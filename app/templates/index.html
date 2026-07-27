@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rigorlytics — Rigorous Analytics</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f1117;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container { max-width: 800px; width: 100%; text-align: center; }
+        h1 { font-size: 3rem; color: #2E75B6; margin-bottom: 8px; }
+        .tagline { font-size: 1.1rem; color: #888; margin-bottom: 40px; }
+        .search-box { display: flex; gap: 10px; margin-bottom: 30px; }
+        input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #1a1d27;
+            color: #fff;
+            font-size: 1rem;
+        }
+        input:focus { outline: none; border-color: #2E75B6; }
+        button {
+            padding: 14px 28px;
+            background: #2E75B6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        button:hover { background: #1F4E79; }
+        .response-box {
+            background: #1a1d27;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            min-height: 100px;
+            display: none;
+        }
+        .response-box.visible { display: block; }
+        .response-label { color: #2E75B6; font-size: 0.85rem; margin-bottom: 8px; font-weight: bold; }
+        .response-text { line-height: 1.6; color: #ddd; }
+        .examples { margin-top: 30px; }
+        .examples p { color: #666; font-size: 0.9rem; margin-bottom: 12px; }
+        .example-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+        .chip {
+            background: #1a1d27;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            color: #aaa;
+            cursor: pointer;
+        }
+        .chip:hover { border-color: #2E75B6; color: #fff; }
+        .loading { color: #2E75B6; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RIGORLYTICS</h1>
+        <p class="tagline">Rigorous Analytics — From the barbershop to the boardroom</p>
+        <div class="search-box">
+            <input type="text" id="question" placeholder="Ask any sports question..." onkeypress="if(event.key==='Enter') askQuestion()"/>
+            <button onclick="askQuestion()">Ask</button>
+        </div>
+        <div class="response-box" id="responseBox">
+            <div class="response-label">RIGORLYTICS ANALYSIS</div>
+            <div class="response-text" id="responseText"></div>
+        </div>
+        <div class="examples">
+            <p>Try asking:</p>
+            <div class="example-chips">
+                <span class="chip" onclick="setQuestion(this)">Who was better — Kobe or LeBron?</span>
+                <span class="chip" onclick="setQuestion(this)">What is True Shooting %?</span>
+                <span class="chip" onclick="setQuestion(this)">Best NBA season ever?</span>
+                <span class="chip" onclick="setQuestion(this)">Is Patrick Mahomes the GOAT QB?</span>
+                <span class="chip" onclick="setQuestion(this)">What is WAR in baseball?</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        function setQuestion(chip) {
+            document.getElementById('question').value = chip.innerText;
+        }
+        async function askQuestion() {
+            const question = document.getElementById('question').value.trim();
+            if (!question) return;
+            const box = document.getElementById('responseBox');
+            const text = document.getElementById('responseText');
+            box.classList.add('visible');
+            text.innerHTML = '<span class="loading">Analyzing...</span>';
+            try {
+                const res = await fetch('/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question })
+                });
+                const data = await res.json();
+                text.innerText = data.answer;
+            } catch (err) {
+                text.innerText = 'Error connecting to Rigorlytics. Please try again.';
+            }
+        }
+    </script>
+</body>
+</html>
