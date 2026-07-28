@@ -1,38 +1,55 @@
 import requests
 
-BASE_URL = 'https://site.api.espn.com/apis/site/v2/sports/basketball/wnba'
-
-def search_wnba_player(name):
+def get_wnba_player_stats(player_name):
     try:
+        url = "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/athletes"
         response = requests.get(
-            f'{BASE_URL}/athletes',
-            params={'limit': 5, 'search': name},
+            url,
+            params={'limit': 500},
             timeout=10
         )
-        return response.json().get('items', [])
-    except Exception as e:
-        return []
+        data = response.json()
+        athletes = data.get('items', [])
 
-def get_wnba_teams():
-    try:
-        response = requests.get(
-            f'{BASE_URL}/teams',
-            timeout=10
-        )
-        return response.json()
+        for athlete in athletes:
+            full_name = athlete.get('displayName', '')
+            if player_name.lower() in full_name.lower():
+                athlete_id = athlete.get('id')
+                return get_wnba_athlete_details(athlete_id, full_name)
+        return ""
     except Exception as e:
-        return {}
+        return ""
+
+def get_wnba_athlete_details(athlete_id, name):
+    try:
+        url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/athletes/{athlete_id}"
+        response = requests.get(url, timeout=10)
+        data = response.json()
+
+        context = f"\nWNBA Player: {name}\n"
+        athlete = data.get('athlete', {})
+        context += f"Position: {athlete.get('position', {}).get('displayName', 'N/A')}\n"
+        context += f"Team: {athlete.get('team', {}).get('displayName', 'N/A')}\n"
+        context += f"Age: {athlete.get('age', 'N/A')}\n"
+        context += f"College: {athlete.get('college', {}).get('name', 'N/A')}\n"
+        context += f"Experience: {athlete.get('experience', {}).get('years', 'N/A')} years\n"
+        return context
+    except Exception as e:
+        return ""
 
 def search_wnba_data(question):
     context = ""
     wnba_players = [
         'Clark', 'Stewart', 'Wilson', 'Ionescu', 'Charles',
-        'Delle Donne', 'Bird', 'Taurasi', 'Parker', 'Diggins'
+        'Delle Donne', 'Bird', 'Taurasi', 'Parker', 'Diggins',
+        'Griner', 'Ogwumike', 'Loyd', 'Howard', 'Plum',
+        'Boston', 'Jones', 'Gray', 'Thomas', 'Collier'
     ]
+
     for name in wnba_players:
         if name.lower() in question.lower():
-            players = search_wnba_player(name)
-            if players:
-                context += f"\nWNBA Player found: {name}\n"
-                context += f"Source: ESPN WNBA API\n"
+            stats = get_wnba_player_stats(name)
+            if stats:
+                context += stats
+
     return context
