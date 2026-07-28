@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rigorlytics — Rigorous Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -51,8 +52,13 @@
             display: none;
         }
         .response-box.visible { display: block; }
-        .response-label { color: #2E75B6; font-size: 0.85rem; margin-bottom: 8px; font-weight: bold; }
-        .response-text { line-height: 1.6; color: #ddd; }
+        .response-label { color: #2E75B6; font-size: 0.85rem; margin-bottom: 12px; font-weight: bold; }
+        .response-text { line-height: 1.7; color: #ddd; }
+        .response-text h1, .response-text h2, .response-text h3 { color: #2E75B6; margin: 12px 0 6px 0; }
+        .response-text strong { color: #ffffff; }
+        .response-text ul, .response-text ol { margin-left: 20px; margin-bottom: 8px; }
+        .response-text li { margin-bottom: 4px; }
+        .response-text p { margin-bottom: 10px; }
         .examples { margin-top: 30px; }
         .examples p { color: #666; font-size: 0.9rem; margin-bottom: 12px; }
         .example-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
@@ -110,7 +116,7 @@
                     body: JSON.stringify({ question })
                 });
                 const data = await res.json();
-                text.innerText = data.answer;
+                text.innerHTML = marked.parse(data.answer);
             } catch (err) {
                 text.innerText = 'Error connecting to Rigorlytics. Please try again.';
             }

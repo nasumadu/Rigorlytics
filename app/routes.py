@@ -1,27 +1,30 @@
 from flask import Blueprint, request, jsonify, render_template
+from app.rag import generate_response
 
-main = Blueprint("main", __name__)
+main = Blueprint('main', __name__)
 
-@main.route("/")
+@main.route('/')
 def home():
-    return render_template("index.html")
+    return render_template('index.html')
 
-@main.route("/ask", methods=["POST"])
+@main.route('/ask', methods=['POST'])
 def ask():
     data = request.get_json()
-    question = data.get("question", "")
+    question = data.get('question', '')
 
     if not question:
-        return jsonify({"error": "No question provided"}), 400
+        return jsonify({'error': 'No question provided'}), 400
+
+    answer = generate_response(question)
 
     response = {
-        "question": question,
-        "answer": f"Rigorlytics received your question: {question}. RAG pipeline coming soon.",
-        "status": "success"
+        'question': question,
+        'answer': answer,
+        'status': 'success'
     }
 
     return jsonify(response), 200
 
-@main.route("/health")
+@main.route('/health')
 def health():
-    return jsonify({"status": "Rigorlytics is running", "version": "1.0"}), 200
+    return jsonify({'status': 'Rigorlytics is running', 'version': '1.0'}), 200
