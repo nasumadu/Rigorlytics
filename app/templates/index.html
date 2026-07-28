@@ -3,124 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rigorlytics — Rigorous Analytics</title>
+    <title>Rigorlytics — Sports Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: Arial, sans-serif;
-            background: #0f1117;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .container { max-width: 800px; width: 100%; text-align: center; }
-        h1 { font-size: 3rem; color: #2E75B6; margin-bottom: 8px; }
-        .tagline { font-size: 1.1rem; color: #888; margin-bottom: 40px; }
-        .search-box { display: flex; gap: 10px; margin-bottom: 30px; }
-        input {
-            flex: 1;
-            padding: 14px 20px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background: #1a1d27;
-            color: #fff;
-            font-size: 1rem;
-        }
-        input:focus { outline: none; border-color: #2E75B6; }
-        button {
-            padding: 14px 28px;
-            background: #2E75B6;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        button:hover { background: #1F4E79; }
-        .response-box {
-            background: #1a1d27;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: left;
-            min-height: 100px;
-            display: none;
-        }
-        .response-box.visible { display: block; }
-        .response-label { color: #2E75B6; font-size: 0.85rem; margin-bottom: 12px; font-weight: bold; }
-        .response-text { line-height: 1.7; color: #ddd; }
-        .response-text h1, .response-text h2, .response-text h3 { color: #2E75B6; margin: 12px 0 6px 0; }
-        .response-text strong { color: #ffffff; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f9fc; color: #1a1a2e; }
+        nav { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.08); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.3rem; font-weight: 800; color: #1a1a2e; letter-spacing: -0.5px; }
+        .logo span { color: #e94560; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: #555; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: #0f3460; }
+        .nav-links a.active { color: #e94560; }
+        .nav-btn { background: linear-gradient(135deg, #0f3460, #16213e); color: white; border: none; padding: 8px 20px; border-radius: 25px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+        .hero { padding: 5rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(ellipse at 60% 40%, rgba(15,52,96,0.06) 0%, transparent 60%), radial-gradient(ellipse at 30% 70%, rgba(233,69,96,0.05) 0%, transparent 50%); pointer-events: none; }
+        .badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, rgba(15,52,96,0.08), rgba(233,69,96,0.08)); border: 1px solid rgba(15,52,96,0.15); border-radius: 25px; padding: 6px 16px; font-size: 0.78rem; font-weight: 600; color: #0f3460; margin-bottom: 1.5rem; letter-spacing: 0.5px; text-transform: uppercase; }
+        .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #e94560; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -1.5px; color: #1a1a2e; }
+        h1 em { font-style: normal; background: linear-gradient(135deg, #e94560, #0f3460); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { font-size: 1.05rem; color: #666; max-width: 520px; margin: 0 auto 2.5rem; line-height: 1.6; }
+        .sport-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .sport-tab { padding: 6px 16px; border-radius: 20px; border: 1.5px solid #e0e0e0; background: white; font-size: 0.82rem; font-weight: 600; color: #888; cursor: pointer; transition: all 0.2s; }
+        .sport-tab.active { border-color: #0f3460; background: #0f3460; color: white; }
+        .sport-tab:hover:not(.active) { border-color: #0f3460; color: #0f3460; }
+        .search-wrapper { max-width: 680px; margin: 0 auto 1rem; }
+        .search-card { background: white; border-radius: 20px; padding: 6px 6px 6px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04); border: 1.5px solid rgba(255,255,255,0.9); }
+        .search-input { flex: 1; border: none; outline: none; font-size: 1rem; color: #1a1a2e; background: transparent; font-family: inherit; }
+        .search-input::placeholder { color: #bbb; }
+        .ask-btn { background: linear-gradient(135deg, #0f3460, #16213e); color: white; border: none; padding: 12px 28px; border-radius: 14px; font-size: 0.95rem; font-weight: 600; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(15,52,96,0.3); transition: all 0.2s; }
+        .ask-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(15,52,96,0.4); }
+        .chips { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; max-width: 680px; margin: 0 auto 2rem; }
+        .chip { background: white; border: 1px solid #e8e8e8; border-radius: 20px; padding: 6px 14px; font-size: 0.8rem; color: #555; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .chip:hover { border-color: #e94560; color: #e94560; box-shadow: 0 2px 8px rgba(233,69,96,0.15); }
+        .response-section { max-width: 680px; margin: 0 auto 2rem; display: none; }
+        .response-card { background: white; border-radius: 20px; padding: 1.5rem 2rem; border: 1px solid #f0f0f0; box-shadow: 0 4px 20px rgba(0,0,0,0.06); text-align: left; }
+        .response-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #f5f5f5; }
+        .response-logo { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #0f3460, #e94560); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: 800; }
+        .response-label { font-size: 0.8rem; font-weight: 700; color: #0f3460; text-transform: uppercase; letter-spacing: 0.5px; }
+        .response-text { font-size: 0.95rem; line-height: 1.7; color: #333; }
+        .response-text h1, .response-text h2, .response-text h3 { color: #0f3460; margin: 12px 0 6px; }
+        .response-text strong { color: #1a1a2e; }
         .response-text ul, .response-text ol { margin-left: 20px; margin-bottom: 8px; }
         .response-text li { margin-bottom: 4px; }
         .response-text p { margin-bottom: 10px; }
-        .examples { margin-top: 30px; }
-        .examples p { color: #666; font-size: 0.9rem; margin-bottom: 12px; }
-        .example-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-        .chip {
-            background: #1a1d27;
-            border: 1px solid #333;
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-size: 0.85rem;
-            color: #aaa;
-            cursor: pointer;
-        }
-        .chip:hover { border-color: #2E75B6; color: #fff; }
-        .loading { color: #2E75B6; font-style: italic; }
+        .loading { color: #0f3460; font-style: italic; }
+        .stats-row { display: flex; justify-content: center; gap: 2rem; max-width: 680px; margin: 0 auto 4rem; }
+        .stat { text-align: center; }
+        .stat-number { font-size: 1.6rem; font-weight: 800; color: #0f3460; letter-spacing: -1px; }
+        .stat-label { font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+        .stat-divider { width: 1px; background: #e8e8e8; align-self: stretch; }
+        .section { padding: 0 2rem 4rem; max-width: 1100px; margin: 0 auto; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.1rem; font-weight: 700; color: #1a1a2e; }
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media (max-width: 768px) { .cards-grid { grid-template-columns: 1fr; } .nav-links { display: none; } h1 { font-size: 2.2rem; } .stats-row { gap: 1rem; } }
+        .feature-card { background: white; border-radius: 16px; padding: 1.5rem; border: 1px solid #f0f0f0; transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden; }
+        .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #0f3460, #e94560); opacity: 0; transition: opacity 0.3s; }
+        .feature-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.1); transform: translateY(-3px); border-color: transparent; }
+        .feature-card:hover::before { opacity: 1; }
+        .card-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1rem; }
+        .card-icon.blue { background: rgba(15,52,96,0.08); }
+        .card-icon.red { background: rgba(233,69,96,0.08); }
+        .card-icon.green { background: rgba(16,185,129,0.08); }
+        .card-title { font-size: 0.95rem; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+        .card-desc { font-size: 0.82rem; color: #888; line-height: 1.5; }
+        .card-tag { display: inline-block; background: rgba(15,52,96,0.06); color: #0f3460; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 10px; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.3px; }
+        footer { background: #1a1a2e; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .footer-logo { font-size: 1rem; font-weight: 800; color: white; }
+        .footer-links { display: flex; gap: 1.5rem; }
+        .footer-links a { color: #888; font-size: 0.8rem; text-decoration: none; }
+        .footer-links a:hover { color: white; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>RIGORLYTICS</h1>
-        <p class="tagline">Rigorous Analytics — From the barbershop to the boardroom</p>
-        <div class="search-box">
-            <input type="text" id="question" placeholder="Ask any sports question..." onkeypress="if(event.key==='Enter') askQuestion()"/>
-            <button onclick="askQuestion()">Ask</button>
-        </div>
-        <div class="response-box" id="responseBox">
-            <div class="response-label">RIGORLYTICS ANALYSIS</div>
-            <div class="response-text" id="responseText"></div>
-        </div>
-        <div class="examples">
-            <p>Try asking:</p>
-            <div class="example-chips">
-                <span class="chip" onclick="setQuestion(this)">Who was better — Kobe or LeBron?</span>
-                <span class="chip" onclick="setQuestion(this)">What is True Shooting %?</span>
-                <span class="chip" onclick="setQuestion(this)">Best NBA season ever?</span>
-                <span class="chip" onclick="setQuestion(this)">Is Patrick Mahomes the GOAT QB?</span>
-                <span class="chip" onclick="setQuestion(this)">What is WAR in baseball?</span>
-            </div>
+<nav>
+    <div class="logo">RIGOR<span>LYTICS</span></div>
+    <ul class="nav-links">
+        <li><a href="#" class="active">Analyze</a></li>
+        <li><a href="#">Players</a></li>
+        <li><a href="#">Teams</a></li>
+        <li><a href="#">Valuation</a></li>
+        <li><a href="#">Compare</a></li>
+    </ul>
+    <button class="nav-btn">Get Started</button>
+</nav>
+<section class="hero">
+    <div class="badge"><div class="badge-dot"></div>AI-Powered Sports Analytics</div>
+    <h1>Sports intelligence<br>powered by <em>data</em></h1>
+    <p class="subtitle">Ask any sports question and get rigorous, data-driven analysis across NBA, NFL, MLB, NHL, and WNBA.</p>
+    <div class="sport-tabs">
+        <div class="sport-tab active" onclick="setTab(this)">🏀 NBA</div>
+        <div class="sport-tab" onclick="setTab(this)">🏈 NFL</div>
+        <div class="sport-tab" onclick="setTab(this)">⚾ MLB</div>
+        <div class="sport-tab" onclick="setTab(this)">🏒 NHL</div>
+        <div class="sport-tab" onclick="setTab(this)">🏀 WNBA</div>
+    </div>
+    <div class="search-wrapper">
+        <div class="search-card">
+            <input class="search-input" type="text" id="question" placeholder="Ask any sports question..." onkeypress="if(event.key==='Enter') askQuestion()" />
+            <button class="ask-btn" onclick="askQuestion()">Analyze</button>
         </div>
     </div>
-    <script>
-        function setQuestion(chip) {
-            document.getElementById('question').value = chip.innerText;
+    <div class="chips">
+        <div class="chip" onclick="setQuestion(this)">Jordan vs LeBron career stats</div>
+        <div class="chip" onclick="setQuestion(this)">Is Mahomes the best QB ever?</div>
+        <div class="chip" onclick="setQuestion(this)">Best MLB season in history?</div>
+        <div class="chip" onclick="setQuestion(this)">McDavid vs Gretzky</div>
+        <div class="chip" onclick="setQuestion(this)">Caitlin Clark impact on WNBA</div>
+    </div>
+    <div class="response-section" id="responseSection">
+        <div class="response-card">
+            <div class="response-header">
+                <div class="response-logo">R</div>
+                <span class="response-label">Rigorlytics Analysis</span>
+            </div>
+            <div class="response-text" id="responseText"></div>
+        </div>
+    </div>
+    <div class="stats-row">
+        <div class="stat"><div class="stat-number">5</div><div class="stat-label">Sports</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-number">15+</div><div class="stat-label">Use Cases</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-number">AI</div><div class="stat-label">Powered</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-number">Free</div><div class="stat-label">To Use</div></div>
+    </div>
+</section>
+<section class="section">
+    <div class="section-header"><div class="section-title">What Rigorlytics does</div></div>
+    <div class="cards-grid">
+        <div class="feature-card"><div class="card-icon blue">📊</div><div class="card-title">Player Analytics</div><div class="card-desc">Deep statistical analysis across all eras with advanced metrics like PER, TS%, WAR, and more.</div><div class="card-tag">All Sports</div></div>
+        <div class="feature-card"><div class="card-icon red">💰</div><div class="card-title">Contract Valuation</div><div class="card-desc">Objective player market value based on performance, position, and comparable contracts.</div><div class="card-tag">For Agents</div></div>
+        <div class="feature-card"><div class="card-icon green">⚖️</div><div class="card-title">Trade Evaluation</div><div class="card-desc">Data-driven trade analysis covering net value, salary cap impact, and roster effects.</div><div class="card-tag">GM Tools</div></div>
+        <div class="feature-card"><div class="card-icon red">🏆</div><div class="card-title">Era Comparisons</div><div class="card-desc">Cross-era statistical analysis adjusted for pace, rules, and competition level changes.</div><div class="card-tag">Historical</div></div>
+        <div class="feature-card"><div class="card-icon blue">🎯</div><div class="card-title">Draft Intelligence</div><div class="card-desc">Prospect evaluation using historical comparable player profiles and projection models.</div><div class="card-tag">Scouting</div></div>
+        <div class="feature-card"><div class="card-icon green">📈</div><div class="card-title">Fantasy Insights</div><div class="card-desc">Advanced efficiency metrics and matchup analysis for smarter fantasy decisions.</div><div class="card-tag">Fantasy</div></div>
+    </div>
+</section>
+<footer>
+    <div class="footer-logo">RIGORLYTICS</div>
+    <div class="footer-links"><a href="#">About</a><a href="#">Privacy</a><a href="#">Contact</a></div>
+</footer>
+<script>
+    function setQuestion(chip) { document.getElementById('question').value = chip.innerText; }
+    function setTab(tab) { document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); }
+    async function askQuestion() {
+        const question = document.getElementById('question').value.trim();
+        if (!question) return;
+        const section = document.getElementById('responseSection');
+        const text = document.getElementById('responseText');
+        section.style.display = 'block';
+        text.innerHTML = '<span class="loading">Analyzing...</span>';
+        section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        try {
+            const res = await fetch('/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question }) });
+            const data = await res.json();
+            text.innerHTML = marked.parse(data.answer);
+        } catch (err) {
+            text.innerText = 'Error connecting to Rigorlytics. Please try again.';
         }
-        async function askQuestion() {
-            const question = document.getElementById('question').value.trim();
-            if (!question) return;
-            const box = document.getElementById('responseBox');
-            const text = document.getElementById('responseText');
-            box.classList.add('visible');
-            text.innerHTML = '<span class="loading">Analyzing...</span>';
-            try {
-                const res = await fetch('/ask', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ question })
-                });
-                const data = await res.json();
-                text.innerHTML = marked.parse(data.answer);
-            } catch (err) {
-                text.innerText = 'Error connecting to Rigorlytics. Please try again.';
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
