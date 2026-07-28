@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy - Rigorlytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
+        nav { background: #fff; border-bottom: 1px solid #e8e9ec; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 58px; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.25rem; font-weight: 800; color: #0f1923; letter-spacing: -0.5px; text-decoration: none; }
+        .logo span { color: #e94560; }
+        .nav-links { display: flex; }
+        .nav-link { padding: 0 16px; height: 58px; display: flex; align-items: center; font-size: 13px; font-weight: 500; color: #666; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover { color: #0f1923; }
+        .nav-link.active { color: #0f1923; border-bottom-color: #e94560; font-weight: 600; }
+        .nav-link.pro-link { color: #0f3460; font-weight: 600; }
+        .nav-btn { background: #0f1923; color: #fff; border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+        @media (max-width: 768px) { .nav-links { display: none; } .tools-grid { grid-template-columns: 1fr; } }
+
+        /* PAGE HEADER */
+        .page-header { background: #0f1923; border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+        .page-header-left { flex: 1; }
+        .page-header-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 8px; }
+        .page-header-title { font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+        .page-header-title em { color: #e94560; font-style: normal; }
+        .page-header-sub { font-size: 13px; color: rgba(255,255,255,0.5); }
+        .page-header-badge { background: rgba(233,69,96,0.15); border: 1px solid rgba(233,69,96,0.3); border-radius: 10px; padding: 0.75rem 1rem; text-align: center; flex-shrink: 0; margin-left: 2rem; }
+        .badge-num { font-size: 1.5rem; font-weight: 800; color: #e94560; }
+        .badge-label { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+        /* LEAGUE TABS */
+        .league-tabs { display: flex; gap: 0; background: #fff; border-radius: 12px; border: 1px solid #e8e9ec; overflow: hidden; margin-bottom: 1.5rem; }
+        .league-tab { flex: 1; padding: 1rem; text-align: center; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+        .league-tab:first-child { border-right: 1px solid #e8e9ec; }
+        .league-tab.active { border-bottom-color: #e94560; background: rgba(233,69,96,0.02); }
+        .league-tab-icon { font-size: 1.5rem; margin-bottom: 4px; }
+        .league-tab-name { font-size: 14px; font-weight: 700; color: #0f1923; }
+        .league-tab-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+        .league-tab.active .league-tab-name { color: #e94560; }
+
+        /* TOOLS GRID */
+        .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .tool-card { background: #fff; border-radius: 14px; border: 1px solid #e8e9ec; overflow: hidden; }
+        .tool-header { padding: 1rem 1.25rem; border-bottom: 1px solid #f5f5f5; display: flex; align-items: center; gap: 10px; }
+        .tool-icon { font-size: 1.2rem; }
+        .tool-title { font-size: 13px; font-weight: 700; color: #0f1923; }
+        .tool-desc { font-size: 11px; color: #aaa; margin-top: 1px; }
+        .tool-body { padding: 1.25rem; }
+        .input-group { margin-bottom: 10px; }
+        .input-label { font-size: 11px; font-weight: 600; color: #555; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .input-field { width: 100%; border: 1.5px solid #e8e9ec; border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #1a1a2e; outline: none; font-family: inherit; transition: border-color 0.15s; }
+        .input-field:focus { border-color: #e94560; }
+        .input-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .select-field { width: 100%; border: 1.5px solid #e8e9ec; border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #1a1a2e; outline: none; font-family: inherit; background: #fff; cursor: pointer; }
+        .select-field:focus { border-color: #e94560; }
+        .analyze-btn { width: 100%; background: #0f1923; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
+        .analyze-btn:hover { background: #1a2d45; }
+        .analyze-btn.nfl { background: #013369; }
+        .analyze-btn.nfl:hover { background: #012050; }
+        .analyze-btn.fpl { background: #00ff85; color: #0f1923; }
+        .analyze-btn.fpl:hover { background: #00e676; }
+
+        /* RESPONSE */
+        .response-box { display: none; background: #f8f9fc; border-radius: 8px; padding: 1rem; margin-top: 10px; border: 1px solid #e8e9ec; }
+        .response-box.visible { display: block; }
+        .response-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .response-dot { width: 8px; height: 8px; border-radius: 50%; background: #e94560; flex-shrink: 0; }
+        .response-label { font-size: 10px; font-weight: 700; color: #e94560; text-transform: uppercase; letter-spacing: 0.5px; }
+        .response-text { font-size: 12px; line-height: 1.7; color: #333; }
+        .response-text h1, .response-text h2, .response-text h3 { color: #0f3460; margin: 10px 0 5px; font-size: 13px; }
+        .response-text h1:first-child, .response-text h2:first-child, .response-text h3:first-child { margin-top: 0; }
+        .response-text strong { color: #1a1a2e; }
+        .response-text ul, .response-text ol { margin-left: 16px; margin-bottom: 8px; }
+        .response-text li { margin-bottom: 3px; }
+        .response-text p { margin-bottom: 8px; }
+        .response-text p:last-child { margin-bottom: 0; }
+        .loading-text { color: #0f3460; font-style: italic; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+        .loading-text::before { content: ''; width: 12px; height: 12px; border: 2px solid #e8e9ec; border-top-color: #0f3460; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* TIPS SECTION */
+        .tips-section { background: #fff; border-radius: 14px; border: 1px solid #e8e9ec; padding: 1.25rem; }
+        .tips-title { font-size: 13px; font-weight: 700; color: #0f1923; margin-bottom: 12px; }
+        .tips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .tip-item { background: #f8f9fc; border-radius: 10px; padding: 0.9rem; }
+        .tip-icon { font-size: 1.1rem; margin-bottom: 6px; }
+        .tip-title { font-size: 12px; font-weight: 700; color: #0f1923; margin-bottom: 4px; }
+        .tip-text { font-size: 11px; color: #777; line-height: 1.5; }
+
+        /* FPL SPECIFIC */
+        .fpl-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(0,255,133,0.1); border: 1px solid rgba(0,255,133,0.3); border-radius: 6px; padding: 3px 8px; font-size: 10px; font-weight: 700; color: #00a854; margin-left: 8px; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="/" class="logo">RIGOR<span>LYTICS</span></a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/stats" class="nav-link">Stats</a>
+        <a href="/ask" class="nav-link">Ask</a>
+        <a href="/fantasy" class="nav-link active">Fantasy</a>
+        <a href="/betting" class="nav-link">Betting</a>
+        <a href="/pro" class="nav-link pro-link">Pro</a>
+        <a href="/about" class="nav-link">About</a>
+    </div>
+    <div><button class="nav-btn">Sign in</button></div>
+</nav>
+
+<div class="page">
+    <div class="page-header">
+        <div class="page-header-left">
+            <div class="page-header-eyebrow">Fantasy Intelligence</div>
+            <div class="page-header-title">Win your league with<br><em>data-driven decisions</em></div>
+            <div class="page-header-sub">AI-powered advice for NFL Fantasy and Fantasy Premier League</div>
+        </div>
+        <div class="page-header-badge">
+            <div class="badge-num">2</div>
+            <div class="badge-label">Leagues covered</div>
+        </div>
+    </div>
+
+    <!-- LEAGUE TABS -->
+    <div class="league-tabs">
+        <div class="league-tab active" id="tab-nfl" onclick="switchLeague('nfl')">
+            <div class="league-tab-icon">🏈</div>
+            <div class="league-tab-name">NFL Fantasy</div>
+            <div class="league-tab-sub">Week 1 · Season starts Sep 4</div>
+        </div>
+        <div class="league-tab" id="tab-fpl" onclick="switchLeague('fpl')">
+            <div class="league-tab-icon">⚽</div>
+            <div class="league-tab-name">Fantasy Premier League <span class="fpl-badge">FPL</span></div>
+            <div class="league-tab-sub">Gameweek 1 · Season starts Aug 16</div>
+        </div>
+    </div>
+
+    <!-- NFL FANTASY -->
+    <div id="nfl-section">
+        <div class="tools-grid">
+            <!-- START/SIT -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">⚡</div>
+                    <div>
+                        <div class="tool-title">Start / Sit Advisor</div>
+                        <div class="tool-desc">Get a data-driven recommendation between two players</div>
+                    </div>
+                </div>
+                <div class="tool-body">
+                    <div class="input-group">
+                        <div class="input-label">Player 1</div>
+                        <input class="input-field" id="nfl-ss-p1" placeholder="e.g. Christian McCaffrey" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Player 2</div>
+                        <input class="input-field" id="nfl-ss-p2" placeholder="e.g. Derrick Henry" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Position</div>
+                        <select class="select-field" id="nfl-ss-pos">
+                            <option>RB</option>
+                            <option>WR</option>
+                            <option>QB</option>
+                            <option>TE</option>
+                            <option>K</option>
+                            <option>DEF</option>
+                        </select>
+                    </div>
+                    <button class="analyze-btn nfl" onclick="nflStartSit()">Get Start/Sit Advice</button>
+                    <div class="response-box" id="nfl-ss-resp">
+                        <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Recommendation</div></div>
+                        <div class="response-text" id="nfl-ss-text"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WAIVER WIRE -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">📋</div>
+                    <div>
+                        <div class="tool-title">Waiver Wire Picks</div>
+                        <div class="tool-desc">Find the best available players for your roster</div>
+                    </div>
+                </div>
+                <div class="tool-body">
+                    <div class="input-group">
+                        <div class="input-label">Position need</div>
+                        <select class="select-field" id="nfl-ww-pos">
+                            <option>RB</option>
+                            <option>WR</option>
+                            <option>QB</option>
+                            <option>TE</option>
+                            <option>K</option>
+                            <option>DEF</option>
+                            <option>FLEX</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Player to drop (optional)</div>
+                        <input class="input-field" id="nfl-ww-drop" placeholder="e.g. Zay Jones" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">League scoring</div>
+                        <select class="select-field" id="nfl-ww-scoring">
+                            <option>Standard</option>
+                            <option>PPR</option>
+                            <option>Half PPR</option>
+                        </select>
+                    </div>
+                    <button class="analyze-btn nfl" onclick="nflWaiver()">Find Waiver Picks</button>
+                    <div class="response-box" id="nfl-ww-resp">
+                        <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Recommendation</div></div>
+                        <div class="response-text" id="nfl-ww-text"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRADE ANALYZER -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">⚖️</div>
+                    <div>
+                        <div class="tool-title">Trade Analyzer</div>
+                        <div class="tool-desc">Find out who wins and loses in any trade</div>
+                    </div>
+                </div>
+                <div class="tool-body">
+                    <div class="input-group">
+                        <div class="input-label">You give</div>
+                        <input class="input-field" id="nfl-trade-give" placeholder="e.g. Stefon Diggs, 2nd round pick" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">You receive</div>
+                        <input class="input-field" id="nfl-trade-get" placeholder="e.g. Travis Kelce" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">League scoring</div>
+                        <select class="select-field" id="nfl-trade-scoring">
+                            <option>Standard</option>
+                            <option>PPR</option>
+                            <option>Half PPR</option>
+                        </select>
+                    </div>
+                    <button class="analyze-btn nfl" onclick="nflTrade()">Analyze This Trade</button>
+                    <div class="response-box" id="nfl-trade-resp">
+                        <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Verdict</div></div>
+                        <div class="response-text" id="nfl-trade-text"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MATCHUP ANALYSIS -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🎯</div>
+                    <div>
+                        <div class="tool-title">Matchup Analysis</div>
+                        <div class="tool-desc">How does your player perform against this defense?</div>
+                    </div>
+                </div>
+                <div class="tool-body">
+                    <div class="input-group">
+                        <div class="input-label">Your player</div>
+                        <input class="input-field" id="nfl-match-player" placeholder="e.g. Ja'Marr Chase" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Opposing defense</div>
+                        <input class="input-field" id="nfl-match-def" placeholder="e.g. San Francisco 49ers" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Game location</div>
+                        <select class="select-field" id="nfl-match-loc">
+                            <option>Home</option>
+                            <option>Away</option>
+                            <option>Neutral</option>
+                        </select>
+                    </div>
+                    <button class="analyze-btn nfl" onclick="nflMatchup()">Analyze Matchup</button>
+                    <div class="response-box" id="nfl-match-resp">
+                        <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Matchup Report</div></div>
+                        <div class="response-text" id="nfl-match-text"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NFL TIPS -->
+        <div class="tips-section">
+            <div class="tips-title">NFL Fantasy tips from Rigorlytics</div>
+            <div class="tips-grid">
+                <div class="tip-item">
+                    <div class="tip-icon">📊</div>
+                    <div class="tip-title">Target share matters most</div>
+                    <div class="tip-text">A WR with 30%+ target share on their team is a reliable weekly starter regardless of touchdowns.</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">🏥</div>
+                    <div class="tip-title">Injury reports drop Thursday</div>
+                    <div class="tip-text">Always check Thursday injury reports before setting your lineup. Full participation means high confidence.</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">🌤️</div>
+                    <div class="tip-title">Weather affects passing games</div>
+                    <div class="tip-text">Wind over 20mph significantly reduces QB and WR value. Rain impacts but is less damaging than wind.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FPL SECTION -->
+    <div id="fpl-section" style="display:none;">
+        <div class="tools-grid">
+            <!-- CAPTAIN PICK -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">©️</div>
+                    <div>
+                        <div class="tool-title">Captain Pick Advisor</div>
+                        <div class="tool-desc">Maximize points with the right captain choice</div>
+                    </div>
+                </div>
+                <div class="tool-body">
+                    <div class="input-group">
+                        <div class="input-label">Your captain options (list your top picks)</div>
+                        <input class="input-field" id="fpl-cap-players" placeholder="e.g. Salah, Haaland, Palmer" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Gameweek number</div>
+                        <input class="input-field" id="fpl-cap-gw" placeholder="e.g. 1" type="number" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Your team budget remaining</div>
+                        <input class="input-field" id="fpl-cap-budget" placeholder="e.g. 0.5" />
+                    </div>
+                    <button class="analyze-btn fpl" onclick="fplCaptain()">Get Captain Pick</button>
+                    <div class="response-box" id="fpl-cap-resp">
+                        <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Captain Advice</div></div>
+                        <div class="response-text" id="fpl-cap-text"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRANSFER ADVICE -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🔄</div>
+                    <div>
+                        <div class="tool-title">Transfer Advice</div>
+                        <div class="tool-desc">Who to bring in and who to sell this gameweek</div>
+                    </div>
+                </div>
+                <div class="tool-body">
+                    <div class="input-group">
+                        <div class="input-label">Player to sell</div>
+                        <input class="input-field" id="fpl-trans-out" placeholder="e.g. Marcus Rashford" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Budget available</div>
+                        <input class="input-field" id="fpl-trans-budget" placeholder="e.g. 7.5m" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Position</div>
+                        <select class="select-field" id="fpl-trans-pos">
+                            <option>GKP</option>
+                            <option>DEF</option>
+                            <option>MID</option>
+                            <option>FWD</option>
+                        </select>
+                    </div>
+                    <button class="analyze-btn fpl" onclick="fplTransfer()">Get Transfer Advice</button>
+                    <div class="response-box" id="fpl-trans-resp">
+                        <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Transfer Pick</div></div>
+                        <div class="response-text" id="fpl-trans-text"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIFFERENTIAL PICKS -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">💎</div>
+                    <div>
+                        <div class="tool-title">Differential Picks</div>
+                        <div class="tool-desc">Low ownership players with high upside to gain rank</div>
+                    </div>
+                </div>
+                <div class="tool-body">
+                    <div class="input-group">
+                        <div class="input-label">Position</div>
+                        <select class="select-field" id="fpl-diff-pos">
+                            <option>Any</option>
+                            <option>GKP</option>
+                            <option>DEF</option>
+                            <option>MID</option>
+                            <option>FWD</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Max price (millions)</div>
+                        <input class="input-field" id="fpl-diff-price" placeholder="e.g. 7.0" type="number" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Gameweek</div>
+                        <input class="input-field" id="fpl-diff-gw" placeholder="e.g. 1" type="number" />
+                    </div>
+                    <button class="analyze-btn fpl" onclick="fplDifferential()">Find Differentials</button>
+                    <div class="response-box" id="fpl-diff-resp">
+                        <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Differential Picks</div></div>
+                        <div class="response-text" id="fpl-diff-text"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRICE RISE -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">📈</div>
+                    <div>
+                        <div class="tool-title">Price Rise Predictor</div>
+                        <div class="tool-desc">Players likely to rise in value — buy before the rush</div>
+                    </div>
+                </div>
+                <div class="tool-body">
+                    <div class="input-group">
+                        <div class="input-label">Player to check</div>
+                        <input class="input-field" id="fpl-price-player" placeholder="e.g. Bukayo Saka" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Current price (millions)</div>
+                        <input class="input-field" id="fpl-price-current" placeholder="e.g. 9.0" type="number" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">Current ownership %</div>
+                        <input class="input-field" id="fpl-price-own" placeholder="e.g. 45" type="number" />
+                    </div>
+                    <button class="analyze-btn fpl" onclick="fplPriceRise()">Predict Price Movement</button>
+                    <div class="response-box" id="fpl-price-resp">
+                        <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Price Prediction</div></div>
+                        <div class="response-text" id="fpl-price-text"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FPL TIPS -->
+        <div class="tips-section">
+            <div class="tips-title">FPL tips from Rigorlytics</div>
+            <div class="tips-grid">
+                <div class="tip-item">
+                    <div class="tip-icon">©️</div>
+                    <div class="tip-title">Captain the premium assets</div>
+                    <div class="tip-text">Salah, Haaland, and Palmer consistently deliver. Only captain a differential if your mini-league demands a big rank swing.</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">📅</div>
+                    <div class="tip-title">Plan for double gameweeks</div>
+                    <div class="tip-text">Target players from teams with favorable DGW fixtures early. Having two games in a week can double your points haul.</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">💰</div>
+                    <div class="tip-title">Value defenders win leagues</div>
+                    <div class="tip-text">Budget defenders from clean sheet teams free up budget for premium midfielders and forwards that score more points.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchLeague(league) {
+        document.getElementById('nfl-section').style.display = league === 'nfl' ? 'block' : 'none';
+        document.getElementById('fpl-section').style.display = league === 'fpl' ? 'block' : 'none';
+        document.getElementById('tab-nfl').classList.toggle('active', league === 'nfl');
+        document.getElementById('tab-fpl').classList.toggle('active', league === 'fpl');
+    }
+
+    function showLoading(textId, boxId) {
+        const box = document.getElementById(boxId);
+        const text = document.getElementById(textId);
+        box.classList.add('visible');
+        text.innerHTML = '<div class="loading-text">Analyzing...</div>';
+        box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    async function callAI(question, textId, boxId) {
+        showLoading(textId, boxId);
+        try {
+            const res = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question })
+            });
+            const data = await res.json();
+            document.getElementById(textId).innerHTML = marked.parse(data.answer);
+        } catch(err) {
+            document.getElementById(textId).innerText = 'Error connecting to Rigorlytics. Please try again.';
+        }
+    }
+
+    function nflStartSit() {
+        const p1 = document.getElementById('nfl-ss-p1').value.trim();
+        const p2 = document.getElementById('nfl-ss-p2').value.trim();
+        const pos = document.getElementById('nfl-ss-pos').value;
+        if (!p1 || !p2) { alert('Please enter both players'); return; }
+        const q = `NFL Fantasy Start/Sit decision: Should I start ${p1} or ${p2} at ${pos} this week? Give me a data-driven recommendation with stats, matchup analysis, and a clear verdict on who to start.`;
+        callAI(q, 'nfl-ss-text', 'nfl-ss-resp');
+    }
+
+    function nflWaiver() {
+        const pos = document.getElementById('nfl-ww-pos').value;
+        const drop = document.getElementById('nfl-ww-drop').value.trim();
+        const scoring = document.getElementById('nfl-ww-scoring').value;
+        const q = `NFL Fantasy waiver wire: Who are the best ${pos} options to pick up off waivers right now in a ${scoring} league? ${drop ? 'I am considering dropping ' + drop + '.' : ''} Give me specific player recommendations with reasoning based on opportunity, matchups, and recent performance.`;
+        callAI(q, 'nfl-ww-text', 'nfl-ww-resp');
+    }
+
+    function nflTrade() {
+        const give = document.getElementById('nfl-trade-give').value.trim();
+        const get = document.getElementById('nfl-trade-get').value.trim();
+        const scoring = document.getElementById('nfl-trade-scoring').value;
+        if (!give || !get) { alert('Please fill in both sides of the trade'); return; }
+        const q = `NFL Fantasy trade analysis in a ${scoring} league: I give ${give} and I receive ${get}. Who wins this trade? Give me a detailed breakdown of value, rest of season outlook, and a clear verdict on whether to accept or decline.`;
+        callAI(q, 'nfl-trade-text', 'nfl-trade-resp');
+    }
+
+    function nflMatchup() {
+        const player = document.getElementById('nfl-match-player').value.trim();
+        const def = document.getElementById('nfl-match-def').value.trim();
+        const loc = document.getElementById('nfl-match-loc').value;
+        if (!player || !def) { alert('Please enter player and opposing defense'); return; }
+        const q = `NFL Fantasy matchup analysis: How does ${player} historically perform against the ${def} defense playing ${loc}? Analyze the matchup including defensive rankings against this position, recent performance, and a fantasy outlook for this week.`;
+        callAI(q, 'nfl-match-text', 'nfl-match-resp');
+    }
+
+    function fplCaptain() {
+        const players = document.getElementById('fpl-cap-players').value.trim();
+        const gw = document.getElementById('fpl-cap-gw').value.trim();
+        if (!players) { alert('Please enter your captain options'); return; }
+        const q = `Fantasy Premier League Gameweek ${gw || 'current'} captain pick: My options are ${players}. Who should I captain this gameweek? Analyze their fixtures, form, home/away record, and ownership. Give me a clear captain recommendation with a vice-captain option.`;
+        callAI(q, 'fpl-cap-text', 'fpl-cap-resp');
+    }
+
+    function fplTransfer() {
+        const out = document.getElementById('fpl-trans-out').value.trim();
+        const budget = document.getElementById('fpl-trans-budget').value.trim();
+        const pos = document.getElementById('fpl-trans-pos').value;
+        if (!budget) { alert('Please enter your available budget'); return; }
+        const q = `Fantasy Premier League transfer advice: I want to sell ${out || 'a player'} and have ${budget} available for a ${pos}. Who are the best FPL ${pos} options to bring in at this price range? Consider upcoming fixtures, form, clean sheet potential, and value for money.`;
+        callAI(q, 'fpl-trans-text', 'fpl-trans-resp');
+    }
+
+    function fplDifferential() {
+        const pos = document.getElementById('fpl-diff-pos').value;
+        const price = document.getElementById('fpl-diff-price').value.trim();
+        const gw = document.getElementById('fpl-diff-gw').value.trim();
+        const q = `Fantasy Premier League differential picks for Gameweek ${gw || 'current'}: Recommend low ownership FPL ${pos === 'Any' ? 'players' : pos + 's'} ${price ? 'under ' + price + 'm' : ''} with high upside to gain rank. Focus on players under 15% ownership with favorable fixtures and good form.`;
+        callAI(q, 'fpl-diff-text', 'fpl-diff-resp');
+    }
+
+    function fplPriceRise() {
+        const player = document.getElementById('fpl-price-player').value.trim();
+        const price = document.getElementById('fpl-price-current').value.trim();
+        const own = document.getElementById('fpl-price-own').value.trim();
+        if (!player) { alert('Please enter a player name'); return; }
+        const q = `Fantasy Premier League price prediction: ${player} is currently priced at ${price || 'unknown'}m with ${own || 'unknown'}% ownership in FPL. Based on their recent form, upcoming fixtures, and typical FPL price movement patterns, are they likely to rise or fall in price? Should I buy now or wait?`;
+        callAI(q, 'fpl-price-text', 'fpl-price-resp');
+    }
+</script>
+</body>
+</html>
