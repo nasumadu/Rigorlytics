@@ -7,71 +7,82 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f4f5f7; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
         nav { background: #fff; border-bottom: 1px solid #e8e9ec; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 58px; position: sticky; top: 0; z-index: 100; }
         .logo { font-size: 1.25rem; font-weight: 800; color: #0f1923; letter-spacing: -0.5px; text-decoration: none; }
         .logo span { color: #e94560; }
-        .nav-links { display: flex; gap: 0; }
-        .nav-link { padding: 0 16px; height: 58px; display: flex; align-items: center; font-size: 13px; font-weight: 500; color: #666; text-decoration: none; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+        .nav-links { display: flex; }
+        .nav-link { padding: 0 16px; height: 58px; display: flex; align-items: center; font-size: 13px; font-weight: 500; color: #666; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }
         .nav-link:hover { color: #0f1923; }
         .nav-link.active { color: #0f1923; border-bottom-color: #e94560; font-weight: 600; }
         .nav-link.pro-link { color: #0f3460; font-weight: 600; }
-        .nav-right { display: flex; align-items: center; gap: 8px; }
         .nav-btn { background: #0f1923; color: #fff; border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
-        .page { flex: 1; display: grid; grid-template-columns: 260px 1fr; max-width: 1200px; margin: 0 auto; width: 100%; padding: 2rem 1.5rem; gap: 1.5rem; }
-        @media (max-width: 768px) { .page { grid-template-columns: 1fr; } .nav-links { display: none; } .sidebar { display: none; } }
-        .sidebar { display: flex; flex-direction: column; gap: 1rem; }
-        .sidebar-card { background: #fff; border-radius: 12px; border: 1px solid #e8e9ec; padding: 1.1rem; }
-        .sidebar-title { font-size: 11px; font-weight: 700; color: #0f1923; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .category-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #bbb; margin-bottom: 6px; margin-top: 12px; }
-        .category-label:first-child { margin-top: 0; }
-        .example-item { padding: 7px 10px; border-radius: 8px; font-size: 12px; color: #555; cursor: pointer; transition: all 0.15s; line-height: 1.4; margin-bottom: 3px; border: 1px solid transparent; }
-        .example-item:hover { background: rgba(233,69,96,0.06); border-color: rgba(233,69,96,0.2); color: #e94560; }
-        .history-title { font-size: 11px; font-weight: 700; color: #0f1923; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .history-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid #f4f5f7; cursor: pointer; }
-        .history-item:last-child { border-bottom: none; padding-bottom: 0; }
-        .history-item:hover .history-q { color: #e94560; }
-        .history-icon { color: #ddd; font-size: 11px; margin-top: 1px; flex-shrink: 0; }
-        .history-q { font-size: 12px; color: #555; line-height: 1.35; transition: color 0.15s; }
-        .empty-history { font-size: 12px; color: #bbb; font-style: italic; }
-        .main { display: flex; flex-direction: column; gap: 1rem; }
-        .search-box { background: #0f1923; border-radius: 16px; padding: 1.75rem; }
-        .search-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 10px; }
-        .search-title { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 1.25rem; line-height: 1.2; }
-        .search-title em { color: #e94560; font-style: normal; }
-        .search-row { display: flex; gap: 8px; align-items: flex-start; }
-        .search-row textarea { flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 12px 16px; color: #fff; font-size: 13px; outline: none; font-family: inherit; resize: none; height: 52px; line-height: 1.4; }
-        .search-row textarea::placeholder { color: rgba(255,255,255,0.35); }
-        .search-row textarea:focus { border-color: #e94560; }
-        .ask-btn { background: #e94560; color: #fff; border: none; padding: 12px 22px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
-        .ask-btn:hover { background: #c0392b; }
-        .search-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
-        .sport-filters { display: flex; gap: 6px; flex-wrap: wrap; }
-        .sport-filter { padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); background: transparent; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.15s; }
-        .sport-filter.active { border-color: #e94560; background: rgba(233,69,96,0.2); color: #fff; }
-        .sport-filter:hover:not(.active) { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
-        .search-hint { font-size: 11px; color: rgba(255,255,255,0.25); }
-        .response-area { display: none; }
+        .layout { display: grid; grid-template-columns: 240px 1fr 240px; gap: 1.5rem; max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .left-panel, .right-panel { display: none; } .nav-links { display: none; } }
+        .left-panel, .right-panel { display: flex; flex-direction: column; gap: 1rem; }
+        .panel-card { background: #fff; border-radius: 12px; border: 1px solid #e8e9ec; padding: 1.1rem; }
+        .panel-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #999; margin-bottom: 12px; }
+        .cat-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #ccc; margin: 10px 0 5px; }
+        .cat-label:first-of-type { margin-top: 0; }
+        .ex-item { padding: 7px 9px; border-radius: 7px; font-size: 12px; color: #555; cursor: pointer; line-height: 1.4; margin-bottom: 2px; border: 1px solid transparent; transition: all 0.15s; }
+        .ex-item:hover { background: rgba(233,69,96,0.05); border-color: rgba(233,69,96,0.15); color: #e94560; }
+        .hist-item { display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
+        .hist-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .hist-item:hover .hist-text { color: #e94560; }
+        .hist-icon { color: #ddd; font-size: 11px; margin-top: 1px; flex-shrink: 0; }
+        .hist-text { font-size: 12px; color: #666; line-height: 1.35; transition: color 0.15s; }
+        .hist-empty { font-size: 12px; color: #ccc; font-style: italic; }
+        .sport-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
+        .sport-tag.fantasy { background: rgba(16,185,129,0.1); color: #065f46; }
+        .sport-tag.betting { background: rgba(233,69,96,0.1); color: #c0392b; }
+        .sport-tag.pro { background: rgba(79,38,193,0.1); color: #4c1d95; }
+        .sport-tag.fan { background: rgba(15,52,96,0.1); color: #0f3460; }
+        .main { display: flex; flex-direction: column; gap: 1.25rem; }
+        .ask-hero { background: #0f1923; border-radius: 16px; padding: 2rem; }
+        .hero-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        .hero-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-transform: uppercase; }
+        .hero-title { font-size: 1.5rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.5rem; }
+        .hero-title em { color: #e94560; font-style: normal; }
+        .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+        .filter-btn { padding: 5px 13px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); background: transparent; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.15s; }
+        .filter-btn.active { border-color: #e94560; background: rgba(233,69,96,0.2); color: #fff; }
+        .filter-btn:hover:not(.active) { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.75); }
+        .input-row { display: flex; gap: 8px; align-items: flex-end; }
+        .input-wrap { flex: 1; position: relative; }
+        .input-wrap textarea { width: 100%; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 12px 16px; color: #fff; font-size: 13px; outline: none; font-family: inherit; resize: none; height: 80px; line-height: 1.5; }
+        .input-wrap textarea::placeholder { color: rgba(255,255,255,0.3); }
+        .input-wrap textarea:focus { border-color: #e94560; }
+        .hint { font-size: 10px; color: rgba(255,255,255,0.2); margin-top: 5px; }
+        .submit-btn { background: #e94560; color: #fff; border: none; padding: 14px 24px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; align-self: flex-start; }
+        .submit-btn:hover { background: #c0392b; }
+        .response-wrap { display: none; }
         .response-card { background: #fff; border-radius: 14px; border: 1px solid #e8e9ec; overflow: hidden; }
-        .response-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid #f4f5f7; }
-        .response-header-left { display: flex; align-items: center; gap: 10px; }
-        .response-logo { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #0f3460, #e94560); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: 800; flex-shrink: 0; }
-        .response-label { font-size: 0.8rem; font-weight: 700; color: #0f3460; text-transform: uppercase; letter-spacing: 0.5px; }
-        .response-question { font-size: 11px; color: #aaa; margin-top: 2px; }
-        .clear-btn { font-size: 11px; color: #aaa; background: none; border: 1px solid #e8e9ec; cursor: pointer; padding: 5px 10px; border-radius: 6px; }
-        .clear-btn:hover { background: #f4f5f7; color: #555; }
-        .response-body { padding: 1.5rem; }
-        .response-text { font-size: 0.95rem; line-height: 1.75; color: #333; }
-        .response-text h1, .response-text h2, .response-text h3 { color: #0f3460; margin: 16px 0 8px; font-size: 1rem; }
-        .response-text h1:first-child, .response-text h2:first-child { margin-top: 0; }
-        .response-text strong { color: #1a1a2e; }
-        .response-text ul, .response-text ol { margin-left: 20px; margin-bottom: 10px; }
-        .response-text li { margin-bottom: 5px; }
-        .response-text p { margin-bottom: 12px; }
-        .response-text p:last-child { margin-bottom: 0; }
-        .loading { color: #0f3460; font-style: italic; display: flex; align-items: center; gap: 8px; }
-        .loading::before { content: ""; width: 14px; height: 14px; border: 2px solid #e8e9ec; border-top-color: #0f3460; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+        .resp-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid #f5f5f5; }
+        .resp-left { display: flex; align-items: center; gap: 10px; }
+        .resp-logo { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, #0f3460, #e94560); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+        .resp-label { font-size: 11px; font-weight: 700; color: #0f3460; text-transform: uppercase; letter-spacing: 0.5px; }
+        .resp-q { font-size: 11px; color: #aaa; margin-top: 2px; }
+        .clear-btn { font-size: 11px; color: #bbb; background: none; border: 1px solid #e8e9ec; cursor: pointer; padding: 5px 10px; border-radius: 6px; transition: all 0.15s; }
+        .clear-btn:hover { color: #555; background: #f5f5f5; }
+        .resp-body { padding: 1.5rem; }
+        .resp-text { font-size: 0.95rem; line-height: 1.8; color: #333; }
+        .resp-text h1, .resp-text h2, .resp-text h3 { color: #0f3460; margin: 14px 0 6px; font-size: 1rem; }
+        .resp-text h1:first-child, .resp-text h2:first-child, .resp-text h3:first-child { margin-top: 0; }
+        .resp-text strong { color: #1a1a2e; }
+        .resp-text ul, .resp-text ol { margin-left: 20px; margin-bottom: 10px; }
+        .resp-text li { margin-bottom: 5px; }
+        .resp-text p { margin-bottom: 12px; }
+        .resp-text p:last-child { margin-bottom: 0; }
+        .loading { color: #0f3460; font-style: italic; display: flex; align-items: center; gap: 8px; padding: 0.5rem 0; }
+        .loading::before { content: ''; width: 14px; height: 14px; border: 2px solid #e8e9ec; border-top-color: #0f3460; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .diff-banner { background: #fff; border-radius: 12px; border: 1px solid #e8e9ec; padding: 1.1rem 1.25rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .diff-item { display: flex; flex-direction: column; gap: 4px; }
+        .diff-icon { font-size: 1.2rem; margin-bottom: 2px; }
+        .diff-title { font-size: 12px; font-weight: 700; color: #0f1923; }
+        .diff-desc { font-size: 11px; color: #888; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -86,151 +97,183 @@
         <a href="/pro" class="nav-link pro-link">Pro</a>
         <a href="/about" class="nav-link">About</a>
     </div>
-    <div class="nav-right"><button class="nav-btn">Sign in</button></div>
+    <div><button class="nav-btn">Sign in</button></div>
 </nav>
 
-<div class="page">
-    <div class="sidebar">
-        <div class="sidebar-card">
-            <div class="sidebar-title">Example questions</div>
-            <div class="category-label">Everyday fans</div>
-            <div class="example-item" onclick="setQ(this)">Who was better — Kobe or LeBron?</div>
-            <div class="example-item" onclick="setQ(this)">Best NBA season in history?</div>
-            <div class="example-item" onclick="setQ(this)">Is Mahomes the GOAT QB?</div>
-            <div class="category-label">Fantasy</div>
-            <div class="example-item" onclick="setQ(this)">Should I start Ja Morant this week?</div>
-            <div class="example-item" onclick="setQ(this)">Best value RBs for Week 1?</div>
-            <div class="example-item" onclick="setQ(this)">Top waiver wire pickups this week?</div>
-            <div class="category-label">Betting</div>
-            <div class="example-item" onclick="setQ(this)">Where is the statistical edge in MLB tonight?</div>
-            <div class="example-item" onclick="setQ(this)">Best value bets for this weekend?</div>
-            <div class="category-label">Pro</div>
-            <div class="example-item" onclick="setQ(this)">What should Ja Morant next contract be worth?</div>
-            <div class="example-item" onclick="setQ(this)">Is Nikola Jokic underpaid or overpaid?</div>
-            <div class="example-item" onclick="setQ(this)">Who wins the Anthony Davis trade?</div>
-        </div>
-        <div class="sidebar-card" id="historyCard">
-            <div class="history-title">Recent questions</div>
-            <div id="historyList"><div class="empty-history">Your questions will appear here</div></div>
+<div class="layout">
+    <div class="left-panel">
+        <div class="panel-card">
+            <div class="panel-title">Example questions</div>
+            <div class="cat-label">Everyday fans</div>
+            <div class="ex-item" onclick="setQ(this)">Who was better — Kobe or LeBron?</div>
+            <div class="ex-item" onclick="setQ(this)">Best NBA season in history?</div>
+            <div class="ex-item" onclick="setQ(this)">Is Mahomes the GOAT QB?</div>
+            <div class="ex-item" onclick="setQ(this)">Gretzky vs McDavid — who was more dominant?</div>
+            <div class="cat-label">Fantasy</div>
+            <div class="ex-item" onclick="setQ(this)">Should I start Ja Morant this week?</div>
+            <div class="ex-item" onclick="setQ(this)">Best value RBs for Week 1?</div>
+            <div class="ex-item" onclick="setQ(this)">Top waiver pickups this week?</div>
+            <div class="cat-label">Betting</div>
+            <div class="ex-item" onclick="setQ(this)">Where is the statistical edge in MLB tonight?</div>
+            <div class="ex-item" onclick="setQ(this)">Best value bets this weekend?</div>
+            <div class="cat-label">Pro</div>
+            <div class="ex-item" onclick="setQ(this)">What should Ja Morant next contract be worth?</div>
+            <div class="ex-item" onclick="setQ(this)">Is Jokic underpaid or overpaid?</div>
+            <div class="ex-item" onclick="setQ(this)">Who wins the Anthony Davis trade?</div>
         </div>
     </div>
 
     <div class="main">
-        <div class="search-box">
-            <div class="search-label">AI Sports Intelligence</div>
-            <div class="search-title">Ask anything about<br>sports <em>analytics</em></div>
-            <div class="search-row">
-                <textarea id="question" placeholder="Ask about players, stats, contracts, fantasy picks, betting edges, trades..." onkeypress="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); askQuestion(); }"></textarea>
-                <button class="ask-btn" onclick="askQuestion()">Analyze</button>
+        <div class="diff-banner">
+            <div class="diff-item">
+                <div class="diff-icon">🔬</div>
+                <div class="diff-title">Research mode</div>
+                <div class="diff-desc">Deep dive analysis with full context — not a quick answer</div>
             </div>
-            <div class="search-footer">
-                <div class="sport-filters">
-                    <div class="sport-filter active" onclick="setFilter(this, '')">All</div>
-                    <div class="sport-filter" onclick="setFilter(this, 'NBA')">NBA</div>
-                    <div class="sport-filter" onclick="setFilter(this, 'NFL')">NFL</div>
-                    <div class="sport-filter" onclick="setFilter(this, 'MLB')">MLB</div>
-                    <div class="sport-filter" onclick="setFilter(this, 'NHL')">NHL</div>
-                    <div class="sport-filter" onclick="setFilter(this, 'WNBA')">WNBA</div>
-                </div>
-                <div class="search-hint">Enter to submit</div>
+            <div class="diff-item">
+                <div class="diff-icon">🗂️</div>
+                <div class="diff-title">Question history</div>
+                <div class="diff-desc">Your last 8 questions saved so you can revisit your research</div>
+            </div>
+            <div class="diff-item">
+                <div class="diff-icon">🎯</div>
+                <div class="diff-title">Sport filters</div>
+                <div class="diff-desc">Narrow your question to a specific sport for more precise analysis</div>
             </div>
         </div>
 
-        <div class="response-area" id="responseArea">
+        <div class="ask-hero">
+            <div class="hero-top">
+                <div class="live-dot"></div>
+                <span class="hero-label">Research mode — ask anything</span>
+            </div>
+            <div class="hero-title">Go deeper with<br><em>sports intelligence</em></div>
+            <div class="filters">
+                <div class="filter-btn active" onclick="setFilter(this, '')">All sports</div>
+                <div class="filter-btn" onclick="setFilter(this, 'NBA')">🏀 NBA</div>
+                <div class="filter-btn" onclick="setFilter(this, 'NFL')">🏈 NFL</div>
+                <div class="filter-btn" onclick="setFilter(this, 'MLB')">⚾ MLB</div>
+                <div class="filter-btn" onclick="setFilter(this, 'NHL')">🏒 NHL</div>
+                <div class="filter-btn" onclick="setFilter(this, 'WNBA')">🏀 WNBA</div>
+            </div>
+            <div class="input-row">
+                <div class="input-wrap">
+                    <textarea id="question" placeholder="Ask a detailed sports question — player analysis, contract value, trade breakdown, fantasy advice, betting edge..."></textarea>
+                    <div class="hint">Press Enter to submit · Shift+Enter for new line</div>
+                </div>
+                <button class="submit-btn" onclick="askQuestion()">Analyze ↗</button>
+            </div>
+        </div>
+
+        <div class="response-wrap" id="responseWrap">
             <div class="response-card">
-                <div class="response-header">
-                    <div class="response-header-left">
-                        <div class="response-logo">R</div>
+                <div class="resp-header">
+                    <div class="resp-left">
+                        <div class="resp-logo">R</div>
                         <div>
-                            <div class="response-label">Rigorlytics Analysis</div>
-                            <div class="response-question" id="responseQuestion"></div>
+                            <div class="resp-label">Rigorlytics Analysis</div>
+                            <div class="resp-q" id="respQ"></div>
                         </div>
                     </div>
-                    <button class="clear-btn" onclick="clearResponse()">Clear x</button>
+                    <button class="clear-btn" onclick="clearResp()">Clear ×</button>
                 </div>
-                <div class="response-body">
-                    <div class="response-text" id="responseText"></div>
+                <div class="resp-body">
+                    <div class="resp-text" id="respText"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <div class="panel-card" id="histCard">
+            <div class="panel-title">Recent questions</div>
+            <div id="histList"><div class="hist-empty">Questions appear here as you research</div></div>
+        </div>
+        <div class="panel-card">
+            <div class="panel-title">Use case tags</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="sport-tag fan">Fan debates</span>
+                <span class="sport-tag fantasy">Fantasy</span>
+                <span class="sport-tag betting">Betting</span>
+                <span class="sport-tag pro">Pro tools</span>
+            </div>
+            <div style="margin-top:12px;font-size:11px;color:#888;line-height:1.5;">
+                Rigorlytics serves everyone — from settling a barbershop argument to building a contract negotiation case.
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    let activeFilter = "";
-    let history = [];
-    try { history = JSON.parse(localStorage.getItem("rig_history") || "[]"); } catch(e) {}
+    let activeFilter = '';
+    let hist = [];
+    try { hist = JSON.parse(localStorage.getItem('rig_hist') || '[]'); } catch(e) {}
 
-    function setFilter(el, sport) {
-        document.querySelectorAll(".sport-filter").forEach(f => f.classList.remove("active"));
-        el.classList.add("active");
-        activeFilter = sport;
+    function setFilter(el, val) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        activeFilter = val;
     }
 
     function setQ(el) {
-        document.getElementById("question").value = el.innerText;
-        document.getElementById("question").focus();
+        document.getElementById('question').value = el.innerText;
+        document.getElementById('question').focus();
     }
 
-    function clearResponse() {
-        document.getElementById("responseArea").style.display = "none";
-        document.getElementById("question").value = "";
-        document.getElementById("question").focus();
+    function clearResp() {
+        document.getElementById('responseWrap').style.display = 'none';
+        document.getElementById('question').value = '';
+        document.getElementById('question').focus();
     }
 
-    function addToHistory(q) {
-        history = [q, ...history.filter(h => h !== q)].slice(0, 8);
-        try { localStorage.setItem("rig_history", JSON.stringify(history)); } catch(e) {}
-        renderHistory();
+    function saveHist(q) {
+        hist = [q, ...hist.filter(h => h !== q)].slice(0, 8);
+        try { localStorage.setItem('rig_hist', JSON.stringify(hist)); } catch(e) {}
+        renderHist();
     }
 
-    function renderHistory() {
-        const list = document.getElementById("historyList");
-        if (history.length === 0) {
-            list.innerHTML = "<div class='empty-history'>Your questions will appear here</div>";
-            return;
-        }
-        list.innerHTML = history.map(q =>
-            "<div class='history-item' onclick='setQStr(decodeURIComponent(\"" + encodeURIComponent(q) + "\"))\><span class='history-icon'>&#8635;</span><div class='history-q'>" + q + "</div></div>"
-        ).join("");
+    function renderHist() {
+        const el = document.getElementById('histList');
+        if (!hist.length) { el.innerHTML = '<div class="hist-empty">Questions appear here as you research</div>'; return; }
+        el.innerHTML = hist.map(q =>
+            '<div class="hist-item" onclick="document.getElementById('question').value='' + q.replace(/'/g,"\'") + '';document.getElementById('question').focus()"><span class="hist-icon">&#8635;</span><div class="hist-text">' + q + '</div></div>'
+        ).join('');
     }
 
-    function setQStr(q) {
-        document.getElementById("question").value = q;
-        document.getElementById("question").focus();
-    }
+    document.getElementById('question').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); askQuestion(); }
+    });
 
     async function askQuestion() {
-        let question = document.getElementById("question").value.trim();
-        if (!question) return;
-        const displayQ = question;
-        if (activeFilter) question = activeFilter + ": " + question;
+        let q = document.getElementById('question').value.trim();
+        if (!q) return;
+        const displayQ = q;
+        if (activeFilter) q = activeFilter + ': ' + q;
 
-        const area = document.getElementById("responseArea");
-        const text = document.getElementById("responseText");
-        const qLabel = document.getElementById("responseQuestion");
+        const wrap = document.getElementById('responseWrap');
+        const text = document.getElementById('respText');
+        const qEl = document.getElementById('respQ');
 
-        area.style.display = "block";
-        qLabel.innerText = displayQ;
-        text.innerHTML = "<div class='loading'>Analyzing...</div>";
-        area.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-        addToHistory(displayQ);
+        wrap.style.display = 'block';
+        qEl.innerText = displayQ;
+        text.innerHTML = '<div class="loading">Analyzing your question...</div>';
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        saveHist(displayQ);
 
         try {
-            const res = await fetch("/ask", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ question })
+            const res = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: q })
             });
             const data = await res.json();
             text.innerHTML = marked.parse(data.answer);
         } catch(err) {
-            text.innerText = "Error connecting to Rigorlytics. Please try again.";
+            text.innerText = 'Error connecting to Rigorlytics. Please try again.';
         }
     }
 
-    renderHistory();
+    renderHist();
 </script>
 </body>
 </html>
