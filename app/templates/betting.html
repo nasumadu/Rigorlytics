@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betting - Rigorlytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
+        nav { background: #fff; border-bottom: 1px solid #e8e9ec; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 58px; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.25rem; font-weight: 800; color: #0f1923; letter-spacing: -0.5px; text-decoration: none; }
+        .logo span { color: #e94560; }
+        .nav-links { display: flex; }
+        .nav-link { padding: 0 16px; height: 58px; display: flex; align-items: center; font-size: 13px; font-weight: 500; color: #666; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover { color: #0f1923; }
+        .nav-link.active { color: #0f1923; border-bottom-color: #e94560; font-weight: 600; }
+        .nav-link.pro-link { color: #0f3460; font-weight: 600; }
+        .nav-btn { background: #0f1923; color: #fff; border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+        @media (max-width: 768px) { .nav-links { display: none; } .tools-grid { grid-template-columns: 1fr; } .sport-tabs { flex-wrap: wrap; } }
+
+        /* DISCLAIMER */
+        .disclaimer { background: rgba(233,69,96,0.06); border: 1px solid rgba(233,69,96,0.2); border-radius: 10px; padding: 10px 14px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 8px; font-size: 11px; color: #888; }
+        .disclaimer-icon { font-size: 14px; flex-shrink: 0; }
+        .disclaimer strong { color: #e94560; }
+
+        /* PAGE HEADER */
+        .page-header { background: linear-gradient(135deg, #0f1923 0%, #1a2d45 100%); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+        .page-header-left { flex: 1; }
+        .page-header-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 8px; }
+        .page-header-title { font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+        .page-header-title em { color: #e94560; font-style: normal; }
+        .page-header-sub { font-size: 13px; color: rgba(255,255,255,0.5); }
+        .header-stats { display: flex; gap: 1rem; margin-left: 2rem; flex-shrink: 0; }
+        .header-stat { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.75rem 1rem; text-align: center; }
+        .header-stat-num { font-size: 1.3rem; font-weight: 800; color: #fff; }
+        .header-stat-label { font-size: 9px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+        /* SPORT TABS */
+        .sport-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; background: #fff; padding: 6px; border-radius: 12px; border: 1px solid #e8e9ec; }
+        .sport-tab { flex: 1; padding: 8px 12px; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+        .sport-tab.active { background: #0f1923; border-color: #0f1923; }
+        .sport-tab-icon { font-size: 1.1rem; margin-bottom: 2px; }
+        .sport-tab-name { font-size: 11px; font-weight: 600; color: #666; }
+        .sport-tab.active .sport-tab-name { color: #fff; }
+        .sport-tab:hover:not(.active) { background: #f4f5f7; }
+
+        /* TOOLS GRID */
+        .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .tool-card { background: #fff; border-radius: 14px; border: 1px solid #e8e9ec; overflow: hidden; }
+        .tool-header { padding: 1rem 1.25rem; border-bottom: 1px solid #f5f5f5; display: flex; align-items: center; gap: 10px; }
+        .tool-icon { font-size: 1.2rem; }
+        .tool-title { font-size: 13px; font-weight: 700; color: #0f1923; }
+        .tool-desc { font-size: 11px; color: #aaa; margin-top: 1px; }
+        .tool-body { padding: 1.25rem; }
+        .input-group { margin-bottom: 10px; }
+        .input-label { font-size: 11px; font-weight: 600; color: #555; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .input-field { width: 100%; border: 1.5px solid #e8e9ec; border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #1a1a2e; outline: none; font-family: inherit; transition: border-color 0.15s; }
+        .input-field:focus { border-color: #e94560; }
+        .select-field { width: 100%; border: 1.5px solid #e8e9ec; border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #1a1a2e; outline: none; font-family: inherit; background: #fff; cursor: pointer; }
+        .select-field:focus { border-color: #e94560; }
+        .input-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .analyze-btn { width: 100%; background: #e94560; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
+        .analyze-btn:hover { background: #c0392b; }
+
+        /* RESPONSE */
+        .response-box { display: none; background: #f8f9fc; border-radius: 8px; padding: 1rem; margin-top: 10px; border: 1px solid #e8e9ec; }
+        .response-box.visible { display: block; }
+        .response-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .response-dot { width: 8px; height: 8px; border-radius: 50%; background: #e94560; flex-shrink: 0; }
+        .response-label { font-size: 10px; font-weight: 700; color: #e94560; text-transform: uppercase; letter-spacing: 0.5px; }
+        .response-text { font-size: 12px; line-height: 1.7; color: #333; }
+        .response-text h1, .response-text h2, .response-text h3 { color: #0f3460; margin: 10px 0 5px; font-size: 13px; }
+        .response-text h1:first-child, .response-text h2:first-child, .response-text h3:first-child { margin-top: 0; }
+        .response-text strong { color: #1a1a2e; }
+        .response-text ul, .response-text ol { margin-left: 16px; margin-bottom: 8px; }
+        .response-text li { margin-bottom: 3px; }
+        .response-text p { margin-bottom: 8px; }
+        .response-text p:last-child { margin-bottom: 0; }
+        .loading-text { color: #0f3460; font-style: italic; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+        .loading-text::before { content: ''; width: 12px; height: 12px; border: 2px solid #e8e9ec; border-top-color: #0f3460; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* TIPS */
+        .tips-section { background: #fff; border-radius: 14px; border: 1px solid #e8e9ec; padding: 1.25rem; }
+        .tips-title { font-size: 13px; font-weight: 700; color: #0f1923; margin-bottom: 12px; }
+        .tips-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .tip-item { background: #f8f9fc; border-radius: 10px; padding: 0.9rem; }
+        .tip-icon { font-size: 1.1rem; margin-bottom: 6px; }
+        .tip-title-sm { font-size: 12px; font-weight: 700; color: #0f1923; margin-bottom: 4px; }
+        .tip-text { font-size: 11px; color: #777; line-height: 1.5; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="/" class="logo">RIGOR<span>LYTICS</span></a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/stats" class="nav-link">Stats</a>
+        <a href="/ask" class="nav-link">Ask</a>
+        <a href="/fantasy" class="nav-link">Fantasy</a>
+        <a href="/betting" class="nav-link active">Betting</a>
+        <a href="/pro" class="nav-link pro-link">Pro</a>
+        <a href="/about" class="nav-link">About</a>
+    </div>
+    <div><button class="nav-btn">Sign in</button></div>
+</nav>
+
+<div class="page">
+    <div class="disclaimer">
+        <div class="disclaimer-icon">⚠️</div>
+        <div><strong>For informational purposes only.</strong> Rigorlytics provides statistical analysis to inform decisions. Always gamble responsibly. Must be 21+ and in a jurisdiction where sports betting is legal.</div>
+    </div>
+
+    <div class="page-header">
+        <div class="page-header-left">
+            <div class="page-header-eyebrow">Betting Intelligence</div>
+            <div class="page-header-title">Find the <em>statistical edge</em><br>before you bet</div>
+            <div class="page-header-sub">Data-driven analysis across NFL, NBA, MLB, NHL, and Soccer</div>
+        </div>
+        <div class="header-stats">
+            <div class="header-stat">
+                <div class="header-stat-num">5</div>
+                <div class="header-stat-label">Sports</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-num">4</div>
+                <div class="header-stat-label">Tools</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SPORT TABS -->
+    <div class="sport-tabs">
+        <div class="sport-tab active" id="tab-nfl" onclick="switchSport('nfl')">
+            <div class="sport-tab-icon">🏈</div>
+            <div class="sport-tab-name">NFL</div>
+        </div>
+        <div class="sport-tab" id="tab-nba" onclick="switchSport('nba')">
+            <div class="sport-tab-icon">🏀</div>
+            <div class="sport-tab-name">NBA</div>
+        </div>
+        <div class="sport-tab" id="tab-mlb" onclick="switchSport('mlb')">
+            <div class="sport-tab-icon">⚾</div>
+            <div class="sport-tab-name">MLB</div>
+        </div>
+        <div class="sport-tab" id="tab-nhl" onclick="switchSport('nhl')">
+            <div class="sport-tab-icon">🏒</div>
+            <div class="sport-tab-name">NHL</div>
+        </div>
+        <div class="sport-tab" id="tab-soccer" onclick="switchSport('soccer')">
+            <div class="sport-tab-icon">⚽</div>
+            <div class="sport-tab-name">Soccer</div>
+        </div>
+    </div>
+
+    <!-- SPORT NAME DISPLAY -->
+    <div id="sport-label" style="font-size:13px;font-weight:700;color:#0f1923;margin-bottom:12px;">NFL Betting Analysis</div>
+
+    <!-- TOOLS GRID -->
+    <div class="tools-grid">
+
+        <!-- GAME PICKS -->
+        <div class="tool-card">
+            <div class="tool-header">
+                <div class="tool-icon">🎯</div>
+                <div>
+                    <div class="tool-title">Game Pick Advisor</div>
+                    <div class="tool-desc">Best bets for tonight based on statistical analysis</div>
+                </div>
+            </div>
+            <div class="tool-body">
+                <div class="input-group">
+                    <div class="input-label">Team 1</div>
+                    <input class="input-field" id="gp-team1" placeholder="e.g. Kansas City Chiefs" />
+                </div>
+                <div class="input-group">
+                    <div class="input-label">Team 2</div>
+                    <input class="input-field" id="gp-team2" placeholder="e.g. Buffalo Bills" />
+                </div>
+                <div class="input-row-2">
+                    <div>
+                        <div class="input-label">Current line</div>
+                        <input class="input-field" id="gp-line" placeholder="e.g. -3.5" />
+                    </div>
+                    <div>
+                        <div class="input-label">Over/Under</div>
+                        <input class="input-field" id="gp-ou" placeholder="e.g. 47.5" />
+                    </div>
+                </div>
+                <button class="analyze-btn" onclick="analyzePick()">Analyze This Game</button>
+                <div class="response-box" id="gp-resp">
+                    <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Game Analysis</div></div>
+                    <div class="response-text" id="gp-text"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLAYER PROPS -->
+        <div class="tool-card">
+            <div class="tool-header">
+                <div class="tool-icon">📊</div>
+                <div>
+                    <div class="tool-title">Player Prop Analyzer</div>
+                    <div class="tool-desc">Statistical edge on player prop bets</div>
+                </div>
+            </div>
+            <div class="tool-body">
+                <div class="input-group">
+                    <div class="input-label">Player name</div>
+                    <input class="input-field" id="pp-player" placeholder="e.g. Patrick Mahomes" />
+                </div>
+                <div class="input-group">
+                    <div class="input-label">Prop type</div>
+                    <input class="input-field" id="pp-prop" placeholder="e.g. Over 275.5 passing yards" />
+                </div>
+                <div class="input-group">
+                    <div class="input-label">Opposing team</div>
+                    <input class="input-field" id="pp-opp" placeholder="e.g. Baltimore Ravens" />
+                </div>
+                <button class="analyze-btn" onclick="analyzeProp()">Analyze This Prop</button>
+                <div class="response-box" id="pp-resp">
+                    <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Prop Analysis</div></div>
+                    <div class="response-text" id="pp-text"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPREAD ANALYSIS -->
+        <div class="tool-card">
+            <div class="tool-header">
+                <div class="tool-icon">📉</div>
+                <div>
+                    <div class="tool-title">Spread Analysis</div>
+                    <div class="tool-desc">Does this team cover the spread statistically?</div>
+                </div>
+            </div>
+            <div class="tool-body">
+                <div class="input-group">
+                    <div class="input-label">Team to bet on</div>
+                    <input class="input-field" id="sp-team" placeholder="e.g. San Francisco 49ers" />
+                </div>
+                <div class="input-group">
+                    <div class="input-label">Spread</div>
+                    <input class="input-field" id="sp-spread" placeholder="e.g. -6.5 or +3" />
+                </div>
+                <div class="input-row-2">
+                    <div>
+                        <div class="input-label">Opponent</div>
+                        <input class="input-field" id="sp-opp" placeholder="e.g. Dallas Cowboys" />
+                    </div>
+                    <div>
+                        <div class="input-label">Location</div>
+                        <select class="select-field" id="sp-loc">
+                            <option>Home</option>
+                            <option>Away</option>
+                            <option>Neutral</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="analyze-btn" onclick="analyzeSpread()">Analyze This Spread</button>
+                <div class="response-box" id="sp-resp">
+                    <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Spread Analysis</div></div>
+                    <div class="response-text" id="sp-text"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OVER/UNDER -->
+        <div class="tool-card">
+            <div class="tool-header">
+                <div class="tool-icon">⬆️</div>
+                <div>
+                    <div class="tool-title">Over/Under Analyzer</div>
+                    <div class="tool-desc">Statistical analysis on totals bets</div>
+                </div>
+            </div>
+            <div class="tool-body">
+                <div class="input-group">
+                    <div class="input-label">Team 1</div>
+                    <input class="input-field" id="ou-team1" placeholder="e.g. Los Angeles Rams" />
+                </div>
+                <div class="input-group">
+                    <div class="input-label">Team 2</div>
+                    <input class="input-field" id="ou-team2" placeholder="e.g. Miami Dolphins" />
+                </div>
+                <div class="input-row-2">
+                    <div>
+                        <div class="input-label">Total line</div>
+                        <input class="input-field" id="ou-total" placeholder="e.g. 51.5" />
+                    </div>
+                    <div>
+                        <div class="input-label">Your lean</div>
+                        <select class="select-field" id="ou-lean">
+                            <option>Over</option>
+                            <option>Under</option>
+                            <option>Not sure</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="analyze-btn" onclick="analyzeOU()">Analyze Over/Under</button>
+                <div class="response-box" id="ou-resp">
+                    <div class="response-header"><div class="response-dot"></div><div class="response-label">Rigorlytics Totals Analysis</div></div>
+                    <div class="response-text" id="ou-text"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TIPS -->
+    <div class="tips-section">
+        <div class="tips-title">Betting intelligence principles from Rigorlytics</div>
+        <div class="tips-grid">
+            <div class="tip-item">
+                <div class="tip-icon">📐</div>
+                <div class="tip-title-sm">Line movement matters</div>
+                <div class="tip-text">Sharp money moves lines. If a line moves against public betting, the sharps are on the other side.</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">🏠</div>
+                <div class="tip-title-sm">Home field is overstated</div>
+                <div class="tip-text">Home field advantage is worth roughly 2.5-3 points in NFL. Markets often price it at 3+ giving away value.</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">🎲</div>
+                <div class="tip-title-sm">Props over spreads</div>
+                <div class="tip-text">Player props offer more statistical edge than spreads. Books are sharper on game lines than individual player markets.</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">📅</div>
+                <div class="tip-title-sm">Injury reports are gold</div>
+                <div class="tip-text">Late injury news creates market inefficiency. A key player ruled out after lines are set is often the best betting opportunity.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let activeSport = 'nfl';
+    const sportLabels = {
+        nfl: 'NFL Betting Analysis',
+        nba: 'NBA Betting Analysis',
+        mlb: 'MLB Betting Analysis',
+        nhl: 'NHL Betting Analysis',
+        soccer: 'Soccer Betting Analysis'
+    };
+
+    function switchSport(sport) {
+        activeSport = sport;
+        document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + sport).classList.add('active');
+        document.getElementById('sport-label').innerText = sportLabels[sport];
+        updatePlaceholders(sport);
+    }
+
+    function updatePlaceholders(sport) {
+        const placeholders = {
+            nfl: { t1: 'e.g. Kansas City Chiefs', t2: 'e.g. Buffalo Bills', line: 'e.g. -3.5', ou: 'e.g. 47.5', player: 'e.g. Patrick Mahomes', prop: 'e.g. Over 275.5 passing yards', opp: 'e.g. Baltimore Ravens', team: 'e.g. San Francisco 49ers', spread: 'e.g. -6.5 or +3', sopp: 'e.g. Dallas Cowboys', out1: 'e.g. Los Angeles Rams', out2: 'e.g. Miami Dolphins', total: 'e.g. 51.5' },
+            nba: { t1: 'e.g. Boston Celtics', t2: 'e.g. Golden State Warriors', line: 'e.g. -5.5', ou: 'e.g. 224.5', player: 'e.g. LeBron James', prop: 'e.g. Over 27.5 points', opp: 'e.g. Miami Heat', team: 'e.g. Denver Nuggets', spread: 'e.g. -4 or +7', sopp: 'e.g. LA Clippers', out1: 'e.g. Phoenix Suns', out2: 'e.g. Brooklyn Nets', total: 'e.g. 231.5' },
+            mlb: { t1: 'e.g. New York Yankees', t2: 'e.g. Los Angeles Dodgers', line: 'e.g. -150 ML', ou: 'e.g. 8.5', player: 'e.g. Shohei Ohtani', prop: 'e.g. Over 1.5 total bases', opp: 'e.g. San Francisco Giants', team: 'e.g. Atlanta Braves', spread: 'e.g. -1.5 or +1.5 RL', sopp: 'e.g. New York Mets', out1: 'e.g. Houston Astros', out2: 'e.g. Texas Rangers', total: 'e.g. 9.0' },
+            nhl: { t1: 'e.g. Colorado Avalanche', t2: 'e.g. Tampa Bay Lightning', line: 'e.g. -140 ML', ou: 'e.g. 6.5', player: 'e.g. Connor McDavid', prop: 'e.g. Over 0.5 goals', opp: 'e.g. Vegas Golden Knights', team: 'e.g. Edmonton Oilers', spread: 'e.g. -1.5 or +1.5 puck line', sopp: 'e.g. Calgary Flames', out1: 'e.g. Boston Bruins', out2: 'e.g. Toronto Maple Leafs', total: 'e.g. 6.0' },
+            soccer: { t1: 'e.g. Manchester City', t2: 'e.g. Arsenal', line: 'e.g. -160 ML', ou: 'e.g. 2.5', player: 'e.g. Mohamed Salah', prop: 'e.g. Over 0.5 goals', opp: 'e.g. Liverpool', team: 'e.g. Chelsea', spread: 'e.g. -0.5 Asian handicap', sopp: 'e.g. Tottenham', out1: 'e.g. Real Madrid', out2: 'e.g. Barcelona', total: 'e.g. 2.5 goals' }
+        };
+        const p = placeholders[sport];
+        document.getElementById('gp-team1').placeholder = p.t1;
+        document.getElementById('gp-team2').placeholder = p.t2;
+        document.getElementById('gp-line').placeholder = p.line;
+        document.getElementById('gp-ou').placeholder = p.ou;
+        document.getElementById('pp-player').placeholder = p.player;
+        document.getElementById('pp-prop').placeholder = p.prop;
+        document.getElementById('pp-opp').placeholder = p.opp;
+        document.getElementById('sp-team').placeholder = p.team;
+        document.getElementById('sp-spread').placeholder = p.spread;
+        document.getElementById('sp-opp').placeholder = p.sopp;
+        document.getElementById('ou-team1').placeholder = p.out1;
+        document.getElementById('ou-team2').placeholder = p.out2;
+        document.getElementById('ou-total').placeholder = p.total;
+    }
+
+    function showLoading(textId, boxId) {
+        const box = document.getElementById(boxId);
+        box.classList.add('visible');
+        document.getElementById(textId).innerHTML = '<div class="loading-text">Analyzing...</div>';
+        box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    async function callAI(question, textId, boxId) {
+        showLoading(textId, boxId);
+        try {
+            const res = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question })
+            });
+            const data = await res.json();
+            document.getElementById(textId).innerHTML = marked.parse(data.answer);
+        } catch(err) {
+            document.getElementById(textId).innerText = 'Error connecting to Rigorlytics. Please try again.';
+        }
+    }
+
+    function analyzePick() {
+        const t1 = document.getElementById('gp-team1').value.trim();
+        const t2 = document.getElementById('gp-team2').value.trim();
+        const line = document.getElementById('gp-line').value.trim();
+        const ou = document.getElementById('gp-ou').value.trim();
+        if (!t1 || !t2) { alert('Please enter both teams'); return; }
+        const sport = activeSport.toUpperCase();
+        const q = `${sport} betting analysis: ${t1} vs ${t2}. ${line ? 'Current spread: ' + line + '.' : ''} ${ou ? 'Over/Under: ' + ou + '.' : ''} Provide a comprehensive betting breakdown including: which side has the statistical edge on the spread, whether the total should go over or under based on team offensive and defensive metrics, key matchup factors, and your overall best bet recommendation for this game.`;
+        callAI(q, 'gp-text', 'gp-resp');
+    }
+
+    function analyzeProp() {
+        const player = document.getElementById('pp-player').value.trim();
+        const prop = document.getElementById('pp-prop').value.trim();
+        const opp = document.getElementById('pp-opp').value.trim();
+        if (!player || !prop) { alert('Please enter player and prop'); return; }
+        const sport = activeSport.toUpperCase();
+        const q = `${sport} player prop bet analysis: ${player} - ${prop}${opp ? ' vs ' + opp : ''}. Analyze this prop bet using historical performance data, recent form, matchup statistics, and situational factors. Does the statistical evidence support taking the over or under on this prop? Give me a clear recommendation with supporting data.`;
+        callAI(q, 'pp-text', 'pp-resp');
+    }
+
+    function analyzeSpread() {
+        const team = document.getElementById('sp-team').value.trim();
+        const spread = document.getElementById('sp-spread').value.trim();
+        const opp = document.getElementById('sp-opp').value.trim();
+        const loc = document.getElementById('sp-loc').value;
+        if (!team || !spread) { alert('Please enter team and spread'); return; }
+        const sport = activeSport.toUpperCase();
+        const q = `${sport} spread analysis: ${team} ${spread} playing ${loc}${opp ? ' vs ' + opp : ''}. Analyze whether ${team} covers this spread. Consider their ATS record, offensive and defensive efficiency, situational trends ${loc === 'Home' ? '(home record)' : loc === 'Away' ? '(road record)' : ''}, and any relevant matchup factors. Give me a clear cover or no-cover recommendation with statistical backing.`;
+        callAI(q, 'sp-text', 'sp-resp');
+    }
+
+    function analyzeOU() {
+        const t1 = document.getElementById('ou-team1').value.trim();
+        const t2 = document.getElementById('ou-team2').value.trim();
+        const total = document.getElementById('ou-total').value.trim();
+        const lean = document.getElementById('ou-lean').value;
+        if (!t1 || !t2 || !total) { alert('Please fill in all fields'); return; }
+        const sport = activeSport.toUpperCase();
+        const q = `${sport} over/under analysis: ${t1} vs ${t2} with a total of ${total}. I am leaning ${lean}. Analyze this total using both teams offensive and defensive scoring averages, pace of play, weather if applicable, and recent over/under trends. Does the statistical evidence support the over or under? Give me a clear recommendation.`;
+        callAI(q, 'ou-text', 'ou-resp');
+    }
+</script>
+</body>
+</html>
