@@ -6,12 +6,19 @@ from app.nfl import search_nfl_data
 from app.mlb import search_mlb_data
 from app.nhl import search_nhl_data
 from app.wnba import search_wnba_data
+from app.live import get_todays_games
 
 load_dotenv()
 client = anthropic.Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
 
 def gather_context(question):
     context = ""
+    try:
+        live = get_todays_games(question)
+        if live:
+            context += "LIVE GAME DATA (retrieved just now, this is current):\n" + live + "\n"
+    except Exception:
+        pass
     try:
         nba_data = search_nba(question)
         if nba_data and "No specific" not in nba_data:
