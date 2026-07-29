@@ -109,15 +109,7 @@
 <body>
 <div class="topbar">
     <span class="topbar-label">Live</span>
-    <div class="score-items">
-        <div class="score-item"><div class="score-teams"><div class="score-team"><span class="score-abbr">NYY</span><span class="score-pts leader">5</span></div><div class="score-team"><span class="score-abbr">BOS</span><span class="score-pts">3</span></div></div><span class="score-status">7th</span></div>
-        <div class="score-divider"></div>
-        <div class="score-item"><div class="score-teams"><div class="score-team"><span class="score-abbr">LAD</span><span class="score-pts leader">2</span></div><div class="score-team"><span class="score-abbr">SF</span><span class="score-pts">1</span></div></div><span class="score-status">5th</span></div>
-        <div class="score-divider"></div>
-        <div class="score-item"><div class="score-teams"><div class="score-team"><span class="score-abbr">ATL</span><span class="score-pts">0</span></div><div class="score-team"><span class="score-abbr">MIA</span><span class="score-pts">0</span></div></div><span class="score-status">7:05 PM</span></div>
-        <div class="score-divider"></div>
-        <div class="score-item"><div class="score-teams"><div class="score-team"><span class="score-abbr">HOU</span><span class="score-pts">0</span></div><div class="score-team"><span class="score-abbr">TEX</span><span class="score-pts">0</span></div></div><span class="score-status">8:05 PM</span></div>
-    </div>
+    <div class="score-items" id="scoreItems"><span style="font-size:11px;color:rgba(255,255,255,0.35);">Loading scores...</span></div>
 </div>
 <nav>
     <a href="/" class="logo">RIGOR<span>LYTICS</span></a>
@@ -243,5 +235,53 @@
         }
     }
 </script>
+
+<script>
+async function loadScores() {
+    try {
+        const res = await fetch('/api/scores');
+        const data = await res.json();
+        const el = document.getElementById('scoreItems');
+        if (!data.games || !data.games.length) {
+            el.innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.35);">No games scheduled</span>';
+            return;
+        }
+        const abbr = (name) => {
+            const parts = name.trim().split(' ');
+            const last = parts[parts.length - 1];
+            return last.substring(0, 3).toUpperCase();
+        };
+        const teamCode = (g, side) => {
+            const real = side === 'away' ? g.away_abbr : g.home_abbr;
+            if (real && real.length) return real;
+            return abbr(side === 'away' ? g.away : g.home);
+        };
+        el.innerHTML = data.games.map(g => {
+            const st = (g.detail || g.status || '');
+            const isLive = /quarter|halftime|period|inning|progress|live|ot|top |bot |middle|end of/i.test(st);
+            const aScore = (g.away_score !== null && g.away_score !== undefined && g.away_score !== '') ? g.away_score : '';
+            const hScore = (g.home_score !== null && g.home_score !== undefined && g.home_score !== '') ? g.home_score : '';
+            const aLead = aScore !== '' && hScore !== '' && Number(aScore) > Number(hScore);
+            const hLead = aScore !== '' && hScore !== '' && Number(hScore) > Number(aScore);
+            const statusColor = isLive ? '#4ade80' : '#e94560';
+            const statusBg = isLive ? 'rgba(74,222,128,0.15)' : 'rgba(233,69,96,0.15)';
+            return `
+              <div class="score-item">
+                <div class="score-teams">
+                  <div class="score-team"><span class="score-abbr">${teamCode(g, 'away')}</span><span class="score-pts ${aLead ? 'leader' : ''}">${aScore}</span></div>
+                  <div class="score-team"><span class="score-abbr">${teamCode(g, 'home')}</span><span class="score-pts ${hLead ? 'leader' : ''}">${hScore}</span></div>
+                </div>
+                <span class="score-status" style="color:${statusColor};background:${statusBg};">${st.length > 18 ? st.substring(0,18) : st}</span>
+              </div>
+              <div class="score-divider"></div>`;
+        }).join('');
+    } catch (e) {
+        document.getElementById('scoreItems').innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.35);">Scores unavailable</span>';
+    }
+}
+loadScores();
+setInterval(loadScores, 60000);
+</script>
+
 </body>
 </html>

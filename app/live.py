@@ -18,10 +18,12 @@ def get_mlb_games(date_str=None):
                 games.append({
                     "away": away.get("team", {}).get("name", ""),
                     "home": home.get("team", {}).get("name", ""),
+                    "away_abbr": away.get("team", {}).get("abbreviation", ""),
+                    "home_abbr": home.get("team", {}).get("abbreviation", ""),
                     "away_score": away.get("score"),
                     "home_score": home.get("score"),
                     "status": g.get("status", {}).get("detailedState", ""),
-                    "detail": line.get("currentInningOrdinal", ""),
+                    "detail": (line.get("currentInningOrdinal", "") if "progress" in g.get("status", {}).get("detailedState", "").lower() else g.get("status", {}).get("detailedState", "")),
                 })
         return games
     except Exception:
@@ -43,6 +45,8 @@ def get_nhl_games(date_str=None):
                 games.append({
                     "away": g.get("awayTeam", {}).get("placeName", {}).get("default", ""),
                     "home": g.get("homeTeam", {}).get("placeName", {}).get("default", ""),
+                    "away_abbr": g.get("awayTeam", {}).get("abbrev", ""),
+                    "home_abbr": g.get("homeTeam", {}).get("abbrev", ""),
                     "away_score": g.get("awayTeam", {}).get("score"),
                     "home_score": g.get("homeTeam", {}).get("score"),
                     "status": g.get("gameState", ""),
@@ -73,6 +77,8 @@ def get_espn_games(sport_path):
             games.append({
                 "away": away.get("team", {}).get("displayName", ""),
                 "home": home.get("team", {}).get("displayName", ""),
+                "away_abbr": away.get("team", {}).get("abbreviation", ""),
+                "home_abbr": home.get("team", {}).get("abbreviation", ""),
                 "away_score": away.get("score"),
                 "home_score": home.get("score"),
                 "status": st.get("description", ""),
