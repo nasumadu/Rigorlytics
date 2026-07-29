@@ -126,7 +126,7 @@
         </div>
         <div class="header-stats">
             <div class="hstat"><div class="hstat-n">4</div><div class="hstat-l">Tools</div></div>
-            <div class="hstat"><div class="hstat-n">5</div><div class="hstat-l">Sports</div></div>
+            <div class="hstat"><div class="hstat-n">6</div><div class="hstat-l">Sports</div></div>
         </div>
     </div>
 
@@ -136,6 +136,7 @@
         <div class="sport-tab" id="tab-mlb" onclick="switchSport('mlb')"><div class="sport-tab-icon">⚾</div><div class="sport-tab-name">MLB</div></div>
         <div class="sport-tab" id="tab-nhl" onclick="switchSport('nhl')"><div class="sport-tab-icon">🏒</div><div class="sport-tab-name">NHL</div></div>
         <div class="sport-tab" id="tab-wnba" onclick="switchSport('wnba')"><div class="sport-tab-icon">🏀</div><div class="sport-tab-name">WNBA</div></div>
+        <div class="sport-tab" id="tab-soccer" onclick="switchSport('soccer')"><div class="sport-tab-icon">⚽</div><div class="sport-tab-name">Soccer</div></div>
     </div>
 
     <div class="section-label" id="sport-label">NBA Front Office Tools</div>
@@ -357,7 +358,7 @@
 
 <script>
     let activeSport = 'NBA';
-    const labels = { nba: 'NBA Front Office Tools', nfl: 'NFL Front Office Tools', mlb: 'MLB Front Office Tools', nhl: 'NHL Front Office Tools', wnba: 'WNBA Front Office Tools' };
+    const labels = { nba: 'NBA Front Office Tools', nfl: 'NFL Front Office Tools', mlb: 'MLB Front Office Tools', nhl: 'NHL Front Office Tools', wnba: 'WNBA Front Office Tools', soccer: 'Soccer Front Office Tools' };
 
     function switchSport(s) {
         activeSport = s.toUpperCase();
@@ -373,7 +374,8 @@
             nfl: { p: 'e.g. Justin Herbert', sal: 'e.g. $52M/yr', give: 'e.g. Davante Adams, 2026 2nd', get: 'e.g. Micah Parsons', prospect: 'e.g. Travis Hunter', pos: 'e.g. Wide Receiver', team: 'e.g. Dallas Cowboys' },
             mlb: { p: 'e.g. Juan Soto', sal: 'e.g. $51M/yr', give: 'e.g. Pete Alonso, prospect', get: 'e.g. Corbin Burnes', prospect: 'e.g. Jackson Holliday', pos: 'e.g. Shortstop', team: 'e.g. New York Yankees' },
             nhl: { p: 'e.g. Connor McDavid', sal: 'e.g. $12.5M/yr', give: 'e.g. Jack Eichel, 1st round pick', get: 'e.g. Mikko Rantanen', prospect: 'e.g. Macklin Celebrini', pos: 'e.g. Center', team: 'e.g. Edmonton Oilers' },
-            wnba: { p: 'e.g. Caitlin Clark', sal: 'e.g. $76K/yr', give: 'e.g. Jonquel Jones', get: 'e.g. Kelsey Plum', prospect: 'e.g. Paige Bueckers', pos: 'e.g. Guard', team: 'e.g. Las Vegas Aces' }
+            wnba: { p: 'e.g. Caitlin Clark', sal: 'e.g. $76K/yr', give: 'e.g. Jonquel Jones', get: 'e.g. Kelsey Plum', prospect: 'e.g. Paige Bueckers', pos: 'e.g. Guard', team: 'e.g. Las Vegas Aces' },
+            soccer: { p: 'e.g. Erling Haaland', sal: 'e.g. £19.5M/yr', give: 'e.g. Marcus Rashford, £40M', get: 'e.g. Bruno Guimaraes', prospect: 'e.g. Lamine Yamal', pos: 'e.g. Winger', team: 'e.g. Manchester City' }
         };
         const p = ph[s];
         document.getElementById('cv-player').placeholder = p.p;
