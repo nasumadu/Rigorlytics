@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats - Rigorlytics</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
+        nav { background: #fff; border-bottom: 1px solid #e8e9ec; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 58px; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.25rem; font-weight: 800; color: #0f1923; letter-spacing: -0.5px; text-decoration: none; }
+        .logo span { color: #e94560; }
+        .nav-links { display: flex; }
+        .nav-link { padding: 0 16px; height: 58px; display: flex; align-items: center; font-size: 13px; font-weight: 500; color: #666; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover { color: #0f1923; }
+        .nav-link.active { color: #0f1923; border-bottom-color: #e94560; font-weight: 600; }
+        .nav-link.pro-link { color: #0f3460; font-weight: 600; }
+        .nav-btn { background: #0f1923; color: #fff; border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .page { max-width: 720px; margin: 0 auto; padding: 4rem 1.5rem; }
+        @media (max-width: 768px) { .nav-links { display: none; } .preview-grid { grid-template-columns: 1fr; } }
+
+        .hero { background: #0f1923; border-radius: 20px; padding: 3rem 2rem; text-align: center; margin-bottom: 1.5rem; }
+        .badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(233,69,96,0.15); border: 1px solid rgba(233,69,96,0.3); border-radius: 20px; padding: 6px 16px; margin-bottom: 20px; }
+        .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #e94560; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .badge-text { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #e94560; text-transform: uppercase; }
+        .hero-title { font-size: 2rem; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.5px; }
+        .hero-title em { color: #e94560; font-style: normal; }
+        .hero-sub { font-size: 0.95rem; color: rgba(255,255,255,0.55); line-height: 1.75; max-width: 480px; margin: 0 auto; }
+
+        .section { background: #fff; border-radius: 16px; border: 1px solid #e8e9ec; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-eye { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: #e94560; text-transform: uppercase; margin-bottom: 10px; }
+        .section-title { font-size: 1.2rem; font-weight: 800; color: #0f1923; margin-bottom: 1.25rem; }
+        .preview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .preview-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: #f8f9fc; border-radius: 10px; }
+        .preview-icon { font-size: 1.2rem; flex-shrink: 0; }
+        .preview-name { font-size: 13px; font-weight: 700; color: #0f1923; margin-bottom: 3px; }
+        .preview-desc { font-size: 11px; color: #888; line-height: 1.5; }
+
+        .cta { background: #e94560; border-radius: 16px; padding: 2.25rem; text-align: center; }
+        .cta-title { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+        .cta-sub { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 1.5rem; line-height: 1.6; }
+        .cta-btn { display: inline-block; background: #fff; color: #e94560; font-size: 13px; font-weight: 700; padding: 11px 30px; border-radius: 8px; text-decoration: none; }
+        .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="/" class="logo">RIGOR<span>LYTICS</span></a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/stats" class="nav-link active">Stats</a>
+        <a href="/ask" class="nav-link">Ask</a>
+        <a href="/fantasy" class="nav-link">Fantasy</a>
+        <a href="/betting" class="nav-link">Betting</a>
+        <a href="/pro" class="nav-link pro-link">Pro</a>
+        <a href="/about" class="nav-link">About</a>
+    </div>
+    <div><button class="nav-btn">Sign in</button></div>
+</nav>
+
+<div class="page">
+
+    <div class="hero">
+        <div class="badge">
+            <div class="badge-dot"></div>
+            <span class="badge-text">In development</span>
+        </div>
+        <div class="hero-title">Stats is <em>coming soon</em></div>
+        <p class="hero-sub">We're building a fast, searchable stats database covering every player and team across all Rigorlytics sports. Clean numbers, instant lookup, no waiting.</p>
+    </div>
+
+    <div class="section">
+        <div class="section-eye">What's coming</div>
+        <div class="section-title">Built for instant lookup</div>
+        <div class="preview-grid">
+            <div class="preview-item">
+                <div class="preview-icon">🔍</div>
+                <div>
+                    <div class="preview-name">Player search</div>
+                    <div class="preview-desc">Find any player instantly and see their full statistical profile at a glance.</div>
+                </div>
+            </div>
+            <div class="preview-item">
+                <div class="preview-icon">📊</div>
+                <div>
+                    <div class="preview-name">Season and career stats</div>
+                    <div class="preview-desc">Complete season splits and career totals across every league we cover.</div>
+                </div>
+            </div>
+            <div class="preview-item">
+                <div class="preview-icon">📈</div>
+                <div>
+                    <div class="preview-name">Advanced metrics</div>
+                    <div class="preview-desc">PER, True Shooting, WAR, EPA, Corsi, and other advanced analytics.</div>
+                </div>
+            </div>
+            <div class="preview-item">
+                <div class="preview-icon">🏟️</div>
+                <div>
+                    <div class="preview-name">Team stats</div>
+                    <div class="preview-desc">Team performance, standings, and roster breakdowns by season.</div>
+                </div>
+            </div>
+            <div class="preview-item">
+                <div class="preview-icon">⚖️</div>
+                <div>
+                    <div class="preview-name">Side by side comparison</div>
+                    <div class="preview-desc">Compare any two players across every metric that matters.</div>
+                </div>
+            </div>
+            <div class="preview-item">
+                <div class="preview-icon">🗂️</div>
+                <div>
+                    <div class="preview-name">Sortable leaderboards</div>
+                    <div class="preview-desc">League leaders in every category, filterable by season and position.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta">
+        <div class="cta-title">In the meantime, just ask</div>
+        <div class="cta-sub">Rigorlytics can already answer any stats question you have. Ask about any player, any season, any comparison.</div>
+        <a href="/ask" class="cta-btn">Go to Ask</a>
+    </div>
+
+</div>
+</body>
+</html>
