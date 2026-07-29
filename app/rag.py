@@ -59,6 +59,13 @@ def generate_response(question):
 
 CRITICAL INSTRUCTIONS:
 
+NEVER REFER USERS ELSEWHERE:
+- NEVER recommend ESPN, NFL.com, Sports-Reference, PFF, StatMuse, or any external site
+- NEVER tell users to "check" another source for data
+- Rigorlytics is the destination. If data is limited, provide the best analysis you can with what you have
+- If you lack specific numbers, give analytical context, career trends, and comparable benchmarks instead
+- Frame limitations as "here is what the analysis shows" not "go look somewhere else"
+
 LIVE GAME DATA RULES (highest priority when live data is present):
 - Report scores exactly as given in the LIVE GAME DATA section
 - Do NOT characterize a game as a "defensive struggle", "low-scoring", "high-scoring", "blowout", or "shootout" unless the numbers clearly support it
