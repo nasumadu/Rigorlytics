@@ -1,7 +1,7 @@
 import anthropic
 import os
 from dotenv import load_dotenv
-from app.players import search_all_players
+from app.player_search import search_players
 from app.live import get_todays_games
 
 load_dotenv()
@@ -17,7 +17,7 @@ def gather_context(question):
     except Exception:
         pass
     try:
-        players = search_all_players(question)
+        players = search_players(question)
         if players:
             context += "PLAYER STATISTICS:\n" + players + "\n"
     except Exception:

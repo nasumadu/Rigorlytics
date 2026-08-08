@@ -21,6 +21,9 @@ Jinja2==3.1.6
 jiter==0.16.0
 MarkupSafe==3.0.3
 packaging==26.2
+psycopg==3.2.13
+psycopg-binary==3.2.13
+psycopg2-binary==2.9.12
 pydantic==2.13.4
 pydantic_core==2.46.4
 PyJWT==2.13.0

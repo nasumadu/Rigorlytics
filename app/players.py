@@ -22,6 +22,13 @@ STOPWORDS = {
     "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December",
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+    "Career", "Careers", "Statistics", "Stat", "Numbers", "Record", "Records",
+    "History", "Comparison", "Versus", "Vs", "And", "Or", "With", "Against",
+    "Better", "Worse", "Greatest", "GOAT", "Prime", "Peak", "Rookie",
+    "Playoff", "Playoffs", "Finals", "Championship", "MVP", "All",
+    "Value", "Contract", "Salary", "Worth", "Analysis", "Breakdown",
+    "Efficiency", "Advanced", "Metrics", "Per", "Average", "Averages",
+    "Overall", "Total", "Totals", "League", "Leaders", "Rankings",
 }
 
 
@@ -63,11 +70,54 @@ def extract_names(question):
     return out[:4]
 
 
+
+NFL_TEAMS = ["raiders", "chiefs", "49ers", "cowboys", "packers", "steelers", "patriots",
+             "eagles", "giants", "jets", "bills", "dolphins", "ravens", "bengals",
+             "browns", "texans", "colts", "jaguars", "titans", "broncos", "chargers",
+             "commanders", "bears", "lions", "vikings", "falcons", "panthers", "saints",
+             "buccaneers", "cardinals", "rams", "seahawks"]
+NBA_TEAMS = ["lakers", "celtics", "warriors", "bulls", "heat", "knicks", "nets", "nuggets",
+             "bucks", "suns", "mavericks", "clippers", "76ers", "sixers", "raptors",
+             "hawks", "hornets", "cavaliers", "pistons", "pacers", "grizzlies", "timberwolves",
+             "pelicans", "thunder", "magic", "blazers", "kings", "spurs", "jazz", "wizards", "rockets"]
+MLB_TEAMS = ["yankees", "red sox", "dodgers", "giants", "cubs", "cardinals", "mets",
+             "braves", "astros", "phillies", "padres", "mariners", "rangers", "blue jays",
+             "orioles", "rays", "twins", "guardians", "tigers", "royals", "white sox",
+             "angels", "athletics", "diamondbacks", "rockies", "brewers", "pirates",
+             "reds", "marlins", "nationals"]
+NHL_TEAMS = ["oilers", "penguins", "capitals", "bruins", "maple leafs", "canadiens",
+             "rangers", "avalanche", "lightning", "golden knights", "panthers", "stars",
+             "flames", "canucks", "jets", "wild", "predators", "blues", "sharks", "kraken"]
+WNBA_TEAMS = ["fever", "aces", "liberty", "sky", "storm", "mercury", "sun", "lynx",
+              "wings", "mystics", "dream", "sparks", "valkyries"]
+
+
+def infer_leagues(subtitle):
+    s = (subtitle or "").lower()
+    if any(t in s for t in NFL_TEAMS):
+        return ["nfl"]
+    if any(t in s for t in WNBA_TEAMS):
+        return ["wnba"]
+    if any(t in s for t in NBA_TEAMS):
+        return ["nba"]
+    if any(t in s for t in MLB_TEAMS):
+        return ["mlb"]
+    if any(t in s for t in NHL_TEAMS):
+        return ["nhl"]
+    return []
+
+
 def lookup_player(name):
-    """Search ESPN across all leagues. Returns (league_key, athlete_id, display, team)."""
+    """Search ESPN, prefer exact matches, and verify the athlete has stats."""
     try:
-        r = requests.get(SEARCH_URL, params={"query": name, "limit": 8}, timeout=10)
+        r = requests.get(SEARCH_URL, params={"query": name, "limit": 12}, timeout=10)
         data = r.json()
+
+        target = name.strip().lower()
+        suffixes = (" jr.", " jr", " sr.", " sr", " ii", " iii", " iv")
+        query_has_suffix = any(target.endswith(s) for s in suffixes)
+
+        candidates = []
         for res in data.get("results", []):
             if res.get("type") != "player":
                 continue
@@ -75,10 +125,53 @@ def lookup_player(name):
                 uid = c.get("uid", "")
                 if "a:" not in uid:
                     continue
+                athlete_id = uid.split("a:")[-1]
+                dn = c.get("displayName", name)
+                sub = c.get("subtitle", "")
+
+                league_key = None
                 for key, cfg in LEAGUES.items():
                     if cfg["uid"] in uid:
-                        return key, uid.split("a:")[-1], c.get("displayName", name), c.get("subtitle", "")
-        return None, None, None, None
+                        league_key = key
+                        break
+
+                # skip college results (l:23 etc) unless nothing else exists
+                is_college = league_key is None and "l:" in uid
+
+                exact = dn.strip().lower() == target
+                dn_has_suffix = any(dn.strip().lower().endswith(s) for s in suffixes)
+                suffix_penalty = 1 if (dn_has_suffix and not query_has_suffix) else 0
+
+                score = 0
+                if exact:
+                    score -= 10
+                score += suffix_penalty * 5
+                if is_college:
+                    score += 8
+                if league_key is None:
+                    score += 1
+
+                candidates.append((score, league_key, athlete_id, dn, sub))
+
+        if not candidates:
+            return None, None, None, None
+
+        candidates.sort(key=lambda x: x[0])
+
+        # try each candidate in order, return the first that actually has stats
+        for score, league_key, athlete_id, dn, sub in candidates[:5]:
+            if league_key:
+                leagues_to_try = [league_key]
+            else:
+                # infer league from the subtitle (team name) when uid has no league
+                leagues_to_try = infer_leagues(sub)
+            for lk in leagues_to_try:
+                for probe in (2024, 2015, 2005, 1998, 1990):
+                    if get_stats(lk, athlete_id, probe):
+                        return lk, athlete_id, dn, sub
+
+        top = candidates[0]
+        return top[1], top[2], top[3], top[4]
     except Exception:
         return None, None, None, None
 
@@ -270,7 +363,7 @@ def get_player_block(name, seasons=None):
 
     block = "\n" + label + " PLAYER: " + str(display) + "\n"
     if team:
-        block += "Team: " + str(team) + "\n"
+        block += "Most recent team on record: " + str(team) + " (NOT necessarily the team for the seasons below)\n"
     block += "Seasons of data: " + str(len(collected)) + "\n"
 
     career = compute_career(league_key, [s for _, s, _ in collected])
