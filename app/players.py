@@ -1,5 +1,6 @@
 import re
 import requests
+from concurrent.futures import ThreadPoolExecutor
 
 SEARCH_URL = "https://site.web.api.espn.com/apis/search/v2"
 
@@ -193,6 +194,48 @@ def format_stats(league_key, stats):
     return "\n".join(out)
 
 
+
+CAREER_AVG_FIELDS = {
+    "nba": [("offensive", "avgPoints", "PPG"), ("general", "avgRebounds", "RPG"),
+            ("offensive", "avgAssists", "APG"), ("offensive", "fieldGoalPct", "FG%"),
+            ("offensive", "threePointFieldGoalPct", "3P%"), ("offensive", "trueShootingPct", "TS%"),
+            ("general", "PER", "PER")],
+    "wnba": [("offensive", "avgPoints", "PPG"), ("general", "avgRebounds", "RPG"),
+             ("offensive", "avgAssists", "APG"), ("offensive", "trueShootingPct", "TS%")],
+    "nfl": [("receiving", "receptions", "Rec/season"), ("receiving", "receivingYards", "Rec Yds/season"),
+            ("passing", "passingYards", "Pass Yds/season"), ("rushing", "rushingYards", "Rush Yds/season")],
+    "mlb": [("batting", "avg", "AVG"), ("batting", "homeRuns", "HR/season"),
+            ("batting", "OPS", "OPS"), ("pitching", "ERA", "ERA")],
+    "nhl": [("offensive", "goals", "Goals/season"), ("offensive", "assists", "Assists/season"),
+            ("offensive", "points", "Points/season")],
+}
+
+
+def compute_career(league_key, season_stats_list):
+    """Average the per-game rate stats across all retrieved seasons."""
+    fields = CAREER_AVG_FIELDS.get(league_key, [])
+    if not fields or not season_stats_list:
+        return ""
+    out = []
+    for cat, key, label in fields:
+        vals = []
+        for st in season_stats_list:
+            raw = st.get(cat, {}).get(key)
+            if raw in (None, "", "-"):
+                continue
+            try:
+                vals.append(float(str(raw).replace(",", "").replace("%", "")))
+            except Exception:
+                continue
+        if vals:
+            avg = sum(vals) / len(vals)
+            out.append("    " + label + ": " + ("%.1f" % avg))
+    if not out:
+        return ""
+    n = len(season_stats_list)
+    return "\n  CAREER AVERAGE (across " + str(n) + " seasons retrieved):\n" + "\n".join(out) + "\n"
+
+
 def get_player_block(name, seasons=None):
     league_key, athlete_id, display, team = lookup_player(name)
     if not athlete_id:
@@ -201,47 +244,53 @@ def get_player_block(name, seasons=None):
     cfg = LEAGUES.get(league_key, {})
     label = cfg.get("label", "")
 
-    if seasons is None:
-        seasons = [2025, 2024, 2023]
+    years = list(range(2025, 2005, -1))
+
+    def fetch(y):
+        return (y, get_stats(league_key, athlete_id, y))
+
+    results = []
+    with ThreadPoolExecutor(max_workers=10) as pool:
+        for y, stats in pool.map(fetch, years):
+            if stats:
+                results.append((y, stats))
+
+    results.sort(key=lambda x: -x[0])
+
+    collected = []
+    for season, stats in results:
+        line = format_stats(league_key, stats)
+        if line:
+            collected.append((season, stats, line))
+        if len(collected) >= 12:
+            break
+
+    if not collected:
+        return ""
 
     block = "\n" + label + " PLAYER: " + str(display) + "\n"
     if team:
         block += "Team: " + str(team) + "\n"
+    block += "Seasons of data: " + str(len(collected)) + "\n"
 
-    found = False
-    for season in seasons:
-        stats = get_stats(league_key, athlete_id, season)
-        if not stats:
-            continue
-        line = format_stats(league_key, stats)
-        if not line:
-            continue
-        found = True
-        block += "\n  " + str(season) + " SEASON:\n" + line + "\n"
+    career = compute_career(league_key, [s for _, s, _ in collected])
+    if career:
+        block += career
 
-    if not found:
-        for season in [2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014,
-                       2013, 2012, 2011, 2010, 2009, 2008]:
-            stats = get_stats(league_key, athlete_id, season)
-            if not stats:
-                continue
-            line = format_stats(league_key, stats)
-            if not line:
-                continue
-            found = True
-            block += "\n  " + str(season) + " SEASON:\n" + line + "\n"
-            if block.count("SEASON:") >= 4:
-                break
+    block += "\n  SEASON BY SEASON:\n"
+    for season, _, line in collected:
+        block += "\n  " + str(season) + ":\n" + line + "\n"
 
-    return block if found else ""
+    return block
 
 
 def search_all_players(question):
-    """Extract names from a question and pull stats for each."""
     names = extract_names(question)
+    if not names:
+        return ""
     context = ""
-    for n in names:
-        b = get_player_block(n)
-        if b:
-            context += b
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        for b in pool.map(get_player_block, names):
+            if b:
+                context += b
     return context
