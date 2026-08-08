@@ -1,11 +1,7 @@
 import anthropic
 import os
 from dotenv import load_dotenv
-from app.nba import search_player_data as search_nba
-from app.nfl import search_nfl_data
-from app.mlb import search_mlb_data
-from app.nhl import search_nhl_data
-from app.wnba import search_wnba_data
+from app.players import search_all_players
 from app.live import get_todays_games
 
 load_dotenv()
@@ -17,37 +13,13 @@ def gather_context(question):
     try:
         live = get_todays_games(question)
         if live:
-            context += "LIVE GAME DATA (retrieved just now, this is current):\n" + live + "\n"
+            context += "LIVE GAME DATA (retrieved just now, current):\n" + live + "\n"
     except Exception:
         pass
     try:
-        nba_data = search_nba(question)
-        if nba_data and "No specific" not in nba_data:
-            context += "NBA DATA:\n" + nba_data + "\n"
-    except Exception:
-        pass
-    try:
-        nfl_data = search_nfl_data(question)
-        if nfl_data:
-            context += "NFL DATA:\n" + nfl_data + "\n"
-    except Exception:
-        pass
-    try:
-        mlb_data = search_mlb_data(question)
-        if mlb_data:
-            context += "MLB DATA:\n" + mlb_data + "\n"
-    except Exception:
-        pass
-    try:
-        nhl_data = search_nhl_data(question)
-        if nhl_data:
-            context += "NHL DATA:\n" + nhl_data + "\n"
-    except Exception:
-        pass
-    try:
-        wnba_data = search_wnba_data(question)
-        if wnba_data:
-            context += "WNBA DATA:\n" + wnba_data + "\n"
+        players = search_all_players(question)
+        if players:
+            context += "PLAYER STATISTICS:\n" + players + "\n"
     except Exception:
         pass
     return context
