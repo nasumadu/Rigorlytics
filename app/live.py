@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def get_mlb_games(date_str=None):
@@ -57,10 +57,13 @@ def get_nhl_games(date_str=None):
         return []
 
 
-def get_espn_games(sport_path):
+def get_espn_games(sport_path, date_str=None):
     try:
         url = "https://site.api.espn.com/apis/site/v2/sports/" + sport_path + "/scoreboard"
-        r = requests.get(url, timeout=10)
+        params = {}
+        if date_str:
+            params["dates"] = date_str.replace("-", "")
+        r = requests.get(url, params=params, timeout=10)
         data = r.json()
         games = []
         for e in data.get("events", []):
@@ -75,6 +78,7 @@ def get_espn_games(sport_path):
                     away = c
             st = e.get("status", {}).get("type", {})
             games.append({
+                "date": e.get("date", ""),
                 "away": away.get("team", {}).get("displayName", ""),
                 "home": home.get("team", {}).get("displayName", ""),
                 "away_abbr": away.get("team", {}).get("abbreviation", ""),
@@ -87,6 +91,24 @@ def get_espn_games(sport_path):
         return games
     except Exception:
         return []
+
+
+
+
+def is_today(game):
+    """True if game is within a rolling window: last ~18 hours through end of today."""
+    d = game.get("date", "")
+    if not d:
+        return True
+    try:
+        game_utc = datetime.strptime(d[:16], "%Y-%m-%dT%H:%M")
+        now_utc = datetime.utcnow()
+        delta_hours = (now_utc - game_utc).total_seconds() / 3600.0
+        # keep games that started within the last 18 hours
+        # or that start within the next 24 hours
+        return -24 <= delta_hours <= 18
+    except Exception:
+        return True
 
 
 def format_games(games, league):

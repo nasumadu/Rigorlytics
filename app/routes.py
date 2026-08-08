@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template
 from app.rag import generate_response
-from app.live import get_mlb_games, get_nhl_games, get_espn_games
+from app.live import get_mlb_games, get_nhl_games, get_espn_games, is_today
 
 main = Blueprint('main', __name__)
 
@@ -45,33 +45,43 @@ def ask():
 
 @main.route('/api/scores')
 def api_scores():
+    from datetime import datetime, timedelta
+    today = datetime.now().strftime("%Y-%m-%d")
+    yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+
     games = []
-    try:
-        for g in get_espn_games("football/nfl")[:6]:
-            g["league"] = "NFL"
+
+    def pull_espn(path, league, limit=6):
+        out = []
+        try:
+            out = get_espn_games(path, today)
+            if not out:
+                out = get_espn_games(path, yesterday)
+        except Exception:
+            out = []
+        for g in out[:limit]:
+            g["league"] = league
             games.append(g)
-    except Exception:
-        pass
+
+    pull_espn("football/nfl", "NFL")
+    pull_espn("basketball/nba", "NBA")
+    pull_espn("basketball/wnba", "WNBA")
+
     try:
-        for g in get_espn_games("basketball/nba")[:6]:
-            g["league"] = "NBA"
-            games.append(g)
-    except Exception:
-        pass
-    try:
-        for g in get_mlb_games()[:8]:
+        mlb = get_mlb_games(today)
+        if not mlb:
+            mlb = get_mlb_games(yesterday)
+        for g in mlb[:8]:
             g["league"] = "MLB"
             games.append(g)
     except Exception:
         pass
+
     try:
-        for g in get_espn_games("basketball/wnba")[:6]:
-            g["league"] = "WNBA"
-            games.append(g)
-    except Exception:
-        pass
-    try:
-        for g in get_nhl_games()[:6]:
+        nhl = get_nhl_games(today)
+        if not nhl:
+            nhl = get_nhl_games(yesterday)
+        for g in nhl[:6]:
             g["league"] = "NHL"
             games.append(g)
     except Exception:
@@ -89,6 +99,7 @@ def api_scores():
 
     games.sort(key=rank)
     return jsonify({"games": games[:20]}), 200
+
 
 @main.route('/health')
 def health():
