@@ -1,3 +1,0 @@
-# DB layer deps — add these to the project's main requirements.txt on the VM
-psycopg2-binary>=2.9
-requests>=2.31
