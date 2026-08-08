@@ -1,98 +1,131 @@
 import requests
-import os
 
-BALLDONTLIE_API_KEY = os.getenv('BALLDONTLIE_API_KEY', '')
-BASE_URL = 'https://api.balldontlie.io/v1'
-headers = {'Authorization': BALLDONTLIE_API_KEY}
+SEARCH_URL = "https://site.web.api.espn.com/apis/search/v2"
+CORE_URL = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba"
 
-def get_players(search_name):
+
+def find_player_id(name):
     try:
-        response = requests.get(
-            f'{BASE_URL}/players',
-            headers=headers,
-            params={'search': search_name, 'per_page': 5},
-            timeout=10
-        )
-        return response.json().get('data', [])
-    except Exception as e:
-        return []
+        r = requests.get(SEARCH_URL, params={"query": name, "limit": 5}, timeout=10)
+        data = r.json()
+        for res in data.get("results", []):
+            if res.get("type") != "player":
+                continue
+            for c in res.get("contents", []):
+                uid = c.get("uid", "")
+                if "l:46" in uid and "a:" in uid:
+                    return uid.split("a:")[-1], c.get("displayName", name), c.get("subtitle", "")
+        return None, None, None
+    except Exception:
+        return None, None, None
 
-def get_season_averages(player_id, season=2024):
-    try:
-        response = requests.get(
-            f'{BASE_URL}/season_averages',
-            headers=headers,
-            params={'player_ids[]': player_id, 'season': season},
-            timeout=10
-        )
-        return response.json().get('data', [])
-    except Exception as e:
-        return []
 
-def get_career_context(player_name):
+def get_season_stats(athlete_id, season):
     try:
-        url = "https://stats.nba.com/stats/commonplayerinfo"
-        nba_headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-            'Referer': 'https://www.nba.com/',
-            'Accept': 'application/json',
-            'x-nba-stats-origin': 'stats',
-            'x-nba-stats-token': 'true'
-        }
+        url = CORE_URL + "/seasons/" + str(season) + "/types/2/athletes/" + str(athlete_id) + "/statistics"
+        r = requests.get(url, timeout=10)
+        if r.status_code != 200:
+            return None
+        data = r.json()
+        cats = {}
+        for cat in data.get("splits", {}).get("categories", []):
+            stats = {}
+            for s in cat.get("stats", []):
+                stats[s.get("name")] = s.get("displayValue")
+            cats[cat.get("name", "")] = stats
+        return cats
+    except Exception:
         return None
-    except:
-        return None
+
+
+def format_season(stats):
+    gen = stats.get("general", {})
+    off = stats.get("offensive", {})
+    dfn = stats.get("defensive", {})
+
+    lines = []
+    pairs = [
+        (gen, "gamesPlayed", "Games Played"),
+        (off, "avgPoints", "Points Per Game"),
+        (gen, "avgRebounds", "Rebounds Per Game"),
+        (off, "avgAssists", "Assists Per Game"),
+        (dfn, "avgSteals", "Steals Per Game"),
+        (dfn, "avgBlocks", "Blocks Per Game"),
+        (off, "avgTurnovers", "Turnovers Per Game"),
+        (off, "avgMinutes", "Minutes Per Game"),
+        (off, "fieldGoalPct", "Field Goal %"),
+        (off, "threePointFieldGoalPct", "3-Point %"),
+        (off, "freeThrowPct", "Free Throw %"),
+        (off, "effectiveFGPct", "Effective FG %"),
+        (off, "trueShootingPct", "True Shooting %"),
+        (gen, "PER", "PER"),
+        (off, "points", "Total Points"),
+        (gen, "rebounds", "Total Rebounds"),
+        (off, "assists", "Total Assists"),
+    ]
+    for src, key, label in pairs:
+        v = src.get(key)
+        if v not in (None, "", "0", "0.0", "-"):
+            lines.append("    " + label + ": " + str(v))
+    return "\n".join(lines)
+
+
+def get_player_stats(name, seasons=None):
+    if seasons is None:
+        seasons = [2025, 2024, 2023]
+
+    athlete_id, display_name, subtitle = find_player_id(name)
+    if not athlete_id:
+        return ""
+
+    context = "\nNBA PLAYER: " + str(display_name) + "\n"
+    if subtitle:
+        context += "Team: " + str(subtitle) + "\n"
+
+    found = False
+    for season in seasons:
+        stats = get_season_stats(athlete_id, season)
+        if not stats:
+            continue
+        block = format_season(stats)
+        if not block:
+            continue
+        found = True
+        context += "\n  " + str(season) + " SEASON:\n" + block + "\n"
+
+    return context if found else ""
+
+
+NBA_NAMES = [
+    "Jokic", "Doncic", "Luka", "Embiid", "Giannis", "Antetokounmpo",
+    "Tatum", "Brown", "Curry", "Durant", "LeBron", "James", "Davis",
+    "Booker", "Beal", "Morant", "Ja Morant", "Edwards", "Anthony Edwards",
+    "Mitchell", "Garland", "Haliburton", "Brunson", "Randle", "Towns",
+    "Sabonis", "Fox", "Murray", "Porter", "Gordon", "Butler", "Adebayo",
+    "Herro", "Banchero", "Wagner", "Wembanyama", "Wemby", "Holmgren",
+    "Gilgeous-Alexander", "Shai", "SGA", "Williamson", "Zion", "Ingram",
+    "Leonard", "Kawhi", "George", "Harden", "Westbrook", "Lillard",
+    "Middleton", "Siakam", "Barnes", "Maxey", "Trae", "Young",
+    "Jordan", "Kobe", "Bryant", "Shaq", "O'Neal", "Duncan", "Garnett",
+    "Nowitzki", "Wade", "Pierce", "Nash", "Iverson", "Carter", "McGrady",
+    "Pippen", "Rodman", "Malone", "Stockton", "Barkley", "Ewing",
+    "Olajuwon", "Robinson", "Bird", "Magic", "Johnson", "Kareem",
+]
+
 
 def search_player_data(question):
     context = ""
-    nba_players = [
-        'LeBron', 'James', 'Curry', 'Durant', 'Giannis',
-        'Tatum', 'Luka', 'Doncic', 'Jokic', 'Embiid',
-        'Harden', 'Mitchell', 'Morant', 'Booker', 'Davis',
-        'Irving', 'Lillard', 'George', 'Butler', 'Beal',
-        'Jordan', 'Kobe', 'Bryant', 'Shaq', 'Magic',
-        'Bird', 'Pippen', 'Rodman', 'Wade', 'Allen',
-        'Paul', 'Westbrook', 'Thompson', 'Green', 'Holiday'
-    ]
+    seen = set()
+    q = question.lower()
 
-    for name in nba_players:
-        if name.lower() in question.lower():
-            players = get_players(name)
-            if players:
-                player = players[0]
-                player_id = player['id']
-                team = player.get('team', {})
-
-                context += f"\nNBA Player: {player['first_name']} {player['last_name']}\n"
-                context += f"Position: {player.get('position', 'N/A')}\n"
-                context += f"Height: {player.get('height', 'N/A')}\n"
-                context += f"Weight: {player.get('weight', 'N/A')} lbs\n"
-                context += f"Draft Year: {player.get('draft_year', 'N/A')}\n"
-                context += f"Draft Round: {player.get('draft_round', 'N/A')}\n"
-                context += f"Draft Pick: {player.get('draft_number', 'N/A')}\n"
-
-                if team:
-                    context += f"Current Team: {team.get('full_name', 'N/A')}\n"
-                    context += f"Conference: {team.get('conference', 'N/A')}\n"
-                    context += f"Division: {team.get('division', 'N/A')}\n"
-
-                # Try multiple seasons
-                for season in [2024, 2023, 2022]:
-                    stats = get_season_averages(player_id, season)
-                    if stats:
-                        s = stats[0]
-                        context += f"\n{season}-{str(season+1)[-2:]} Season Stats:\n"
-                        context += f"  Games Played: {s.get('games_played', 'N/A')}\n"
-                        context += f"  Minutes Per Game: {s.get('min', 'N/A')}\n"
-                        context += f"  Points Per Game: {s.get('pts', 'N/A')}\n"
-                        context += f"  Rebounds Per Game: {s.get('reb', 'N/A')}\n"
-                        context += f"  Assists Per Game: {s.get('ast', 'N/A')}\n"
-                        context += f"  Steals Per Game: {s.get('stl', 'N/A')}\n"
-                        context += f"  Blocks Per Game: {s.get('blk', 'N/A')}\n"
-                        context += f"  Turnovers Per Game: {s.get('turnover', 'N/A')}\n"
-                        context += f"  Field Goal %: {s.get('fg_pct', 'N/A')}\n"
-                        context += f"  3-Point %: {s.get('fg3_pct', 'N/A')}\n"
-                        context += f"  Free Throw %: {s.get('ft_pct', 'N/A')}\n"
-                        break
+    for name in NBA_NAMES:
+        n = name.lower()
+        if n in q and n not in seen:
+            seen.add(n)
+            stats = get_player_stats(name)
+            if stats:
+                context += stats
+            if len(seen) >= 3:
+                break
 
     return context if context else "No specific NBA player data found."
