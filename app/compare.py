@@ -11,6 +11,7 @@ ROWS = {
         ("passing.interceptions", "INT / season", True, False),
         ("passing.completionPct", "Completion %", False, True),
         ("passing.QBRating", "Passer rating", False, True),
+        ("passing.QBR", "ESPN QBR", False, True),
         ("rushing.rushingYards", "Rush yds / season", True, True),
         ("rushing.rushingTouchdowns", "Rush TD / season", True, True),
         ("general.gamesPlayed", "Games / season", False, True),
