@@ -2,6 +2,7 @@
 
 import json
 from app.db import query, get_conn
+from app.aliases import resolve_alias
 
 # Which JSONB keys to surface per league, and how to label them
 FIELDS = {
@@ -90,6 +91,7 @@ LABELS = {k: dict(v) for k, v in FIELDS.items()}
 
 def find_players(name):
     """Find matching players by name. Exact match first, then partial."""
+    name = resolve_alias(name)
     rows = query("""
         SELECT p.id, p.full_name, p.external_id, p.position, l.code AS league,
                (SELECT count(*) FROM player_seasons ps WHERE ps.player_id = p.id) AS n
