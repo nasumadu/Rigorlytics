@@ -91,19 +91,22 @@ LABELS = {k: dict(v) for k, v in FIELDS.items()}
 def find_players(name):
     """Find matching players by name. Exact match first, then partial."""
     rows = query("""
-        SELECT p.id, p.full_name, p.external_id, p.position, l.code AS league
+        SELECT p.id, p.full_name, p.external_id, p.position, l.code AS league,
+               (SELECT count(*) FROM player_seasons ps WHERE ps.player_id = p.id) AS n
         FROM players p JOIN leagues l ON l.id = p.league_id
         WHERE lower(p.full_name) = lower(%s)
+        ORDER BY n DESC
         LIMIT 5
     """, (name,))
     if rows:
         return rows
 
     return query("""
-        SELECT p.id, p.full_name, p.external_id, p.position, l.code AS league
+        SELECT p.id, p.full_name, p.external_id, p.position, l.code AS league,
+               (SELECT count(*) FROM player_seasons ps WHERE ps.player_id = p.id) AS n
         FROM players p JOIN leagues l ON l.id = p.league_id
         WHERE p.full_name ILIKE %s
-        ORDER BY length(p.full_name)
+        ORDER BY n DESC, length(p.full_name)
         LIMIT 5
     """, (name + "%",))
 
