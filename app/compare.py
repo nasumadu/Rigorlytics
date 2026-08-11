@@ -3,59 +3,91 @@
 from app.db import query
 from app.player_db import find_players, get_seasons, _num
 
-# Stat rows per position group. Each entry: (jsonb key, label, per_season, higher_is_better)
+# (jsonb key, label, mode, higher_is_better)
+# mode: "sum" = career total, "avg" = per-season average, "rate" = averaged rate
 ROWS = {
     "QB": [
-        ("passing.passingYards", "Pass yds / season", True, True),
-        ("passing.passingTouchdowns", "Pass TD / season", True, True),
-        ("passing.interceptions", "INT / season", True, False),
-        ("passing.completionPct", "Completion %", False, True),
-        ("passing.QBRating", "Passer rating", False, True),
-        ("passing.QBR", "ESPN QBR", False, True),
-        ("rushing.rushingYards", "Rush yds / season", True, True),
-        ("rushing.rushingTouchdowns", "Rush TD / season", True, True),
-        ("general.gamesPlayed", "Games / season", False, True),
+        ("__section__", "Overall", None, None),
+        ("general.gamesPlayed", "Games", "sum", True),
+        ("passing.QBRating", "Passer rating", "rate", True),
+        ("passing.QBR", "ESPN QBR", "rate", True),
+        ("__section__", "Passing", None, None),
+        ("passing.completionPct", "Completion %", "rate", True),
+        ("passing.passingYards", "Pass yards", "sum", True),
+        ("passing.yardsPerPassAttempt", "Yards per attempt", "rate", True),
+        ("passing.passingYardsPerGame", "Pass yards per game", "rate", True),
+        ("passing.passingTouchdowns", "Pass TD", "sum", True),
+        ("passing.interceptions", "Interceptions", "sum", False),
+        ("__section__", "Rushing", None, None),
+        ("rushing.rushingAttempts", "Rush attempts", "sum", True),
+        ("rushing.rushingYards", "Rush yards", "sum", True),
+        ("rushing.yardsPerRushAttempt", "Yards per carry", "rate", True),
+        ("rushing.rushingTouchdowns", "Rush TD", "sum", True),
     ],
     "RB": [
-        ("rushing.rushingYards", "Rush yds / season", True, True),
-        ("rushing.rushingTouchdowns", "Rush TD / season", True, True),
-        ("rushing.yardsPerRushAttempt", "Yards per carry", False, True),
-        ("receiving.receptions", "Rec / season", True, True),
-        ("receiving.receivingYards", "Rec yds / season", True, True),
-        ("general.gamesPlayed", "Games / season", False, True),
+        ("__section__", "Overall", None, None),
+        ("general.gamesPlayed", "Games", "sum", True),
+        ("__section__", "Rushing", None, None),
+        ("rushing.rushingAttempts", "Rush attempts", "sum", True),
+        ("rushing.rushingYards", "Rush yards", "sum", True),
+        ("rushing.yardsPerRushAttempt", "Yards per carry", "rate", True),
+        ("rushing.rushingYardsPerGame", "Rush yards per game", "rate", True),
+        ("rushing.rushingTouchdowns", "Rush TD", "sum", True),
+        ("__section__", "Receiving", None, None),
+        ("receiving.receptions", "Receptions", "sum", True),
+        ("receiving.receivingYards", "Rec yards", "sum", True),
+        ("receiving.receivingTouchdowns", "Rec TD", "sum", True),
     ],
     "WR": [
-        ("receiving.receptions", "Rec / season", True, True),
-        ("receiving.receivingYards", "Rec yds / season", True, True),
-        ("receiving.receivingTouchdowns", "Rec TD / season", True, True),
-        ("receiving.yardsPerReception", "Yards per catch", False, True),
-        ("receiving.receivingTargets", "Targets / season", True, True),
-        ("general.gamesPlayed", "Games / season", False, True),
+        ("__section__", "Overall", None, None),
+        ("general.gamesPlayed", "Games", "sum", True),
+        ("__section__", "Receiving", None, None),
+        ("receiving.receptions", "Receptions", "sum", True),
+        ("receiving.receivingTargets", "Targets", "sum", True),
+        ("receiving.receivingYards", "Rec yards", "sum", True),
+        ("receiving.yardsPerReception", "Yards per catch", "rate", True),
+        ("receiving.receivingYardsPerGame", "Rec yards per game", "rate", True),
+        ("receiving.receivingTouchdowns", "Rec TD", "sum", True),
+        ("receiving.receivingFirstDowns", "First downs", "sum", True),
     ],
     "NBA": [
-        ("offensive.avgPoints", "Points per game", False, True),
-        ("general.avgRebounds", "Rebounds per game", False, True),
-        ("offensive.avgAssists", "Assists per game", False, True),
-        ("offensive.fieldGoalPct", "Field goal %", False, True),
-        ("offensive.threePointFieldGoalPct", "Three point %", False, True),
-        ("offensive.trueShootingPct", "True shooting %", False, True),
-        ("general.PER", "PER", False, True),
-        ("general.gamesPlayed", "Games / season", False, True),
+        ("__section__", "Overall", None, None),
+        ("general.gamesPlayed", "Games", "sum", True),
+        ("general.PER", "PER", "rate", True),
+        ("__section__", "Scoring", None, None),
+        ("offensive.avgPoints", "Points per game", "rate", True),
+        ("offensive.fieldGoalPct", "Field goal %", "rate", True),
+        ("offensive.threePointFieldGoalPct", "Three point %", "rate", True),
+        ("offensive.freeThrowPct", "Free throw %", "rate", True),
+        ("offensive.trueShootingPct", "True shooting %", "rate", True),
+        ("__section__", "All around", None, None),
+        ("general.avgRebounds", "Rebounds per game", "rate", True),
+        ("offensive.avgAssists", "Assists per game", "rate", True),
+        ("defensive.avgSteals", "Steals per game", "rate", True),
+        ("defensive.avgBlocks", "Blocks per game", "rate", True),
     ],
     "MLB": [
-        ("batting.avg", "Batting average", False, True),
-        ("batting.homeRuns", "HR / season", True, True),
-        ("batting.RBIs", "RBI / season", True, True),
-        ("batting.OPS", "OPS", False, True),
-        ("batting.onBasePct", "On base %", False, True),
-        ("general.gamesPlayed", "Games / season", False, True),
+        ("__section__", "Overall", None, None),
+        ("general.gamesPlayed", "Games", "sum", True),
+        ("__section__", "Batting", None, None),
+        ("batting.avg", "Batting average", "rate", True),
+        ("batting.hits", "Hits", "sum", True),
+        ("batting.homeRuns", "Home runs", "sum", True),
+        ("batting.RBIs", "RBI", "sum", True),
+        ("batting.runs", "Runs", "sum", True),
+        ("batting.onBasePct", "On base %", "rate", True),
+        ("batting.slugAvg", "Slugging", "rate", True),
+        ("batting.OPS", "OPS", "rate", True),
     ],
     "NHL": [
-        ("offensive.goals", "Goals / season", True, True),
-        ("offensive.assists", "Assists / season", True, True),
-        ("offensive.points", "Points / season", True, True),
-        ("offensive.plusMinus", "Plus minus", False, True),
-        ("general.gamesPlayed", "Games / season", False, True),
+        ("__section__", "Overall", None, None),
+        ("general.gamesPlayed", "Games", "sum", True),
+        ("__section__", "Scoring", None, None),
+        ("offensive.goals", "Goals", "sum", True),
+        ("offensive.assists", "Assists", "sum", True),
+        ("offensive.points", "Points", "sum", True),
+        ("offensive.plusMinus", "Plus minus", "sum", True),
+        ("offensive.shootingPct", "Shooting %", "rate", True),
     ],
 }
 
@@ -64,7 +96,6 @@ RB_LIKE = {"RB", "FB", "HB"}
 
 
 def position_group(league, position):
-    """Map a league and position to a stat row set."""
     if league in ("NBA", "WNBA"):
         return "NBA"
     if league == "MLB":
@@ -82,43 +113,42 @@ def position_group(league, position):
 
 
 def player_profile(name):
-    """Resolve a name to a player with season data, or None."""
     for m in find_players(name):
-        seasons = get_seasons(m["id"], limit=25)
+        seasons = get_seasons(m["id"], limit=30)
         if seasons:
+            extra = query("""SELECT headshot_url, jersey, height_inches, weight_lbs
+                             FROM players WHERE id = %s""", (m["id"],))
+            e = extra[0] if extra else {}
             return {
                 "id": m["id"],
                 "name": m["full_name"],
                 "league": m["league"],
                 "position": m.get("position"),
                 "seasons": seasons,
+                "headshot": e.get("headshot_url"),
+                "jersey": e.get("jersey"),
             }
     return None
 
 
-def averages(seasons, rows):
-    """Compute per-season averages for each stat row."""
-    out = {}
-    n = len(seasons)
-    for key, label, per_season, higher in rows:
-        vals = []
-        for s in seasons:
-            v = _num((s["stats"] or {}).get(key))
-            if v is not None:
-                vals.append(v)
-        if not vals:
-            continue
-        out[key] = sum(vals) / len(vals)
-    return out
+def aggregate(seasons, key, mode):
+    vals = []
+    for s in seasons:
+        v = _num((s["stats"] or {}).get(key))
+        if v is not None:
+            vals.append(v)
+    if not vals:
+        return None
+    if mode == "sum":
+        return sum(vals)
+    return sum(vals) / len(vals)
 
 
 def build_comparison(name_a, name_b):
-    """Return a comparison payload, or None if the pair cannot be compared."""
     a = player_profile(name_a)
     b = player_profile(name_b)
     if not a or not b:
         return None
-
     if a["league"] != b["league"]:
         return None
 
@@ -128,41 +158,60 @@ def build_comparison(name_a, name_b):
         return None
 
     rows = ROWS[ga]
-    avg_a = averages(a["seasons"], rows)
-    avg_b = averages(b["seasons"], rows)
-
-    out_rows = []
+    out = []
     wins_a = 0
     wins_b = 0
-    for key, label, per_season, higher in rows:
-        if key not in avg_a or key not in avg_b:
+    pending_section = None
+
+    for key, label, mode, higher in rows:
+        if key == "__section__":
+            pending_section = label
             continue
-        va = avg_a[key]
-        vb = avg_b[key]
-        if higher:
-            winner = "a" if va > vb else ("b" if vb > va else None)
+
+        va = aggregate(a["seasons"], key, mode)
+        vb = aggregate(b["seasons"], key, mode)
+        if va is None or vb is None:
+            continue
+
+        decimals = 0 if mode == "sum" else (3 if abs(va) < 2 else 1)
+        ra = round(va, decimals)
+        rb = round(vb, decimals)
+
+        if ra == rb:
+            winner = None
+        elif higher:
+            winner = "a" if ra > rb else "b"
         else:
-            winner = "a" if va < vb else ("b" if vb < va else None)
+            winner = "a" if ra < rb else "b"
+
         if winner == "a":
             wins_a += 1
         elif winner == "b":
             wins_b += 1
-        out_rows.append({
+
+        if pending_section:
+            out.append({"section": pending_section})
+            pending_section = None
+
+        out.append({
             "label": label,
-            "a": round(va, 1),
-            "b": round(vb, 1),
+            "a": ra,
+            "b": rb,
             "winner": winner,
         })
 
-    if len(out_rows) < 3:
+    stat_rows = [r for r in out if "label" in r]
+    if len(stat_rows) < 4:
         return None
 
     return {
         "type": "comparison",
         "league": a["league"],
         "position_group": ga,
-        "a": {"name": a["name"], "position": a["position"], "seasons": len(a["seasons"])},
-        "b": {"name": b["name"], "position": b["position"], "seasons": len(b["seasons"])},
-        "rows": out_rows,
+        "a": {"name": a["name"], "position": a["position"], "seasons": len(a["seasons"]),
+              "headshot": a["headshot"], "jersey": a["jersey"]},
+        "b": {"name": b["name"], "position": b["position"], "seasons": len(b["seasons"]),
+              "headshot": b["headshot"], "jersey": b["jersey"]},
+        "rows": out,
         "wins": {"a": wins_a, "b": wins_b},
     }

@@ -85,23 +85,21 @@
         .diff-desc { font-size: 11px; color: #888; line-height: 1.4; }
     
         .cmp-card { background:#fff; border:1px solid #e8e9ec; border-radius:14px; overflow:hidden; margin-bottom:1rem; }
-        .cmp-head { padding:1rem 1.25rem; border-bottom:1px solid #f0f0f0; }
-        .cmp-eyebrow { font-size:11px; color:#999; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
-        .cmp-names { display:grid; grid-template-columns:1fr 60px 1fr; align-items:center; gap:8px; }
-        .cmp-name { font-size:15px; font-weight:700; color:#0f1923; }
+        .cmp-head { display:grid; grid-template-columns:1fr 60px 1fr; align-items:start; padding:1.25rem 1rem 1rem; border-bottom:1px solid #eee; }
+        .cmp-player { text-align:center; }
+        .cmp-photo { width:74px; height:74px; border-radius:50%; object-fit:cover; background:#f0f0f0; border:2px solid #f0f0f0; }
+        .cmp-photo-blank { display:flex; align-items:center; justify-content:center; font-weight:700; color:#999; font-size:20px; margin:0 auto; }
+        .cmp-name { font-size:15px; font-weight:700; color:#0f1923; margin-top:8px; }
         .cmp-meta { font-size:11px; color:#999; margin-top:2px; }
-        .cmp-vs { text-align:center; font-size:11px; color:#bbb; }
-        .cmp-rows { padding:.5rem 1.25rem 1rem; }
-        .cmp-row { padding:9px 0; border-bottom:1px solid #f5f5f5; }
+        .cmp-vs { text-align:center; font-size:12px; font-weight:700; color:#ccc; padding-top:32px; letter-spacing:1px; }
+        .cmp-rows { }
+        .cmp-section { background:#f8f9fc; padding:7px 1rem; font-size:11px; font-weight:700; color:#0f3460; text-transform:uppercase; letter-spacing:.6px; border-bottom:1px solid #eee; }
+        .cmp-row { display:grid; grid-template-columns:1fr 150px 1fr; align-items:center; border-bottom:1px solid #f5f5f5; }
         .cmp-row:last-child { border-bottom:none; }
-        .cmp-line { display:grid; grid-template-columns:1fr 128px 1fr; align-items:center; gap:10px; }
-        .cmp-val { font-size:14px; color:#999; }
-        .cmp-val.win { color:#0f1923; font-weight:700; }
-        .cmp-label { text-align:center; font-size:11px; color:#888; }
-        .cmp-bars { display:grid; grid-template-columns:1fr 128px 1fr; align-items:center; gap:10px; margin-top:4px; }
-        .cmp-bar { height:4px; border-radius:2px; background:#e0e2e8; }
-        .cmp-bar.win { background:#0f3460; }
-        .cmp-foot { padding:.85rem 1.25rem; border-top:1px solid #f0f0f0; background:#f8f9fc; font-size:12px; color:#666; }
+        .cmp-cell { text-align:center; font-size:14px; color:#777; padding:9px 6px; }
+        .cmp-cell.win { background:rgba(16,185,129,.10); color:#0f1923; font-weight:700; }
+        .cmp-label { text-align:center; font-size:12px; font-weight:600; color:#555; padding:9px 4px; }
+        .cmp-foot { padding:.85rem 1rem; border-top:1px solid #eee; background:#f8f9fc; font-size:12px; color:#666; text-align:center; }
     </style>
 </head>
 <body>
@@ -225,46 +223,44 @@
 
 <script>
     function renderComparison(d) {
-      const rows = d.rows.map(r => {
-        const max = Math.max(Math.abs(r.a), Math.abs(r.b)) || 1;
-        const aw = Math.round((Math.abs(r.a) / max) * 100);
-        const bw = Math.round((Math.abs(r.b) / max) * 100);
+      const body = d.rows.map(r => {
+        if (r.section) {
+          return `<div class="cmp-section">${r.section}</div>`;
+        }
         const aWin = r.winner === 'a', bWin = r.winner === 'b';
+        const fmt = v => v.toLocaleString();
         return `<div class="cmp-row">
-          <div class="cmp-line">
-            <div style="text-align:right" class="cmp-val ${aWin?'win':''}">${r.a.toLocaleString()}</div>
-            <div class="cmp-label">${r.label}</div>
-            <div class="cmp-val ${bWin?'win':''}">${r.b.toLocaleString()}</div>
-          </div>
-          <div class="cmp-bars">
-            <div style="display:flex;justify-content:flex-end"><div class="cmp-bar ${aWin?'win':''}" style="width:${aw}%"></div></div>
-            <div></div>
-            <div><div class="cmp-bar ${bWin?'win':''}" style="width:${bw}%"></div></div>
-          </div>
+          <div class="cmp-cell ${aWin?'win':''}">${fmt(r.a)}</div>
+          <div class="cmp-label">${r.label}</div>
+          <div class="cmp-cell ${bWin?'win':''}">${fmt(r.b)}</div>
         </div>`;
       }).join('');
 
       const lead = d.wins.a > d.wins.b ? d.a.name : (d.wins.b > d.wins.a ? d.b.name : null);
+      const total = d.rows.filter(r => !r.section).length;
       const foot = lead
-        ? `${lead} leads in ${Math.max(d.wins.a, d.wins.b)} of ${d.rows.length} categories.`
-        : `Even split — ${d.wins.a} categories each.`;
+        ? `${lead} leads in ${Math.max(d.wins.a, d.wins.b)} of ${total} categories.`
+        : `Even split \u2014 ${d.wins.a} categories each.`;
+
+      const photo = (p, align) => p.headshot
+        ? `<img src="${p.headshot}" alt="${p.name}" class="cmp-photo" />`
+        : `<div class="cmp-photo cmp-photo-blank">${p.name.split(' ').map(x=>x[0]).join('')}</div>`;
 
       return `<div class="cmp-card">
         <div class="cmp-head">
-          <div class="cmp-eyebrow">Career comparison &middot; ${d.league}</div>
-          <div class="cmp-names">
-            <div style="text-align:right">
-              <div class="cmp-name">${d.a.name}</div>
-              <div class="cmp-meta">${d.a.position || ''} &middot; ${d.a.seasons} seasons</div>
-            </div>
-            <div class="cmp-vs">vs</div>
-            <div>
-              <div class="cmp-name">${d.b.name}</div>
-              <div class="cmp-meta">${d.b.position || ''} &middot; ${d.b.seasons} seasons</div>
-            </div>
+          <div class="cmp-player">
+            ${photo(d.a)}
+            <div class="cmp-name">${d.a.name}</div>
+            <div class="cmp-meta">${d.a.position || ''}${d.a.jersey ? ' \u00b7 #' + d.a.jersey : ''} \u00b7 ${d.a.seasons} seasons</div>
+          </div>
+          <div class="cmp-vs">VS</div>
+          <div class="cmp-player">
+            ${photo(d.b)}
+            <div class="cmp-name">${d.b.name}</div>
+            <div class="cmp-meta">${d.b.position || ''}${d.b.jersey ? ' \u00b7 #' + d.b.jersey : ''} \u00b7 ${d.b.seasons} seasons</div>
           </div>
         </div>
-        <div class="cmp-rows">${rows}</div>
+        <div class="cmp-rows">${body}</div>
         <div class="cmp-foot">${foot}</div>
       </div>`;
     }
