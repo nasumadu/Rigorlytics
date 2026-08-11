@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template
 from app.rag import generate_response
+from app.compare import build_comparison
+from app.players import extract_names
 from app.live import get_mlb_games, get_nhl_games, get_espn_games, is_today
 
 main = Blueprint('main', __name__)
@@ -99,6 +101,26 @@ def api_scores():
 
     games.sort(key=rank)
     return jsonify({"games": games[:20]}), 200
+
+
+
+
+@main.route('/api/compare', methods=['POST'])
+def api_compare():
+    data = request.get_json() or {}
+    question = data.get('question', '')
+    if not question:
+        return jsonify({'error': 'No question provided'}), 400
+
+    names = extract_names(question)
+    if len(names) < 2:
+        return jsonify({'type': 'none'}), 200
+
+    payload = build_comparison(names[0], names[1])
+    if not payload:
+        return jsonify({'type': 'none'}), 200
+
+    return jsonify(payload), 200
 
 
 @main.route('/health')
