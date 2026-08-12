@@ -123,6 +123,13 @@ def api_compare():
     return jsonify(payload), 200
 
 
+
+
+@main.route('/research')
+def research():
+    return render_template('research.html')
+
+
 @main.route('/health')
 def health():
     return jsonify({'status': 'Rigorlytics is running', 'version': '1.0'}), 200
