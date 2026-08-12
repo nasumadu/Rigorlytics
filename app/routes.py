@@ -127,6 +127,11 @@ def api_compare():
 
 @main.route('/research')
 def research():
+    return render_template('research_index.html')
+
+
+@main.route('/research/nba-free-agency-2025')
+def research_nba_fa():
     return render_template('research.html')
 
 
