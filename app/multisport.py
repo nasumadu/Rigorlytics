@@ -203,6 +203,10 @@ def _norm_event(ev, key, cfg):
     state = st.get("state") or "pre"
     status = st.get("shortDetail") or st.get("detail") or ""
 
+    # ESPN reports "0" for games that have not started - show no score at all
+    if state == "pre":
+        home["score"] = away["score"] = None
+
     # soccer can end level — never render a draw as a "winner"
     draw = False
     if cfg.get("draws") and state == "post":
