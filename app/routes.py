@@ -135,6 +135,11 @@ def research_nba_fa():
     return render_template('research.html')
 
 
+@main.route('/research/nfl-free-agency-2026')
+def research_nfl_fa():
+    return render_template('research_nfl_fa_2026.html')
+
+
 @main.route('/health')
 def health():
     return jsonify({'status': 'Rigorlytics is running', 'version': '1.0'}), 200
