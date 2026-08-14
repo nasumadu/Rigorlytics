@@ -143,3 +143,20 @@ def research_nfl_fa():
 @main.route('/health')
 def health():
     return jsonify({'status': 'Rigorlytics is running', 'version': '1.0'}), 200
+
+
+@main.route('/scores')
+def scores_page():
+    return render_template('scores.html')
+
+
+@main.route('/api/live/<league_key>')
+def api_live(league_key):
+    from app.multisport import LEAGUES, scoreboard
+    if league_key not in LEAGUES:
+        return jsonify({"error": "unknown league", "games": []}), 404
+    try:
+        games = scoreboard(league_key)
+    except Exception as e:
+        return jsonify({"error": str(e), "games": []})
+    return jsonify({"league": league_key, "games": games})
