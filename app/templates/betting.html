@@ -118,11 +118,11 @@
         <div class="page-header-left">
             <div class="page-header-eyebrow">Betting Intelligence</div>
             <div class="page-header-title">Find the <em>statistical edge</em><br>before you bet</div>
-            <div class="page-header-sub">Data-driven analysis across NFL, NBA, MLB, NHL, and Soccer</div>
+            <div class="page-header-sub">Data-driven analysis across the NFL, college football, NBA, college basketball, MLB, NHL and soccer</div>
         </div>
         <div class="header-stats">
             <div class="header-stat">
-                <div class="header-stat-num">5</div>
+                <div class="header-stat-num">9</div>
                 <div class="header-stat-label">Sports</div>
             </div>
             <div class="header-stat">
@@ -133,30 +133,23 @@
     </div>
 
     <!-- SPORT TABS -->
-    <div class="sport-tabs">
-        <div class="sport-tab active" id="tab-nfl" onclick="switchSport('nfl')">
-            <div class="sport-tab-icon">🏈</div>
-            <div class="sport-tab-name">NFL</div>
-        </div>
-        <div class="sport-tab" id="tab-nba" onclick="switchSport('nba')">
-            <div class="sport-tab-icon">🏀</div>
-            <div class="sport-tab-name">NBA</div>
-        </div>
-        <div class="sport-tab" id="tab-mlb" onclick="switchSport('mlb')">
-            <div class="sport-tab-icon">⚾</div>
-            <div class="sport-tab-name">MLB</div>
-        </div>
-        <div class="sport-tab" id="tab-nhl" onclick="switchSport('nhl')">
-            <div class="sport-tab-icon">🏒</div>
-            <div class="sport-tab-name">NHL</div>
-        </div>
-        <div class="sport-tab" id="tab-soccer" onclick="switchSport('soccer')">
-            <div class="sport-tab-icon">⚽</div>
-            <div class="sport-tab-name">Soccer</div>
-        </div>
+    <div class="sport-tabs" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <label for="sport-select" style="font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#374151;">Sport</label>
+        <select id="sport-select" onchange="switchSport(this.value)" style="min-width:300px;padding:12px 16px;border:1px solid #D8DDE4;border-radius:9px;font-size:15px;font-weight:600;color:#0f1923;background:#fff;">
+            <option value="nfl">NFL</option>
+            <option value="cfb">CFB - College Football</option>
+            <option value="nba">NBA</option>
+            <option value="mcbb">MCBB - Men's College Basketball</option>
+            <option value="wcbb">WCBB - Women's College Basketball</option>
+            <option value="mlb">MLB</option>
+            <option value="nhl">NHL</option>
+            <option value="epl">EPL - Premier League</option>
+            <option value="mls">MLS - Major League Soccer</option>
+        </select>
     </div>
 
     <!-- SPORT NAME DISPLAY -->
+    <div id="college-note" style="display:none;background:#FDF2F4;border:1px solid #F6D5DC;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#374151;"><b>College note:</b> player props on college athletes are prohibited or restricted in many states. Use the college tools for team-level analysis.</div>
     <div id="sport-label" style="font-size:13px;font-weight:700;color:#0f1923;margin-bottom:12px;">NFL Betting Analysis</div>
 
     <!-- TOOLS GRID -->
@@ -345,13 +338,20 @@
         nba: 'NBA Betting Analysis',
         mlb: 'MLB Betting Analysis',
         nhl: 'NHL Betting Analysis',
-        soccer: 'Soccer Betting Analysis'
+        soccer: 'Soccer Betting Analysis',
+        cfb: 'CFB Betting Analysis',
+        mcbb: 'MCBB Betting Analysis',
+        wcbb: 'WCBB Betting Analysis',
+        epl: 'EPL Betting Analysis',
+        mls: 'MLS Betting Analysis'
     };
 
     function switchSport(sport) {
         activeSport = sport;
         document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active'));
-        document.getElementById('tab-' + sport).classList.add('active');
+        var _t=document.getElementById('tab-'+sport); if(_t) _t.classList.add('active');
+        var _c=document.getElementById('college-note');
+        if(_c) _c.style.display=(['cfb','mcbb','wcbb'].indexOf(sport)>=0)?'block':'none';
         document.getElementById('sport-label').innerText = sportLabels[sport];
         updatePlaceholders(sport);
     }
@@ -362,7 +362,12 @@
             nba: { t1: 'e.g. Boston Celtics', t2: 'e.g. Golden State Warriors', line: 'e.g. -5.5', ou: 'e.g. 224.5', player: 'e.g. LeBron James', prop: 'e.g. Over 27.5 points', opp: 'e.g. Miami Heat', team: 'e.g. Denver Nuggets', spread: 'e.g. -4 or +7', sopp: 'e.g. LA Clippers', out1: 'e.g. Phoenix Suns', out2: 'e.g. Brooklyn Nets', total: 'e.g. 231.5' },
             mlb: { t1: 'e.g. New York Yankees', t2: 'e.g. Los Angeles Dodgers', line: 'e.g. -150 ML', ou: 'e.g. 8.5', player: 'e.g. Shohei Ohtani', prop: 'e.g. Over 1.5 total bases', opp: 'e.g. San Francisco Giants', team: 'e.g. Atlanta Braves', spread: 'e.g. -1.5 or +1.5 RL', sopp: 'e.g. New York Mets', out1: 'e.g. Houston Astros', out2: 'e.g. Texas Rangers', total: 'e.g. 9.0' },
             nhl: { t1: 'e.g. Colorado Avalanche', t2: 'e.g. Tampa Bay Lightning', line: 'e.g. -140 ML', ou: 'e.g. 6.5', player: 'e.g. Connor McDavid', prop: 'e.g. Over 0.5 goals', opp: 'e.g. Vegas Golden Knights', team: 'e.g. Edmonton Oilers', spread: 'e.g. -1.5 or +1.5 puck line', sopp: 'e.g. Calgary Flames', out1: 'e.g. Boston Bruins', out2: 'e.g. Toronto Maple Leafs', total: 'e.g. 6.0' },
-            soccer: { t1: 'e.g. Manchester City', t2: 'e.g. Arsenal', line: 'e.g. -160 ML', ou: 'e.g. 2.5', player: 'e.g. Mohamed Salah', prop: 'e.g. Over 0.5 goals', opp: 'e.g. Liverpool', team: 'e.g. Chelsea', spread: 'e.g. -0.5 Asian handicap', sopp: 'e.g. Tottenham', out1: 'e.g. Real Madrid', out2: 'e.g. Barcelona', total: 'e.g. 2.5 goals' }
+            soccer: { t1: 'e.g. Manchester City', t2: 'e.g. Arsenal', line: 'e.g. -160 ML', ou: 'e.g. 2.5', player: 'e.g. Mohamed Salah', prop: 'e.g. Over 0.5 goals', opp: 'e.g. Liverpool', team: 'e.g. Chelsea', spread: 'e.g. -0.5 Asian handicap', sopp: 'e.g. Tottenham', out1: 'e.g. Real Madrid', out2: 'e.g. Barcelona', total: 'e.g. 2.5 goals' },
+            cfb: { t1:'e.g. Georgia Bulldogs',t2:'e.g. Ohio State Buckeyes',line:'e.g. -7.5',ou:'e.g. 52.5',player:'e.g. team rushing attack',prop:'e.g. Team total over 31.5 points',opp:'e.g. Alabama Crimson Tide',team:'e.g. Michigan Wolverines',spread:'e.g. -10.5 or +3',sopp:'e.g. Texas Longhorns',out1:'e.g. Oregon Ducks',out2:'e.g. Penn State',total:'e.g. 55.5' },
+            mcbb: { t1:'e.g. Duke Blue Devils',t2:'e.g. Kansas Jayhawks',line:'e.g. -5.5',ou:'e.g. 146.5',player:'e.g. team three-point rate',prop:'e.g. Team total over 74.5 points',opp:'e.g. Houston Cougars',team:'e.g. UConn Huskies',spread:'e.g. -7.5 or +4',sopp:'e.g. Purdue',out1:'e.g. Arizona',out2:'e.g. Baylor',total:'e.g. 149.5' },
+            wcbb: { t1:'e.g. South Carolina Gamecocks',t2:'e.g. UConn Huskies',line:'e.g. -3.5',ou:'e.g. 138.5',player:'e.g. team rebounding margin',prop:'e.g. Team total over 71.5 points',opp:'e.g. LSU Tigers',team:'e.g. Iowa Hawkeyes',spread:'e.g. -6.5 or +3',sopp:'e.g. Stanford',out1:'e.g. Texas',out2:'e.g. Notre Dame',total:'e.g. 141.5' },
+            epl: { t1:'e.g. Arsenal',t2:'e.g. Manchester City',line:'e.g. -0.5 handicap',ou:'e.g. 2.5',player:'e.g. Erling Haaland',prop:'e.g. Over 0.5 goals',opp:'e.g. Liverpool',team:'e.g. Chelsea',spread:'e.g. -0.5 or +1 handicap',sopp:'e.g. Tottenham',out1:'e.g. Newcastle',out2:'e.g. Aston Villa',total:'e.g. 2.5 goals' },
+            mls: { t1:'e.g. Inter Miami',t2:'e.g. LAFC',line:'e.g. -0.5 handicap',ou:'e.g. 3.5',player:'e.g. Lionel Messi',prop:'e.g. Over 0.5 goals',opp:'e.g. Columbus Crew',team:'e.g. Seattle Sounders',spread:'e.g. -0.5 or +1 handicap',sopp:'e.g. Atlanta United',out1:'e.g. Portland Timbers',out2:'e.g. NYCFC',total:'e.g. 3.5 goals' }
         };
         const p = placeholders[sport];
         document.getElementById('gp-team1').placeholder = p.t1;
