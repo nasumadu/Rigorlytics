@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rigorlytics — Sports Intelligence</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f5f7; color: #1a1a2e; font-size: 14px; }
+        .topbar { background: #0f1923; color: #fff; padding: 0 1.5rem; height: 40px; display: flex; align-items: center; gap: 1rem; overflow: hidden; }
+        .topbar-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #e94560; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+        .score-items { display: flex; gap: 1.5rem; overflow: hidden; flex: 1; }
+        .score-item { display: flex; align-items: center; gap: 8px; font-size: 11px; white-space: nowrap; }
+        .score-teams { display: flex; flex-direction: column; gap: 1px; }
+        .score-team { display: flex; align-items: center; gap: 6px; }
+        .score-abbr { font-weight: 600; width: 30px; }
+        .score-pts { font-weight: 700; width: 18px; text-align: right; }
+        .score-pts.leader { color: #4ade80; }
+        .score-status { font-size: 9px; color: #e94560; font-weight: 700; background: rgba(233,69,96,0.15); padding: 2px 6px; border-radius: 4px; }
+        .score-divider { width: 1px; background: rgba(255,255,255,0.1); align-self: stretch; flex-shrink: 0; }
+        nav { background: #fff; border-bottom: 1px solid #e8e9ec; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 58px; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.25rem; font-weight: 800; color: #0f1923; letter-spacing: -0.5px; flex-shrink: 0; text-decoration: none; }
+        .logo span { color: #e94560; }
+        .nav-links { display: flex; gap: 0; }
+        .nav-link { padding: 0 16px; height: 58px; display: flex; align-items: center; font-size: 13px; font-weight: 500; color: #666; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; text-decoration: none; white-space: nowrap; }
+        .nav-link:hover { color: #0f1923; }
+        .nav-link.active { color: #0f1923; border-bottom-color: #e94560; font-weight: 600; }
+        .nav-link.pro-link { color: #0f3460; font-weight: 600; }
+        .nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .nav-btn { background: #0f1923; color: #fff; border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; display: grid; grid-template-columns: 1fr 260px; gap: 1.5rem; }
+        @media (max-width: 768px) { .page { grid-template-columns: 1fr; } .nav-links { display: none; } .cards { grid-template-columns: 1fr; } }
+        .search-hero { background: #0f1923; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+        .hero-eyebrow { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+        .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: blink 1.5s infinite; flex-shrink: 0; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .eyebrow-text { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-transform: uppercase; }
+        .hero-title { font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+        .hero-title em { color: #e94560; font-style: normal; }
+        .search-row { display: flex; gap: 8px; }
+        .search-row input { flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 11px 16px; color: #fff; font-size: 13px; outline: none; font-family: inherit; }
+        .search-row input::placeholder { color: rgba(255,255,255,0.35); }
+        .search-row input:focus { border-color: #e94560; }
+        .search-row button { background: #e94560; color: #fff; border: none; padding: 11px 22px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .search-row button:hover { background: #c0392b; }
+        .chips { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+        .chip { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 5px 13px; font-size: 11px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; }
+        .chip:hover { background: rgba(233,69,96,0.2); border-color: #e94560; color: #fff; }
+        .response-section { display: none; margin-bottom: 2rem; }
+        .response-card { background: #fff; border-radius: 14px; padding: 1.5rem; border: 1px solid #e8e9ec; }
+        .response-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #f4f5f7; }
+        .response-logo { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #0f3460, #e94560); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: 800; flex-shrink: 0; }
+        .response-label { font-size: 0.8rem; font-weight: 700; color: #0f3460; text-transform: uppercase; letter-spacing: 0.5px; }
+        .response-text { font-size: 0.95rem; line-height: 1.7; color: #333; }
+        .response-text h1, .response-text h2, .response-text h3 { color: #0f3460; margin: 12px 0 6px; }
+        .response-text strong { color: #1a1a2e; }
+        .response-text ul, .response-text ol { margin-left: 20px; margin-bottom: 8px; }
+        .response-text li { margin-bottom: 4px; }
+        .response-text p { margin-bottom: 10px; }
+        .loading { color: #0f3460; font-style: italic; }
+        .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .section-title { font-size: 14px; font-weight: 700; color: #0f1923; }
+        .section-more { font-size: 11px; color: #e94560; cursor: pointer; font-weight: 600; text-decoration: none; }
+        .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
+        .card { background: #fff; border-radius: 12px; padding: 1.1rem; border: 1px solid #e8e9ec; cursor: pointer; transition: all 0.2s; }
+        .card:hover { border-color: #e94560; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+        .card-sport { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 7px; }
+        .card-sport.nba { color: #c9082a; }
+        .card-sport.nfl { color: #013369; }
+        .card-sport.mlb { color: #002d72; }
+        .card-headline { font-size: 13px; font-weight: 600; color: #0f1923; line-height: 1.35; margin-bottom: 8px; }
+        .card-insight { font-size: 11px; color: #777; line-height: 1.55; margin-bottom: 10px; }
+        .card-foot { display: flex; align-items: center; justify-content: space-between; }
+        .card-tag { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 6px; }
+        .card-tag.fantasy { background: rgba(16,185,129,0.09); color: #065f46; }
+        .card-tag.betting { background: rgba(233,69,96,0.09); color: #c0392b; }
+        .card-tag.pro { background: rgba(79,38,193,0.09); color: #4c1d95; }
+        .card-time { font-size: 10px; color: #bbb; }
+        .featured { background: #0f3460; border-radius: 14px; padding: 1.5rem; margin-bottom: 2rem; color: #fff; }
+        .featured-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
+        .featured-player { font-size: 1.1rem; font-weight: 800; margin-bottom: 2px; }
+        .featured-sub { font-size: 11px; color: rgba(255,255,255,0.55); margin-bottom: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+        .stat-box { text-align: center; background: rgba(255,255,255,0.06); border-radius: 8px; padding: 10px 6px; }
+        .stat-val { font-size: 1.15rem; font-weight: 800; }
+        .stat-key { font-size: 9px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+        .featured-take { font-size: 11px; color: rgba(255,255,255,0.7); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; }
+        .featured-take strong { color: #fff; }
+        .debates { background: #fff; border-radius: 12px; border: 1px solid #e8e9ec; overflow: hidden; margin-bottom: 2rem; }
+        .debate-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 1.1rem; border-bottom: 1px solid #f4f5f7; cursor: pointer; }
+        .debate-item:hover { background: #fafafa; }
+        .debate-item:last-child { border-bottom: none; }
+        .debate-num { font-size: 1.1rem; font-weight: 800; color: #e8e9ec; width: 22px; flex-shrink: 0; line-height: 1.1; margin-top: 1px; }
+        .debate-body { flex: 1; }
+        .debate-q { font-size: 12px; font-weight: 600; color: #0f1923; line-height: 1.4; margin-bottom: 3px; }
+        .debate-src { font-size: 10px; color: #bbb; }
+        .debate-btn { font-size: 10px; font-weight: 600; color: #e94560; background: rgba(233,69,96,0.08); border: none; padding: 5px 11px; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+        .right { display: flex; flex-direction: column; }
+        .panel { background: #fff; border-radius: 12px; border: 1px solid #e8e9ec; padding: 1.1rem; position: sticky; top: 80px; }
+        .trending-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f4f5f7; cursor: pointer; }
+        .trending-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .trending-num { font-size: 11px; font-weight: 700; color: #ddd; width: 14px; margin-top: 1px; flex-shrink: 0; }
+        .trending-body { flex: 1; }
+        .trending-text { font-size: 12px; font-weight: 500; color: #0f1923; line-height: 1.35; margin-bottom: 2px; }
+        .trending-sport { font-size: 9px; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 0.3px; }
+    
+        .cmp-card { background:#fff; border:1px solid #e8e9ec; border-radius:14px; overflow:hidden; margin-bottom:1rem; }
+        .cmp-head { display:grid; grid-template-columns:1fr 60px 1fr; align-items:start; padding:1.25rem 1rem 1rem; border-bottom:1px solid #eee; }
+        .cmp-player { text-align:center; }
+        .cmp-photo { width:74px; height:74px; border-radius:50%; object-fit:cover; background:#f0f0f0; border:2px solid #f0f0f0; }
+        .cmp-photo-blank { display:flex; align-items:center; justify-content:center; font-weight:700; color:#999; font-size:20px; margin:0 auto; }
+        .cmp-name { font-size:15px; font-weight:700; color:#0f1923; margin-top:8px; }
+        .cmp-meta { font-size:11px; color:#999; margin-top:2px; }
+        .cmp-vs { text-align:center; font-size:12px; font-weight:700; color:#ccc; padding-top:32px; letter-spacing:1px; }
+        .cmp-rows { }
+        .cmp-section { background:#f8f9fc; padding:7px 1rem; font-size:11px; font-weight:700; color:#0f3460; text-transform:uppercase; letter-spacing:.6px; border-bottom:1px solid #eee; }
+        .cmp-row { display:grid; grid-template-columns:1fr 150px 1fr; align-items:center; border-bottom:1px solid #f5f5f5; }
+        .cmp-row:last-child { border-bottom:none; }
+        .cmp-cell { text-align:center; font-size:14px; color:#777; padding:9px 6px; }
+        .cmp-cell.win { background:rgba(16,185,129,.10); color:#0f1923; font-weight:700; }
+        .cmp-label { text-align:center; font-size:12px; font-weight:600; color:#555; padding:9px 4px; }
+        .cmp-foot { padding:.85rem 1rem; border-top:1px solid #eee; background:#f8f9fc; font-size:12px; color:#666; text-align:center; }
+    </style>
+</head>
+<body>
+<div class="topbar">
+    <span class="topbar-label">Live</span>
+    <div class="score-items" id="scoreItems"><span style="font-size:11px;color:rgba(255,255,255,0.35);">Loading scores...</span></div>
+</div>
+<nav>
+    <a href="/" class="logo">RIGOR<span>LYTICS</span></a>
+    <div class="nav-links">
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/stats" class="nav-link">Stats</a>
+        <a href="/ask" class="nav-link">Ask</a>
+        <a href="/fantasy" class="nav-link">Fantasy</a>
+        <a href="/betting" class="nav-link">Betting</a>
+        <a href="/pro" class="nav-link pro-link">Pro</a>
+        <a href="/research" class="nav-link">Research</a>
+        <a href="/about" class="nav-link">About</a>
+    </div>
+    <div class="nav-right"><a href="/ask" class="nav-btn" style="text-decoration:none;display:inline-block;">Ask Rigorlytics</a></div>
+</nav>
+<div class="page">
+    <div class="main">
+        <div class="search-hero">
+            <div class="hero-eyebrow"><div class="live-dot"></div><span class="eyebrow-text">AI Sports Intelligence</span></div>
+            <div class="hero-title">Sports intelligence<br>powered by <em>data</em></div>
+            <div class="search-row">
+                <input type="text" id="question" placeholder="Ask about players, stats, contracts, fantasy, betting..." onkeypress="if(event.key==='Enter') askQuestion()" />
+                <button onclick="askQuestion()">Ask &#x2197;</button>
+            </div>
+            <div class="chips">
+                <div class="chip" onclick="setQ(this)">Jordan vs LeBron career stats</div>
+                <div class="chip" onclick="setQ(this)">Best value bet tonight?</div>
+                <div class="chip" onclick="setQ(this)">Should I start Ja Morant?</div>
+                <div class="chip" onclick="setQ(this)">What is Ohtani worth?</div>
+                <div class="chip" onclick="setQ(this)">Who wins this trade?</div>
+            </div>
+        </div>
+        <div class="response-section" id="responseSection">
+            <div class="response-card">
+                <div class="response-header">
+                    <div class="response-logo">R</div>
+                    <span class="response-label">Rigorlytics Analysis</span>
+                </div>
+                <div class="response-text" id="responseText"></div>
+            </div>
+        </div>
+        <div class="section-head"><div class="section-title">Today's analysis</div><a href="/ask" class="section-more">See all</a></div>
+        <div class="cards">
+            <div class="card" onclick="setQ2('Top RBs to start in Week 1 based on matchup data')">
+                <div class="card-sport nfl">NFL · Fantasy</div>
+                <div class="card-headline">Top RBs to start in Week 1 based on matchup data</div>
+                <div class="card-insight">McCaffrey faces a defense allowing 147 rush YPG last season. Efficiency metrics strongly favor him.</div>
+                <div class="card-foot"><span class="card-tag fantasy">Fantasy</span><span class="card-time">1h ago</span></div>
+            </div>
+            <div class="card" onclick="setQ2('Yankees vs Red Sox statistical edge tonight')">
+                <div class="card-sport mlb">MLB · Betting</div>
+                <div class="card-headline">Yankees vs Red Sox — where the statistical edge sits tonight</div>
+                <div class="card-insight">Cole's K/9 of 11.2 vs Boston's 28.4% strikeout rate creates value on strikeouts at current odds.</div>
+                <div class="card-foot"><span class="card-tag betting">Betting</span><span class="card-time">2h ago</span></div>
+            </div>
+            <div class="card" onclick="setQ2('Is Luka Doncic contract a bargain?')">
+                <div class="card-sport nba">NBA · Pro</div>
+                <div class="card-headline">Luka Doncic: is his contract still a bargain after year 3?</div>
+                <div class="card-insight">At $43M/yr, Doncic ranks 4th in salary but 1st in PER among all active guards.</div>
+                <div class="card-foot"><span class="card-tag pro">Pro</span><span class="card-time">4h ago</span></div>
+            </div>
+        </div>
+        <div class="section-head"><div class="section-title">Daily spotlight</div><span class="section-more" onclick="setQ2('Tell me about Nikola Jokic stats and value')">Ask about him</span></div>
+        <div class="featured">
+            <div class="featured-label">NBA · Center · 3x MVP</div>
+            <div class="featured-player">Nikola Jokic</div>
+            <div class="featured-sub">Denver Nuggets</div>
+            <div class="stats-grid">
+                <div class="stat-box"><div class="stat-val">26.4</div><div class="stat-key">PPG</div></div>
+                <div class="stat-box"><div class="stat-val">12.4</div><div class="stat-key">RPG</div></div>
+                <div class="stat-box"><div class="stat-val">9.0</div><div class="stat-key">APG</div></div>
+                <div class="stat-box"><div class="stat-val">31.7</div><div class="stat-key">PER</div></div>
+            </div>
+            <div class="featured-take"><strong>Rigorlytics take:</strong> Jokic's PER of 31.7 is the highest single-season mark since Jordan's 1988 campaign. Fantasy owners — top-3 pick in any format. At $47M/yr he remains one of the most undervalued contracts in league history.</div>
+        </div>
+        <div class="section-head"><div class="section-title">Hot debates</div><span class="section-more">See all</span></div>
+        <div class="debates">
+            <div class="debate-item">
+                <div class="debate-num">1</div>
+                <div class="debate-body"><div class="debate-q">Is Caitlin Clark the most impactful WNBA rookie ever by attendance and viewership metrics?</div><div class="debate-src">Trending on X · 284K posts</div></div>
+                <button class="debate-btn" onclick="setQ2('Is Caitlin Clark the most impactful WNBA rookie ever?')">Ask Rigorlytics</button>
+            </div>
+            <div class="debate-item">
+                <div class="debate-num">2</div>
+                <div class="debate-body"><div class="debate-q">Should the Warriors trade Steph Curry for a rebuild or compete now?</div><div class="debate-src">Trending on Reddit · r/nba</div></div>
+                <button class="debate-btn" onclick="setQ2('Should the Warriors trade Steph Curry?')">Ask Rigorlytics</button>
+            </div>
+            <div class="debate-item">
+                <div class="debate-num">3</div>
+                <div class="debate-body"><div class="debate-q">Is Mahomes already the greatest QB of all time statistically?</div><div class="debate-src">Trending on X · 178K posts</div></div>
+                <button class="debate-btn" onclick="setQ2('Is Mahomes the greatest QB statistically?')">Ask Rigorlytics</button>
+            </div>
+        </div>
+    </div>
+    <div class="right">
+        <div class="panel">
+            <div class="section-head"><div class="section-title">Trending searches</div></div>
+            <div class="trending-item" onclick="setQ2('Bronny James rookie season stats')"><div class="trending-num">1</div><div class="trending-body"><div class="trending-text">Bronny James rookie season stats</div><div class="trending-sport">NBA</div></div></div>
+            <div class="trending-item" onclick="setQ2('Best fantasy WRs for Week 1')"><div class="trending-num">2</div><div class="trending-body"><div class="trending-text">Best fantasy WRs for Week 1</div><div class="trending-sport">NFL Fantasy</div></div></div>
+            <div class="trending-item" onclick="setQ2('Best betting value plays tonight')"><div class="trending-num">3</div><div class="trending-body"><div class="trending-text">Tonight best betting value plays</div><div class="trending-sport">Betting</div></div></div>
+            <div class="trending-item" onclick="setQ2('Ohtani Dodgers contract ROI')"><div class="trending-num">4</div><div class="trending-body"><div class="trending-text">Ohtani Dodgers contract ROI</div><div class="trending-sport">MLB</div></div></div>
+            <div class="trending-item" onclick="setQ2('McDavid points pace vs Gretzky')"><div class="trending-num">5</div><div class="trending-body"><div class="trending-text">McDavid points pace vs Gretzky</div><div class="trending-sport">NHL</div></div></div>
+            <div class="trending-item" onclick="setQ2('Caitlin Clark WNBA impact analysis')"><div class="trending-num">6</div><div class="trending-body"><div class="trending-text">Caitlin Clark WNBA impact</div><div class="trending-sport">WNBA</div></div></div>
+        </div>
+    </div>
+</div>
+<script>
+    function renderComparison(d) {
+      const body = d.rows.map(r => {
+        if (r.section) {
+          return `<div class="cmp-section">${r.section}</div>`;
+        }
+        const aWin = r.winner === 'a', bWin = r.winner === 'b';
+        const fmt = v => v.toLocaleString();
+        return `<div class="cmp-row">
+          <div class="cmp-cell ${aWin?'win':''}">${fmt(r.a)}</div>
+          <div class="cmp-label">${r.label}</div>
+          <div class="cmp-cell ${bWin?'win':''}">${fmt(r.b)}</div>
+        </div>`;
+      }).join('');
+
+      const lead = d.wins.a > d.wins.b ? d.a.name : (d.wins.b > d.wins.a ? d.b.name : null);
+      const total = d.rows.filter(r => !r.section).length;
+      const foot = lead
+        ? `${lead} leads in ${Math.max(d.wins.a, d.wins.b)} of ${total} categories.`
+        : `Even split \u2014 ${d.wins.a} categories each.`;
+
+      const photo = (p, align) => p.headshot
+        ? `<img src="${p.headshot}" alt="${p.name}" class="cmp-photo" />`
+        : `<div class="cmp-photo cmp-photo-blank">${p.name.split(' ').map(x=>x[0]).join('')}</div>`;
+
+      return `<div class="cmp-card">
+        <div class="cmp-head">
+          <div class="cmp-player">
+            ${photo(d.a)}
+            <div class="cmp-name">${d.a.name}</div>
+            <div class="cmp-meta">${d.a.position || ''}${d.a.jersey ? ' \u00b7 #' + d.a.jersey : ''} \u00b7 ${d.a.seasons} seasons</div>
+          </div>
+          <div class="cmp-vs">VS</div>
+          <div class="cmp-player">
+            ${photo(d.b)}
+            <div class="cmp-name">${d.b.name}</div>
+            <div class="cmp-meta">${d.b.position || ''}${d.b.jersey ? ' \u00b7 #' + d.b.jersey : ''} \u00b7 ${d.b.seasons} seasons</div>
+          </div>
+        </div>
+        <div class="cmp-rows">${body}</div>
+        <div class="cmp-foot">${foot}</div>
+      </div>`;
+    }
+
+    function setQ(chip) { document.getElementById('question').value = chip.innerText; }
+    function setQ2(text) { document.getElementById('question').value = text; window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => askQuestion(), 400); }
+    async function askQuestion() {
+        const question = document.getElementById('question').value.trim();
+        if (!question) return;
+        const section = document.getElementById('responseSection');
+        const text = document.getElementById('responseText');
+        section.style.display = 'block';
+        text.innerHTML = '<span class="loading">Analyzing...</span>';
+        section.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+        try {
+            const cmp = await fetch('/api/compare', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question })
+            });
+            const cmpData = await cmp.json();
+            let cardHtml = '';
+            if (cmpData && cmpData.type === 'comparison') {
+                cardHtml = renderComparison(cmpData);
+            }
+            const res = await fetch('/ask', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({question})});
+            const data = await res.json();
+            text.innerHTML = cardHtml + marked.parse(data.answer);
+        } catch(err) {
+            text.innerText = 'Error connecting to Rigorlytics. Please try again.';
+        }
+    }
+</script>
+
+<script>
+async function loadScores() {
+    try {
+        const res = await fetch('/api/scores');
+        const data = await res.json();
+        const el = document.getElementById('scoreItems');
+        if (!data.games || !data.games.length) {
+            el.innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.35);">No games scheduled</span>';
+            return;
+        }
+        const abbr = (name) => {
+            const parts = name.trim().split(' ');
+            const last = parts[parts.length - 1];
+            return last.substring(0, 3).toUpperCase();
+        };
+        const teamCode = (g, side) => {
+            const real = side === 'away' ? g.away_abbr : g.home_abbr;
+            if (real && real.length) return real;
+            return abbr(side === 'away' ? g.away : g.home);
+        };
+        el.innerHTML = data.games.map(g => {
+            const st = (g.detail || g.status || '');
+            const isLive = /quarter|halftime|period|inning|progress|live|ot|top |bot |middle|end of/i.test(st);
+            const aScore = (g.away_score !== null && g.away_score !== undefined && g.away_score !== '') ? g.away_score : '';
+            const hScore = (g.home_score !== null && g.home_score !== undefined && g.home_score !== '') ? g.home_score : '';
+            const aLead = aScore !== '' && hScore !== '' && Number(aScore) > Number(hScore);
+            const hLead = aScore !== '' && hScore !== '' && Number(hScore) > Number(aScore);
+            const statusColor = isLive ? '#4ade80' : '#e94560';
+            const statusBg = isLive ? 'rgba(74,222,128,0.15)' : 'rgba(233,69,96,0.15)';
+            return `
+              <div class="score-item">
+                <div class="score-teams">
+                  <div class="score-team"><span class="score-abbr">${teamCode(g, 'away')}</span><span class="score-pts ${aLead ? 'leader' : ''}">${aScore}</span></div>
+                  <div class="score-team"><span class="score-abbr">${teamCode(g, 'home')}</span><span class="score-pts ${hLead ? 'leader' : ''}">${hScore}</span></div>
+                </div>
+                <span class="score-status" style="color:${statusColor};background:${statusBg};">${st.length > 18 ? st.substring(0,18) : st}</span>
+              </div>
+              <div class="score-divider"></div>`;
+        }).join('');
+    } catch (e) {
+        document.getElementById('scoreItems').innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.35);">Scores unavailable</span>';
+    }
+}
+loadScores();
+setInterval(loadScores, 60000);
+</script>
+
+</body>
+</html>
