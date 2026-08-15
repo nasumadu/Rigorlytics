@@ -132,13 +132,16 @@
         </div>
     </div>
 
-    <div class="sport-tabs">
-        <div class="sport-tab active" id="tab-nba" onclick="switchSport('nba')"><div class="sport-tab-icon">🏀</div><div class="sport-tab-name">NBA</div></div>
-        <div class="sport-tab" id="tab-nfl" onclick="switchSport('nfl')"><div class="sport-tab-icon">🏈</div><div class="sport-tab-name">NFL</div></div>
-        <div class="sport-tab" id="tab-mlb" onclick="switchSport('mlb')"><div class="sport-tab-icon">⚾</div><div class="sport-tab-name">MLB</div></div>
-        <div class="sport-tab" id="tab-nhl" onclick="switchSport('nhl')"><div class="sport-tab-icon">🏒</div><div class="sport-tab-name">NHL</div></div>
-        <div class="sport-tab" id="tab-wnba" onclick="switchSport('wnba')"><div class="sport-tab-icon">🏀</div><div class="sport-tab-name">WNBA</div></div>
-        <div class="sport-tab" id="tab-soccer" onclick="switchSport('soccer')"><div class="sport-tab-icon">⚽</div><div class="sport-tab-name">Soccer</div></div>
+    <div class="sport-tabs" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <label for="sport-select" style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#666;margin:0;">Sport</label>
+        <select id="sport-select" onchange="switchSport(this.value)" style="flex:1;min-width:240px;max-width:340px;padding:10px 14px;border:1px solid #e8e9ec;border-radius:8px;font-size:14px;font-weight:600;color:#0f3460;background:#fff;">
+            <option value="nba">NBA</option>
+            <option value="nfl">NFL</option>
+            <option value="mlb">MLB</option>
+            <option value="nhl">NHL</option>
+            <option value="wnba">WNBA</option>
+            <option value="soccer">Soccer</option>
+        </select>
     </div>
 
     <div class="section-label" id="sport-label">NBA Front Office Tools</div>
@@ -365,7 +368,7 @@
     function switchSport(s) {
         activeSport = s.toUpperCase();
         document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active'));
-        document.getElementById('tab-' + s).classList.add('active');
+        var _t=document.getElementById('tab-'+s); if(_t) _t.classList.add('active');
         document.getElementById('sport-label').innerText = labels[s];
         updatePlaceholders(s);
     }
