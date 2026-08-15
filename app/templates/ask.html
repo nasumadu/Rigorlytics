@@ -266,6 +266,7 @@
         } catch(err) {
             body.innerHTML = '<div class="chat-err">Error connecting to Rigorlytics. Please try again.</div>';
         }
+        el.scrollIntoView({ behavior:'smooth', block:'end' });
         el.focus();
     }
 </script>
