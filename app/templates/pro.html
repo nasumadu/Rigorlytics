@@ -137,6 +137,7 @@
         <select id="sport-select" onchange="switchSport(this.value)" style="flex:1;min-width:240px;max-width:340px;padding:10px 14px;border:1px solid #e8e9ec;border-radius:8px;font-size:14px;font-weight:600;color:#0f3460;background:#fff;">
             <option value="nba">NBA</option>
             <option value="nfl">NFL</option>
+            <option value="cfb">College Football</option>
             <option value="mlb">MLB</option>
             <option value="nhl">NHL</option>
             <option value="wnba">WNBA</option>
@@ -152,8 +153,8 @@
             <div class="tool-header">
                 <div class="tool-icon">💰</div>
                 <div>
-                    <div class="tool-title">Contract Valuation</div>
-                    <div class="tool-desc">What should this player actually be paid?</div>
+                    <div class="tool-title" id="t1t">Contract Valuation</div>
+                    <div class="tool-desc" id="t1d">What should this player actually be paid?</div>
                 </div>
             </div>
             <div class="tool-body">
@@ -192,8 +193,8 @@
             <div class="tool-header">
                 <div class="tool-icon">⚖️</div>
                 <div>
-                    <div class="tool-title">Trade Analyzer</div>
-                    <div class="tool-desc">Who wins and what are the cap implications?</div>
+                    <div class="tool-title" id="t2t">Trade Analyzer</div>
+                    <div class="tool-desc" id="t2d">Who wins and what are the cap implications?</div>
                 </div>
             </div>
             <div class="tool-body">
@@ -225,8 +226,8 @@
             <div class="tool-header">
                 <div class="tool-icon">🎯</div>
                 <div>
-                    <div class="tool-title">Draft Intel</div>
-                    <div class="tool-desc">Prospect evaluation and comparable player profiles</div>
+                    <div class="tool-title" id="t3t">Draft Intel</div>
+                    <div class="tool-desc" id="t3d">Prospect evaluation and comparable player profiles</div>
                 </div>
             </div>
             <div class="tool-body">
@@ -265,8 +266,8 @@
             <div class="tool-header">
                 <div class="tool-icon">🏗️</div>
                 <div>
-                    <div class="tool-title">Roster Construction</div>
-                    <div class="tool-desc">Salary cap strategy and team building analysis</div>
+                    <div class="tool-title" id="t4t">Roster Construction</div>
+                    <div class="tool-desc" id="t4d">Salary cap strategy and team building analysis</div>
                 </div>
             </div>
             <div class="tool-body">
@@ -363,17 +364,41 @@
 
 <script>
     let activeSport = 'NBA';
-    const labels = { nba: 'NBA Front Office Tools', nfl: 'NFL Front Office Tools', mlb: 'MLB Front Office Tools', nhl: 'NHL Front Office Tools', wnba: 'WNBA Front Office Tools', soccer: 'Soccer Front Office Tools' };
+    const labels = { nba: 'NBA Front Office Tools', nfl: 'NFL Front Office Tools', cfb: 'College Football Front Office Tools', mlb: 'MLB Front Office Tools', nhl: 'NHL Front Office Tools', wnba: 'WNBA Front Office Tools', soccer: 'Soccer Front Office Tools' };
+
+    const TOOLCOPY = {
+        cfb: [['NIL Valuation','What should this player\'s NIL package be worth?'],
+              ['Transfer Portal Analyzer','Portal fit, and what retention would cost'],
+              ['Recruiting Intel','High school prospect evaluation and comparable profiles'],
+              ['Roster Architecture','Scholarship matrix, eligibility and NIL budget']],
+        soccer: [['Transfer Valuation','What should this player\'s fee and wages be?'],
+                 ['Transfer Analyzer','Fee, amortisation and squad-cost impact'],
+                 ['Scouting Intel','Prospect evaluation and comparable player profiles'],
+                 ['Squad Building','Wage bill, SCR headroom and PSR position']]
+    };
+    const TOOLDEFAULT = [['Contract Valuation','What should this player actually be paid?'],
+        ['Trade Analyzer','Who wins and what are the cap implications?'],
+        ['Draft Intel','Prospect evaluation and comparable player profiles'],
+        ['Roster Construction','Salary cap strategy and team building analysis']];
+    function applyToolCopy(s) {
+        var c = TOOLCOPY[s] || TOOLDEFAULT;
+        ['t1','t2','t3','t4'].forEach(function(id, n) {
+            var t = document.getElementById(id + 't'), d = document.getElementById(id + 'd');
+            if (t) t.innerText = c[n][0];
+            if (d) d.innerText = c[n][1];
+        });
+    }
 
     function switchSport(s) {
         activeSport = s.toUpperCase();
         document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active'));
         var _t=document.getElementById('tab-'+s); if(_t) _t.classList.add('active');
         document.getElementById('sport-label').innerText = labels[s];
+        applyToolCopy(s);
         updatePlaceholders(s);
     }
 
-    function updatePlaceholders(s) {
+    function updatePlaceholders(s) { try {
         const ph = {
             nba: { p: 'e.g. Ja Morant', sal: 'e.g. $34M/yr', give: 'e.g. Anthony Davis, 2027 1st', get: 'e.g. Luka Doncic', prospect: 'e.g. Cooper Flagg', pos: 'e.g. Forward', team: 'e.g. Golden State Warriors' },
             nfl: { p: 'e.g. Justin Herbert', sal: 'e.g. $52M/yr', give: 'e.g. Davante Adams, 2026 2nd', get: 'e.g. Micah Parsons', prospect: 'e.g. Travis Hunter', pos: 'e.g. Wide Receiver', team: 'e.g. Dallas Cowboys' },
@@ -390,7 +415,7 @@
         document.getElementById('di-player').placeholder = p.prospect;
         document.getElementById('di-pos').placeholder = p.pos;
         document.getElementById('rc-team').placeholder = p.team;
-    }
+     } catch(e) {}}
 
     function showLoad(tid, bid) {
         document.getElementById(bid).classList.add('visible');
