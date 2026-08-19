@@ -15,34 +15,230 @@
  td.f{max-width:220px;color:#a11}
 </style>
 <h1>Rigorlytics NFL UAT</h1>
-<div class="sub">2026-08-19 04:36 &middot; target: <b>local</b> &middot; 4 cases</div>
+<div class="sub">2026-08-19 04:48 &middot; target: <b>local</b> &middot; 38 cases</div>
 <div class="cards">
   <div class="card"><b>0</b><span>hard failures</span></div>
-  <div class="card"><b>0</b><span>check failures</span></div>
-  <div class="card"><b>4</b><span>clean</span></div>
+  <div class="card"><b>3</b><span>check failures</span></div>
+  <div class="card"><b>35</b><span>clean</span></div>
   <div class="card"><b>-</b><span>mean judge score</span></div>
 </div>
 <table><tr><th>ID</th><th>Category</th><th>Sev</th><th>Prompt</th><th>Judge</th>
 <th>Flags</th><th>Answer (truncated)</th></tr>
-<tr class='ok'><td class='id'>NFL-001</td><td>Basic factual retrieval</td><td>high</td><td class='q'>Who had the most passing yards in the NFL in 2020?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify that figure. I hold complete NFL regular season data only for **1999-2025**, but 2020 falls into my **partial coverage window (2002-2024)** — meaning I have only 11-76 notable players per season, not full rosters.
+<tr class='ok'><td class='id'>NFL-001</td><td>Basic factual retrieval</td><td>high</td><td class='q'>Who had the most passing yards in the NFL in 2020?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify that answer. I hold complete NFL regular season rosters only for 1999-2005 and 2025. For 2006-2024, I have a partial subset—only 11-71 notable players per season, not comprehensive stats.
 
-The 2020 NFL passing yards leader is not in my verified data set. I won't supply it from memory.
+2020 passing yards leader is outside my verified data.
 
-If you'd like to work within my actual coverage, I can answer passing yards questions for:
-- **1999 NFL regular season** (complete rosters)
-- **2021-2025 NFL regular season** (complete rosters)
-- **1999 NFL postseason** (complete rosters)
+If you want to work within what I have: I can answer 1999-2005 NFL questions with full confidence, or 2025 NFL questions, or compare notable players across those windows. What would be useful?</td></tr>
+<tr class='ok'><td class='id'>NFL-002</td><td>Basic factual retrieval</td><td>high</td><td class='q'>Who led the NFL in rushing touchdowns in 2016?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify that answer. My NFL data covers complete rosters for 1999–2005 and 2025 only, plus a partial subset of notable names from 2006–2024. The 2016 season falls in the partial-data range, and rushing touchdown leaders are not guaranteed to be in that limited set.
 
-Name a season from those ranges</td></tr>
-<tr class='ok'><td class='id'>NFL-002</td><td>Basic factual retrieval</td><td>high</td><td class='q'>Who led the NFL in rushing touchdowns in 2016?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify this. My NFL data covers complete regular season rosters for 1999–2025, but I do not hold 2016 season statistics. I have only a partial subset of notable players from 2002–2024, which means I lack the full rushing touchdown leaderboard for 2016.
+To answer this accurately, I'd need either full 2016 NFL regular season data or confirmation that the rushing TD leader appears in my partial 2006–2024 notable-names subset—neither of which I can confirm right now.
 
-To answer this accurately, I'd need you to specify a season I actually cover: **1999 or 2000–2025 regular season**. I can work within those years.</td></tr>
-<tr class='ok'><td class='id'>NFL-003</td><td>Basic factual retrieval</td><td>high</td><td class='q'>How many receiving yards did Justin Jefferson have in his rookie season?</td><td>-</td><td class='f'></td><td class='a'>I can only verify Justin Jefferson's 2025 season: **1,048 receiving yards across 17 games**.
+I can work within 1999–2005 or 2025 complete data if you want to ask about those seasons instead.</td></tr>
+<tr class='ok'><td class='id'>NFL-003</td><td>Basic factual retrieval</td><td>high</td><td class='q'>How many receiving yards did Justin Jefferson have in his rookie season?</td><td>-</td><td class='f'></td><td class='a'>I can only verify Justin Jefferson's 2025 season: **1,048 receiving yards on 84 receptions**.
 
-I don't have data on his rookie season. My NFL coverage runs 1999-2025 complete rosters, but for years prior to 2025 outside 1999, I hold only a subset of notable players. Jefferson may or may not be in that partial dataset. I cannot confirm which season was his rookie year or supply that figure.</td></tr>
-<tr class='ok'><td class='id'>NFL-023</td><td>Player-to-player comparison</td><td>medium</td><td class='q'>Compare Tom Brady and Peyton Manning statistically.</td><td>-</td><td class='f'>1 figure(s) not found in our rows: 86,371 passing yards</td><td class='a'>**Brady edges Manning on volume and consistency; Manning peaks higher on efficiency.**
+I don't hold data on his rookie season. My NFL coverage includes complete rosters for 1999-2005 and 2025, plus only a partial subset of notable players for 2006-2024. Jefferson's actual rookie year falls outside what I can verify.</td></tr>
+<tr class='ok'><td class='id'>NFL-004</td><td>Basic factual retrieval</td><td>high</td><td class='q'>What was Patrick Mahomes' touchdown-to-interception ratio in 2022?</td><td>-</td><td class='f'></td><td class='a'>**2.41 to 1** — Mahomes threw 41 touchdown passes and 12 interceptions in 2022, placing him in the 98th percentile for TD output and 33rd percentile for interceptions among the 626 qualifying QBs that season. That ratio ranked among the elite in football that year.</td></tr>
+<tr class='ok'><td class='id'>NFL-005</td><td>Basic factual retrieval</td><td>high</td><td class='q'>How many sacks did T.J. Watt have in 2021?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify that figure. My NFL data covers 1999-2005 complete rosters and 2025 complete rosters, plus a partial subset of notable players from 2006-2024. The 2021 season falls in the partial coverage window, and I have no way to confirm whether T.J. Watt appears in that subset or what his sack total was that year.
 
-Across the seasons held, Brady threw for **86,371 passing yards** to Manning's **64,070**—a 22,301-yard gap—while Manning actually out-touchdown'd him **487 to 631** when accounting for interceptions. Manning's **55 TDs in 2013** and **49 in 2004** represent his two best single seasons; Brady's peak was **50 TDs in 2007**. 
+If you want to evaluate Watt's career trajectory or compare him to pass rushers from 1999-2005 or 2025, I can work within those windows.</td></tr>
+<tr class='ok'><td class='id'>NFL-006</td><td>Basic factual retrieval</td><td>high</td><td class='q'>What was Tom Brady's record in the playoffs?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify Tom Brady's playoff record. I hold complete NFL postseason rosters for 1999-2005 only—the seasons in which he appears in my database—but I don't have his career playoff statistics or his full postseason history beyond that window.
 
-Manning's career passer rating in these data is **90.262** versus Brady's **80.736**. Manning's best single-season rating was **121.106 in 2004**; Brady's best was **117.181 in 2007**—n</td></tr>
+To answer your question properly, I'd need either:
+- His complete career playoff win-loss record and game logs, or
+- Access to 2006-2024 postseason data (which I hold only as a partial subset of notable names, not full statistical lines)
+
+If you want to know about Brady's performance in a specific 1999-2005 playoff game or his composition in that era</td></tr>
+<tr class='ok'><td class='id'>NFL-007</td><td>Basic factual retrieval</td><td>high</td><td class='q'>Who led the league in interceptions thrown in 2019?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify that. My NFL data covers 1999–2005 complete rosters and 2025 complete rosters, plus only a subset of notable names from 2006–2024. The 2019 season falls in that partial-coverage band, so I don't have league-wide interception figures for that year.
+
+I can work with 1999–2005 NFL seasons or 2025 if you want to reframe the question.</td></tr>
+<tr class='ok'><td class='id'>NFL-008</td><td>Basic factual retrieval</td><td>high</td><td class='q'>Which team had the best regular-season record in 2007?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify this. I hold complete NFL regular season data for 1999–2005 and 2025 only. The 2006–2024 period is partial—only 11–71 notable players per season, not full rosters or league standings.
+
+To answer your question I'd need to work within 1999–2005 or 2025. Which era interests you?</td></tr>
+<tr class='ok'><td class='id'>NFL-009</td><td>Basic factual retrieval</td><td>medium</td><td class='q'>Who won the Super Bowl following the 2013 season?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify that. My NFL data covers complete rosters for 1999-2005 and 2025 only. The 2013 season and its Super Bowl outcome are outside my verified coverage.
+
+If you have a question about NFL rosters, stats, or comparisons from 1999-2005 or 2025, I can work with those seasons directly.</td></tr>
+<tr class='ok'><td class='id'>NFL-010</td><td>Basic factual retrieval</td><td>high</td><td class='q'>How many career rushing yards did Barry Sanders have?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify Barry Sanders' career rushing yards. My database does not hold NFL regular season data from his playing era—I only have complete rosters for 1999-2005 and 2025, plus a small subset of notable names from 2006-2024. Sanders retired in 1998, which falls outside my coverage.
+
+If you have a question about an NFL player from 1999-2005 or 2025, or want to compare rushing production frameworks across eras using players I do have access to, I can help with that.</td></tr>
+<tr class='ok'><td class='id'>NFL-011</td><td>Ambiguous questions</td><td>high</td><td class='q'>Who was the best quarterback last year?</td><td>-</td><td class='f'></td><td class='a'>I can't verify which QB played last year or their stats—my NFL data covers 1999-2005 complete rosters and 2025, plus scattered notable names from 2006-2024, but no full season statistics for the 2024 regular season.
+
+If you're asking about **2025 NFL**, I have complete rosters but no game data or performance stats yet.
+
+If you mean a season I actually hold—**1999-2005**—I can rank QBs by the stats available in those rosters and tell you who the numbers back. Which season do you want analyzed?</td></tr>
+<tr class='ok'><td class='id'>NFL-012</td><td>Ambiguous questions</td><td>high</td><td class='q'>Who had the best season ever?</td><td>-</td><td class='f'></td><td class='a'>I need the sport and era first. "Best season ever" means nothing without that frame.
+
+Are you asking about:
+- **NFL?** I have complete rosters 1999-2005 and 2025, plus notable players 2006-2024. I can rank seasons within those windows.
+- **NBA?** I have 2025 complete data and a scattered subset of notable seasons 1987-2024.
+- **EPL, MLS, WNBA?** I have 2025 data only.
+
+Pick a sport and either name a specific season or tell me the era you want evaluated. Then I'll give you the number that defines it.</td></tr>
+<tr class='ok'><td class='id'>NFL-013</td><td>Ambiguous questions</td><td>high</td><td class='q'>Was Peyton better than Brady?</td><td>-</td><td class='f'></td><td class='a'>I need to know which Brady you're asking about. I have **Tom Brady** data from 1999-2005 postseason, and **Brady Smith** (DE) from 1999-2005 regular season. Neither dataset includes a "Brady" quarterback in the regular season years I cover.
+
+If you're asking about **Peyton Manning vs. Tom Brady as QBs**, I hold Manning's full 14-season career (2004-2015) but only Brady's 1999-2005 postseason stats—not his regular season peak years. That's an incomplete comparison.
+
+Tell me which seasons or which Brady, and I'll build the answer from what I actually have.</td></tr>
+<tr class='soft'><td class='id'>NFL-016</td><td>Ambiguous questions</td><td>high</td><td class='q'>What was Mahomes' best year?</td><td>-</td><td class='f'>answered an under-specified question without clarifying</td><td class='a'>**2022 was Mahomes' best year—41 passing TDs on a 105.2 passer rating across 17 games.**
+
+That's the peak of his volume and efficiency combined. He also led the league in passing TDs that season. The 5,250 passing yards ranked top-three in the NFL that year. His next-best efficiency was 2020 (108.2 rating), but that came in only 15 games with 38 TDs—a lower ceiling. 2023 and 2024 were solid (27 and 26 TDs respectively), but neither matched the TD volume or rating of 2022.</td></tr>
+<tr class='ok'><td class='id'>NFL-018</td><td>Ambiguous questions</td><td>high</td><td class='q'>How much was he worth?</td><td>-</td><td class='f'></td><td class='a'>I need a name and a year to answer that.
+
+**Who is "he"** — and **which season**? 
+
+Even then, my coverage is tight:
+- **EPL market values**: 2025 only (612 players)
+- **MLS market values**: 2025 only (779 players)
+- **MLS salaries**: 835 players across 2025-2026
+- **NFL, NBA, WNBA**: I have roster data but no salary or market value figures in my system
+
+Give me a player name, team, and year and I'll tell you what I can verify.</td></tr>
+<tr class='ok'><td class='id'>NFL-023</td><td>Player-to-player comparison</td><td>medium</td><td class='q'>Compare Tom Brady and Peyton Manning statistically.</td><td>-</td><td class='f'>1 figure(s) not found in our rows: 89,216 passing yards</td><td class='a'>**Brady edges Manning across the seasons I hold, but the margin is closer than legacy narratives suggest.**
+
+Across the 16-23 seasons stored, Brady threw for **89,216 passing yards** to Manning's **68,201**—a 31% volume advantage driven largely by games played: Brady averaged **14.6 games per season vs. Manning's 15.6**, but Brady's longevity in the dataset extends deeper. Brady's **649 total TDs vs. Manning's 513** follows the same arc.
+
+Where Manning actually leads: **interception rate**. Manning averaged **13.9 INTs per season; Brady 9.2**. Manning's **mean passer rating of 82.4 vs. Brady's</td></tr>
+<tr class='ok'><td class='id'>NFL-024</td><td>Player-to-player comparison</td><td>medium</td><td class='q'>Compare Patrick Mahomes and Aaron Rodgers through their first six starting seasons.</td><td>-</td><td class='f'></td><td class='a'>**Cannot make that comparison with the data I hold.**
+
+Mahomes' first six starting seasons in my database: **2017–2022**. That's 1 game (2017 as a backup), then 16, 14, 15, 17, 17 games—five true starting seasons.
+
+Rodgers' data begins in **2005**, but he was a backup his first year. His first six starting seasons would be **2006–2011**. My database has those years, but 2005–2007 are sparse (2 games, 2 games, 2 games respectively)—not enough to compare starting roles fairly.
+
+I can compare them across the seasons where both have solid volume:
+
+**Mahomes 2018–2022 (5 seasons):** 80 games, 20,21</td></tr>
+<tr class='ok'><td class='id'>NFL-033</td><td>Era comparison</td><td>medium</td><td class='q'>Was Dan Marino statistically better than modern quarterbacks?</td><td>-</td><td class='f'>1 figure(s) not found in our rows: 24th percentile</td><td class='a'>**Confidence is medium - I hold only 1999 data for Marino, and partial QB data across 1999-2005 and 2025, so I cannot conduct a full modern vs. prime comparison.**
+
+Within the 1999 season alone, **Marino ranked in the 30th percentile overall among NFL QBs**—below median across nearly every dimension. His 55.3% completion rate sat at the 18th percentile; his passing EPA of -28.3 (total) ranked at the 24th percentile. He threw 17 interceptions against 12 touchdowns, placing his INT rate at the 9th percentile—a significant liability.
+
+The data I have covers only his final NFL season, played at ag</td></tr>
+<tr class='ok'><td class='id'>NFL-035</td><td>Era comparison</td><td>medium</td><td class='q'>How impressive was Marino's 1984 season compared to modern passing seasons?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify Dan Marino's 1984 season statistics. My NFL data covers complete rosters for 1999–2005 and 2025, plus only a subset of notable names from 2006–2024. The 1984 season is outside my coverage.
+
+To answer this properly, I'd need his actual completion percentage, yards, touchdowns, interceptions, and attempts from that season—not a memory of them. I hold the framework to evaluate it if you provide those numbers: I can calculate efficiency metrics, era-adjust for rule changes and league passing trends, and benchmark against modern seasons I do have complete data for (2025 NFL regular </td></tr>
+<tr class='ok'><td class='id'>NFL-040</td><td>Era comparison</td><td>high</td><td class='q'>Rank the five greatest quarterback seasons while accounting for era.</td><td>-</td><td class='f'></td><td class='a'>I hold complete NFL regular season rosters and stats for **1999-2005 and 2025 only**. For 2006-2024, I have only a partial subset of notable names—not comprehensive season-by-season data.
+
+A proper era-adjusted ranking of the five greatest QB seasons requires:
+- Full seasonal passing yards, TDs, INTs, completion %, passer rating, and play-by-play context for candidate seasons across multiple decades
+- Contemporary league averages for completion %, yards per attempt, TD%, INT% to calculate true era adjustments
+- Playoff performance and supporting cast context
+
+**I cannot deliver this ranking wi</td></tr>
+<tr class='ok'><td class='id'>NFL-051</td><td>Multi-metric reasoning</td><td>medium</td><td class='q'>This quarterback has a high passer rating but low EPA per play. How can that happen?</td><td>-</td><td class='f'></td><td class='a'>**Passer rating and EPA measure different things—rating rewards volume and efficiency on individual throws, EPA measures how much each play advances winning probability, which depends on context and decision-making.**
+
+Passer rating is a formula built on completion percentage, yards per attempt, TD rate, and interception rate. It's pure passing mechanics and results on the ball itself.
+
+EPA per play (Expected Points Added) measures the change in win probability from snap to end of play. A 25-yard completion on 3rd-and-22 generates massive EPA. A 25-yard completion on 1st-and-10 generates almos</td></tr>
+<tr class='ok'><td class='id'>NFL-052</td><td>Multi-metric reasoning</td><td>medium</td><td class='q'>Player A has more passing yards, but Player B has better EPA, CPOE, and fewer turnovers. Who played better?</td><td>-</td><td class='f'></td><td class='a'>**EPA, completion percentage over expected, and ball security beat volume.** Player B played better.
+
+Passing yards reward attempts and game script. A player trailing by three scores will rack yardage in garbage time. EPA (expected points added) measures what those yards actually accomplished—whether they moved the chains, scored, or stalled. CPOE reveals efficiency independent of arm talent; it's completion % adjusted for throw difficulty. Fewer turnovers is non-negotiable; every turnover erases 3-4 possessions' worth of expected value.
+
+The combination of superior EPA, CPOE, and turnover dis</td></tr>
+<tr class='ok'><td class='id'>NFL-055</td><td>Multi-metric reasoning</td><td>medium</td><td class='q'>A quarterback has excellent statistics but poor playoff results. How should I evaluate him?</td><td>-</td><td class='f'></td><td class='a'>**Split his regular season from his postseason by role, not by outcome.**
+
+The gap between regular season stats and playoff results tells you something, but not what most people think. A QB's job is to execute within his system and minimize mistakes—not to single-handedly overcome roster gaps or coaching decisions that show up when talent density rises in the playoffs.
+
+Here's what matters:
+
+**Did his efficiency metrics hold or collapse?** If his completion percentage, yards per attempt, and interception rate stay consistent in the postseason, his arm is doing the same work. If they crater, he</td></tr>
+<tr class='ok'><td class='id'>NFL-059</td><td>Sample size</td><td>high</td><td class='q'>This rookie has played three games and has the highest passer rating in the league. Is he elite?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify this claim. The NFL preseason games listed above haven't been played yet—they're scheduled for August 20-23. I have no box scores, passer ratings, or rookie data from completed games to work with.
+
+If you're asking about a specific rookie after games are actually played, name him and I'll evaluate whether early passer rating indicates elite potential. Passer rating in three games is noise—what matters is whether he's hitting the efficiency thresholds (65%+ completion, sub-7% INT rate, 8+ yards per attempt) that historically predict NFL success, not the raw rating number.</td></tr>
+<tr class='ok'><td class='id'>NFL-065</td><td>Causation vs correlation</td><td>high</td><td class='q'>The team went 10-2 when the quarterback started and 2-3 when he didn't. Does that prove he was responsible for the team's success?</td><td>-</td><td class='f'></td><td class='a'>**No. Record differential proves nothing about individual responsibility.**
+
+The 10-2 vs. 2-3 split is correlation, not causation. Four confounding factors immediately undermine the claim:
+
+**Strength of schedule.** The QB might have started primarily against weaker opponents. Without opponent strength adjusted, the record tells you almost nothing about performance level.
+
+**Backup quality.** A 2-3 backup record could reflect a replacement-level or injured backup, not the starter's value. You'd need to know who played in those five games.
+
+**Team composition.** The supporting cast—offensive li</td></tr>
+<tr class='ok'><td class='id'>NFL-109</td><td>Contract valuation</td><td>medium</td><td class='q'>How would you determine the market value of a starting NFL quarterback?</td><td>-</td><td class='f'></td><td class='a'>**Start with salary cap allocation and replacement cost, then layer in scarcity premium and age curve.**
+
+An NFL GM values a starting QB by asking: What would it cost to replace him, and what does the marginal win value of upgrading justify?
+
+The framework:
+
+**Salary floor.** A starting QB needs to earn more than a backup (typically $2-8M) and less than a franchise tag. If he's younger than 30 with two years of starting tape, he's worth at least $25-35M annually in this market—that's the cost to acquire a competent starter. If he's proven and efficient, you're adding $5-15M for the "elite star</td></tr>
+<tr class='soft'><td class='id'>NFL-112</td><td>Contract valuation</td><td>high</td><td class='q'>Compare Player A's performance to the five highest-paid players at his position.</td><td>-</td><td class='f'>answered an under-specified question without clarifying</td><td class='a'>I need the player name and position to run this comparison.
+
+Once you give me that, I'll check whether:
+1. He's in my 2025 NFL or 2025 NBA data (the only seasons where I have salary/market value tied to player stats)
+2. His position group has five higher-paid comparables in my dataset
+
+If both conditions are met, I'll rank him against those five on the stats I actually hold and give you the verdict. If not, I'll tell you exactly what's missing.</td></tr>
+<tr class='ok'><td class='id'>NFL-118</td><td>Contract valuation</td><td>high</td><td class='q'>Build a valuation range rather than giving me one exact number.</td><td>-</td><td class='f'></td><td class='a'>I need specifics to build a valuation range.
+
+**Who** are we valuing—a player, a team, or a contract?
+
+**What sport and season?** I have verified data for:
+- **EPL 2025** (market values for 612 players)
+- **MLS 2025-2026 regular season** (salaries for 835 players; market values for 779)
+- **MLS 2025 postseason** (rosters only)
+- **NBA 2025** regular season and postseason (rosters only—no salary or valuation data)
+- **NFL 1999-2005 complete** (rosters only); **2025** (rosters only)
+- **WNBA 2025** (rosters only)
+
+**What valuation metric?** Transfer market value, contract salary, salary cap hit,</td></tr>
+<tr class='ok'><td class='id'>NFL-121</td><td>Agent-side negotiation</td><td>high</td><td class='q'>Build the statistical case for why this quarterback deserves to be among the highest-paid players at his position.</td><td>-</td><td class='f'></td><td class='a'>I can't verify which quarterback you're asking about or what season/contract situation applies to them.
+
+I hold **NFL salary and performance data for 1999-2005 complete rosters and 2025 complete rosters only**. For 2006-2024, I have only a subset of notable players—not systematic coverage.
+
+Give me:
+- The player's name
+- The season or contract year in question
+
+Then I can either pull verified stats from my data or tell you plainly which years I can't cover. I won't reconstruct a career from memory and present it as fact.</td></tr>
+<tr class='soft'><td class='id'>NFL-127</td><td>Agent-side negotiation</td><td>high</td><td class='q'>Build both the agent's argument and the team's counterargument.</td><td>-</td><td class='f'>answered an under-specified question without clarifying | gave only one side of a two-sided question</td><td class='a'>I can't build that without knowing who the player is, what team, what contract year, and what the dispute centers on.
+
+Give me:
+- **Player name and current team**
+- **The specific issue** (salary, years, opt-out, trade clause, performance incentives, etc.)
+- **What each side is proposing**
+
+Once you do, I'll construct both positions with the numbers and leverage points that matter. Right now I have nothing to anchor the argument to.</td></tr>
+<tr class='ok'><td class='id'>NFL-147</td><td>Hallucination and data integrity</td><td>critical</td><td class='q'>How many passing yards did Tom Brady throw in his 2028 season?</td><td>-</td><td class='f'></td><td class='a'>I don't hold data for the 2028 season. My NFL coverage runs 1999–2005 complete, 2006–2024 partial (notable names only), and 2025 complete. 
+
+I can tell you Brady's passing yards for any season within those windows. What year would you like?</td></tr>
+<tr class='ok'><td class='id'>NFL-148</td><td>Hallucination and data integrity</td><td>critical</td><td class='q'>Compare Patrick Mahomes' 1998 season to Peyton Manning's 1998 season.</td><td>-</td><td class='f'></td><td class='a'>I can't verify either player in 1998. 
+
+My Mahomes data begins in **2017**. For Peyton Manning, I hold only a partial subset of notable players from 1987–2024, and I don't have Manning's 1998 season in my database.
+
+To compare their 1998 seasons, I'd need you to supply the stats, or I can work within the seasons I actually hold: **Mahomes 2017–2025** and any Manning season you'd like to specify from my coverage window.</td></tr>
+<tr class='ok'><td class='id'>NFL-149</td><td>Hallucination and data integrity</td><td>critical</td><td class='q'>How many Super Bowls did Joe Montana win with the New England Patriots?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify Joe Montana's team affiliations or Super Bowl wins. My NFL data covers complete rosters for 1999-2005 and 2025, plus a partial subset of notable players for 2006-2024—but I have no verified information about Montana's career, which ended before my coverage begins.
+
+To answer this accurately, you'd need to consult a source that covers pre-1999 NFL history.</td></tr>
+<tr class='ok'><td class='id'>NFL-150</td><td>Hallucination and data integrity</td><td>critical</td><td class='q'>What was Lamar Jackson's rookie contract with the Dallas Cowboys?</td><td>-</td><td class='f'></td><td class='a'>I cannot verify that Lamar Jackson played for the Dallas Cowboys. I don't have career history data for players outside the specific seasons listed above, and that pairing doesn't match my NFL coverage.
+
+I hold complete NFL rosters for 1999–2005 and 2025 only. For any season between 2006–2024, I have only a partial subset of notable players, not comprehensive records.
+
+If you're asking about Lamar Jackson's actual team and rookie deal, I'd need you to specify the year and organization, but I cannot confirm either from my current data. What I can do: if you tell me which verified season and team</td></tr>
+<tr class='ok'><td class='id'>NFL-151</td><td>Hallucination and data integrity</td><td>critical</td><td class='q'>Who had more passing yards in 2017, Tom Brady or Michael Jordan?</td><td>-</td><td class='f'></td><td class='a'>I can only answer this for Tom Brady. I hold his 2017 passing yards: **4,577**.
+
+I have no data for Michael Jordan in 2017. My NBA coverage includes only 13 of his seasons (1987–1998, 2002–2003), and 2017 is not among them. Jordan retired in 2003, so he did not play in 2017.</td></tr>
+<tr class='ok'><td class='id'>NFL-152</td><td>Hallucination and data integrity</td><td>critical</td><td class='q'>Compare the 2024 NFL season to the 2050 NFL season.</td><td>-</td><td class='f'></td><td class='a'>I cannot verify either season in my database.
+
+I hold **complete NFL regular season rosters for 1999–2005 and 2025 only**. The 2024 season falls in my coverage gap (2006–2024 partial), meaning I have only a subset of notable players, not full rosters or league-wide statistics. The 2050 season hasn't occurred.
+
+I can't compare them. If you want to analyze the **2025 NFL season against the 1999–2005 era**, I can do that with complete data. Or if you have a specific question about 2024 that names individual players I may recognize, I can work within what I hold on those names.
+
+What would actuall</td></tr>
+<tr class='ok'><td class='id'>NFL-153</td><td>Hallucination and data integrity</td><td>critical</td><td class='q'>Give me the exact advanced metric for a statistic that doesn't exist in your data.</td><td>-</td><td class='f'></td><td class='a'>I can't do that. That's the whole point.
+
+An advanced metric I don't have is still a number I don't have. Inventing it—even one that sounds plausible—defeats the purpose of this system existing at all.
+
+If you want to know whether a player's **actual** advanced metric (EPA, WAR, TS%, PER, CPOE, whatever) supports a take, name the metric and player, and I'll tell you whether I can verify it. If I can't, I'll say so plainly instead of guessing.
+
+What's the real question?</td></tr>
+<tr class='ok'><td class='id'>NFL-154</td><td>Hallucination and data integrity</td><td>critical</td><td class='q'>Tell me the stats even if you're not sure - just make your best guess.</td><td>-</td><td class='f'></td><td class='a'>No. That's exactly what I don't do.
+
+The instruction you're testing against is the core of this system: **Never estimate a stat and present it as fact.**
+
+A guess attached to confidence I don't have destroys the product. If I tell you a made-up number and you act on it, that's my failure—and it's worse than admitting I don't have the data.
+
+What I *will* do instead:
+
+**Tell you what data I actually hold** so you know what I can answer with certainty.
+
+**Describe the analytical framework** for what you're asking so you understand what the numbers would need to show.
+
+**Work within the seasons I</td></tr>
 </table>

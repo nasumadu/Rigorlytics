@@ -46,9 +46,23 @@ def _build():
             groups.setdefault((r["league"], r["kind"]), {})[int(r["yr"])] = int(r["n"])
 
         def span(years):
-            years = sorted(years)
-            return (str(years[0]) if len(years) == 1
-                    else "%s-%s" % (years[0], years[-1]))
+            """Compress to ranges, keeping gaps visible.
+
+            [1999,2000,2001,2002,2025] must read "1999-2002, 2025" and not
+            "1999-2025" - the second claims eighteen seasons we do not have.
+            """
+            years = sorted(set(int(y) for y in years))
+            if not years:
+                return "none"
+            parts, start, prev = [], years[0], years[0]
+            for y in years[1:]:
+                if y == prev + 1:
+                    prev = y
+                    continue
+                parts.append(str(start) if start == prev else "%s-%s" % (start, prev))
+                start = prev = y
+            parts.append(str(start) if start == prev else "%s-%s" % (start, prev))
+            return ", ".join(parts)
 
         for (league, kind), years in sorted(groups.items()):
             top = max(years.values())
