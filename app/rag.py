@@ -122,7 +122,7 @@ def generate_response(question):
                 "cannot verify it rather than reciting it from memory.\n\n")
         cov = coverage_line()
         if cov:
-            user_message = cov + "\n\n" + user_message
+            user_message += cov + "\n\n"
         user_message += (
             "PREMISE CHECK: if the question pairs a player with a team, a season, an "
             "award or an event that is not confirmed in the verified data above, do "
@@ -130,6 +130,15 @@ def generate_response(question):
             "it. Never invent a plausible-sounding career detail to make an answer "
             "read smoothly - a fabricated supporting detail attached to a correct "
             "headline is the worst failure this system can produce.\n\n")
+        user_message += (
+            "READING RULE: the coverage list above describes SEASONS, not "
+            "players. Any player whose record is printed in the VERIFIED "
+            "DATA block IS held by this database. Never reply that you lack "
+            "a player whose numbers appear above.\n"
+            "PERCENTILE RULE: state a percentile ONLY for a player who has "
+            "an explicit METRICS block above showing that exact percentile. "
+            "A MULTI-SEASON RECORD block contains no percentiles. Do not "
+            "derive, estimate, round, or imply one from it.\n\n")
         user_message += "QUESTION: " + question
 
         message = client.messages.create(

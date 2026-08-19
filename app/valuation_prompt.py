@@ -192,6 +192,11 @@ def render_for_prompt(obj):
     else:
         L.append("POSTSEASON (%s playoffs, %s games):"
                  % (ps.get("year"), ps.get("games") or "?"))
+        if not ps.get("same_season", True):
+            L.append("  WARNING: this playoff row is from %s, which is NOT the "
+                     "season analysed above. Report it as a separate, earlier "
+                     "postseason. Do not describe it as that season's playoffs "
+                     "and do not compare the two." % ps.get("year"))
         if ps.get("split"):
             L.append("  Playoff rate vs this player's OWN regular-season rate:")
             for r in ps["split"]:

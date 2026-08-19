@@ -68,10 +68,9 @@ def _build():
             top = max(years.values())
             full = [y for y, n in years.items() if n >= 0.5 * top]
             thin = {y: n for y, n in years.items() if n < 0.5 * top}
-            # "complete rosters" was read as roster-only, with no statistics.
-            # Say plainly that these are statistical records.
-            part = ("%s %s season: %s complete - %s player-season stat lines" % (
-                league, kind, span(full), format(sum(years[y] for y in full), ",")))
+            part = "[%s] %s season: %s complete - %s %s player-season stat lines" % (
+                league, kind, span(full), format(sum(years[y] for y in full), ","),
+                league)
             if thin:
                 part += ("; %s partial - only %d-%d players per season, a subset of "
                          "notable names rather than full rosters"
@@ -100,11 +99,14 @@ def _build():
     if not rows:
         return "DATA COVERAGE: no seasons loaded."
 
-    out = ["DATA COVERAGE - the ONLY seasons Rigorlytics holds:"]
+    out = ["DATA COVERAGE - which SEASONS are stored, per league. Each line "
+           "applies ONLY to the league in brackets at its start:"]
     out += ["  " + r for r in rows]
     if money:
         out.append("  money: " + "; ".join(money))
     out.append(
+        "This list is about SEASONS, not players. If a player's record appears "
+        "elsewhere in this prompt, you have that player - do not contradict it. "
         "Any other season, any career total, and any player not covered above is "
         "NOT in this database. If a question needs data outside this list, say "
         "which seasons you actually hold and offer to work within them. Do not "

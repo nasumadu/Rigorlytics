@@ -676,12 +676,23 @@ def analyze(name, league=None, comps=6):
 
         my_post = post.get(me["id"])
         if my_post:
+            # postseason_for returns the most recent playoff row, which is not
+            # necessarily the season being analysed. Setting a 2022 playoff rate
+            # against a 2025 regular-season rate and calling the difference a
+            # change reports a three-year era gap as form.
+            same_season = (my_post["year"] == my_year)
             postseason = dict(
                 has_data=True, year=my_post["year"],
                 games=my_post["games_played"],
                 workload=workload(my_post["stats"], sport),
-                split=playoff_split(my_stats, my_post["stats"], specs, sport),
-                basis="playoff rates against this player's own regular-season rates")
+                same_season=same_season,
+                split=(playoff_split(my_stats, my_post["stats"], specs, sport)
+                       if same_season else []),
+                basis=("playoff rates against this player's own regular-season "
+                       "rates" if same_season else
+                       "playoff row is from %s but the analysed season is %s, "
+                       "so no rate comparison is valid across that gap"
+                       % (my_post["year"], my_year)))
         else:
             postseason = dict(
                 has_data=False,
