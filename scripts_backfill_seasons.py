@@ -167,7 +167,7 @@ def ensure_team(cur, lid, t):
     return r["id"] if hasattr(r, "keys") else r[0]
 
 
-def seed_players(cur, cfg, lid, year, limit=None, pause=0.12):
+def seed_players(cur, cfg, lid, year, limit=None, pause=0.12, conn=None):
     """Seed players + teams from the core API.
 
     Returns (added, roster) where roster maps players.id -> teams.id for every
@@ -218,6 +218,14 @@ def seed_players(cur, cfg, lid, year, limit=None, pause=0.12):
                 added += 1
             roster[pid] = tid
             time.sleep(pause)
+        # Commit per team. CFB is 146 programs and several hours; holding one
+        # transaction across that guarantees the pooler drops it and every
+        # inserted row is rolled back.
+        if conn is not None:
+            try:
+                conn.commit()
+            except Exception as e:
+                print("    ! commit %s: %s" % (i, str(e)[:60]))
         print("    team %d/%d  %-24s added=%d existing=%d" % (
             i, len(trefs), (tdoc.get("abbreviation") or "")[:24], added, skipped))
     return added, roster
@@ -299,7 +307,7 @@ def run(keys, year_override, limit, dry, pause, reseed, seed_only, roster_only):
             roster = {}
             if reseed or roster_only or (cfg["seed"] and n == 0):
                 print("  seeding rosters + teams from core API")
-                added, roster = seed_players(cur, cfg, lid, year, limit=limit)
+                added, roster = seed_players(cur, cfg, lid, year, limit=limit, conn=c)
                 c.commit()
                 print("  seeded %d new players across %d roster spots" % (added, len(roster)))
             if seed_only:
