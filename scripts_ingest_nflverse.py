@@ -21,7 +21,7 @@ this does not duplicate the ESPN-sourced roster.
     python scripts_ingest_nflverse.py --years 1999-2025 --types reg,post
 """
 
-import os, sys, csv, io, re, json, time, argparse, unicodedata, urllib.request
+import os, sys, csv, io, re, json, math, time, argparse, unicodedata, urllib.request
 
 try:
     sys.stdout.reconfigure(line_buffering=True)
@@ -106,7 +106,10 @@ def num(v):
         f = float(v)
     except (TypeError, ValueError):
         return None
-    return f if f == f else None          # drop NaN
+    # nflverse emits Infinity for rate columns with a zero denominator - a
+    # receiver with no targets gets target_share = inf. json.dumps writes that
+    # literally and Postgres rejects it as invalid JSON, killing the load.
+    return f if math.isfinite(f) else None
 
 
 def load_season(year, kind, refresh=False):
