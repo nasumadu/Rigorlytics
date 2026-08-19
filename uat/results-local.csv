@@ -1,20 +1,18 @@
 id,category,severity,tags,prompt,mech_pass,hard_fail,flags,judge_weighted,judge_verdict,judge_notes,answer
-NFL-016,Ambiguous questions,high,ambiguous;db_absent,What was Mahomes' best year?,True,False,1 figure(s) not found in our rows: 108.2 rating,,,,"**2022 was Mahomes' best season by volume and efficiency.** He threw 41 passing TDs against 12 INTs, posted a 105.2 passer rating, and logged 5,250 passing yards across 17 games—his highest marks in all three categories across the nine seasons in this dataset.
+NFL-016,Ambiguous questions,high,ambiguous;db_absent,What was Mahomes' best year?,True,False,1 figure(s) not found in our rows: 108.2 rating,,,,"**2022 was Mahomes' best season: 41 passing TDs, 5,250 passing yards, and a 105.2 passer rating across 17 games.** That's the only year in this dataset where his rating cracked 105. His TD volume that season is the highest on record here, and he maintained 67.1% completion while adding 4 rushing TDs. The 2020 campaign (38 pass TDs, 108.2 rating, 15 games) runs closest, but 2022 edges it on volume and the full 17-game sample."
+NFL-023,Player-to-player comparison,medium,db_absent,Compare Tom Brady and Peyton Manning statistically.,False,False,"2 figure(s) not found in our rows: 89,216 passing yards; 649 TDs",,,,"**Across their seasons in the data, Manning edges Brady in peak efficiency and consistency; Brady dominates in volume and longevity.**
 
-2020 is a close second on efficiency (108.2 rating, 6 INT in 15 games), but the volume edge and TD:INT ratio make 2022 the cleaner answer."
-NFL-023,Player-to-player comparison,medium,db_absent,Compare Tom Brady and Peyton Manning statistically.,True,False,"1 figure(s) not found in our rows: 89,216 yards",,,,"**Tom Brady edges Peyton Manning across the seasons we hold, driven by volume, efficiency, and longevity—but the gap is smaller than their reputations suggest.**
+**Volume:** Brady played **335 games** to Manning's **250**, and accumulated **89,216 passing yards** vs. **68,201**. Brady's single-season peak was **5,316 yards (2021)**; Manning's was **5,477 yards (2013)**. Brady threw **649 TDs** total; Manning **513**.
 
-Across the 16 seasons held for both:
+**Efficiency markers:** Manning's **mean Completion %= 65.683** to Brady's **62.911**. Manning's **mean EPA per season = 137.152**; Brady's **101.744**—a meaningful gap. Manning's best EPA season was **262.239 (2013)**; Brady's best was **250.028 (2007)**.
 
-**Volume.** Brady totaled **649 passing TDs** vs. Manning's **513**—a 26% advantage. Brady also threw for **89,216 yards** to Manning's **68,201** (31% more). Brady played **335 games** to Manning's **250** (34% more games played).
+**Interceptions:** Brady's **212 INTs across 335 games** (0.633 per game) vs. Manning's **223 across 250 games** (0.892 per game). Brady was more turnover-efficient.
 
-**Efficiency.** Brady's **Passing EPA mean of 101.744** per season trails Manning's **137.152**—Manning was more efficient per game. Brady's **completion % averaged 62.911%** vs. Manning's **65.683%**. Manning also posted a better **CPOE mean of 4.367** vs. Brady's **1.913** across the seasons where both have the metric.
+**Peak:** Manning's 2013 season (**5,477 yards, 55 TDs, 10 INTs, 262.239 EPA**) stands as the highest-impact single year in this dataset. Brady's 2007 (**4,806 yards, 50 TDs, 8 INTs, 250.028 EPA**) is closest.
 
-**The interception problem.** Brady threw **212 INTs** vs. Manning's **223**—nearly identical profiles, both high-volume arms.
+**The spread:** Manning played fewer seasons (16 vs. 23 in the data) but operated at a higher efficiency floor. Brady's longevity at high level is the outlier—he sustained starter-quality production into his mid-40s. Manning declined faster after 2014."
+NFL-059,Sample size,high,sample_size,This rookie has played three games and has the highest passer rating in the league. Is he elite?,True,False,,,,,"I can't verify this claim. I hold complete NFL regular season rosters back to 1999, but I don't have game-by-game passer ratings for 2026 or any historical season. 
 
-**Peak.** Brady's best season was **2021 (5,316 yards, 43 TDs, 144.768 EPA)**. Manning's was **2013 (5,477 yards, 55 TDs, 262.239 EPA)**—Manning's peak was higher.
+To answer whether a three-game sample qualifies as ""elite,"" I'd need to know: **What's his rating, and how far above league average is it?** Three games of outlier performance—even at 140+ rating—is noise, not signal. You need 8-10 games minimum before passer rating predictive value kicks in, and even then rookie variance is massive.
 
-The verdict: Brady accumulated more through sheer durability and games played. Manning was the more efficient processor. Both sustained elite performance into their late 30s, but Manning's injury-shortened 2015 (10 games, 2,249 yards) truncates his aggregate numbers and slightly favors Brady's totals."
-NFL-059,Sample size,high,sample_size,This rookie has played three games and has the highest passer rating in the league. Is he elite?,True,False,,,,,"I can't verify this claim against current data. You haven't named the player or specified the league, and the live game data I hold shows no in-progress or completed games with final passing statistics that would let me calculate passer ratings.
-
-Tell me the player name, league, and season, and I'll check whether he actually leads in passer rating and what that rating is. Then we can discuss whether three games of dominance signals elite-level play or early-season variance."
+If you have the actual number and want me to contextualize it against historical rookie benchmarks or current league leaders, give me the figure and I'll work with it."
