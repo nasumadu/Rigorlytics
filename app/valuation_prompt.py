@@ -92,6 +92,25 @@ def money_str(amount, currency):
     return "%s %s" % (currency, format(int(amount), ","))
 
 
+def both_str(m):
+    """Euro figures carry their dollar equivalent, converted at the rate on the
+    figure's own date. Dollar-native figures print once."""
+    if not m:
+        return "no money data"
+    base = money_str(m.get("amount"), m.get("currency"))
+    usd = m.get("amount_usd")
+    if usd and m.get("currency") != "USD":
+        base += " (%s)" % money_str(usd, "USD")
+    return base
+
+
+def pair_str(eur, usd, currency="EUR"):
+    out = money_str(eur, currency)
+    if usd is not None and currency != "USD":
+        out += " (%s)" % money_str(usd, "USD")
+    return out
+
+
 def render_for_prompt(obj):
     """Analysis object -> the text block handed to the model."""
     if not obj or not obj.get("ok"):
@@ -136,7 +155,7 @@ def render_for_prompt(obj):
                      % (cmp_["player"],
                         (" (%s)" % cmp_["team"]) if cmp_.get("team") else "",
                         (", age %s" % cmp_["age"]) if cmp_.get("age") else "",
-                        money_str(mo["amount"], mo["currency"]) if mo else "no money data"))
+                        both_str(mo)))
 
     L.append("")
     if not m.get("axis"):
@@ -155,16 +174,16 @@ def render_for_prompt(obj):
             if mine.get("agent"):
                 extra.append("agent %s" % mine["agent"])
             L.append("Actual: %s%s"
-                     % (money_str(mine["amount"], mine["currency"]),
+                     % (both_str(mine),
                         ("  (" + ", ".join(extra) + ")") if extra else ""))
         else:
             L.append("Actual: not held for this player - do not guess it.")
         b = m.get("band")
         if b:
             L.append("Projected band from comparables: %s to %s (midpoint %s)"
-                     % (money_str(b["low"], b["currency"]),
-                        money_str(b["high"], b["currency"]),
-                        money_str(b["mid"], b["currency"])))
+                     % (pair_str(b["low"], b.get("low_usd"), b["currency"]),
+                        pair_str(b["high"], b.get("high_usd"), b["currency"]),
+                        pair_str(b["mid"], b.get("mid_usd"), b["currency"])))
             L.append("Band basis: %s" % b["basis"])
             if b.get("verdict"):
                 L.append("VERDICT: the actual figure sits %s the projected band "
@@ -175,6 +194,11 @@ def render_for_prompt(obj):
                          "an appraisal. Say so if you cite it.")
         else:
             L.append("No projected band: too few comparables carry money data.")
+
+    if m.get("axis") == "market_value":
+        L.append("Dollar figures are the euro amount converted at the European "
+                 "Central Bank reference rate on that figure's own date, not at "
+                 "today's rate. Quote either currency; do not convert yourself.")
 
     L.append("")
     L.append("CLAIM RULES: percentiles, rates and the comparable set are computed "

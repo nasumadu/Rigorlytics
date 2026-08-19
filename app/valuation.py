@@ -340,11 +340,12 @@ def money_for(cur, player_ids, league):
             amt = r["guaranteed"] or r["avg_annual_value"]
             if amt:
                 out[r["player_id"]] = dict(amount=int(amt), currency="USD",
+                                           amount_usd=int(amt),
                                            source=r["source"], as_of=r["start_year"],
                                            kind=r["contract_type"])
     else:
-        cur.execute("""SELECT player_id, market_value_eur, contract_expires,
-                              agent_name, source, updated_at
+        cur.execute("""SELECT player_id, market_value_eur, market_value_usd,
+                              contract_expires, agent_name, source, updated_at
                        FROM player_market_profile WHERE player_id = ANY(%s)""",
                     (list(player_ids),))
         for r in cur.fetchall():
@@ -352,6 +353,8 @@ def money_for(cur, player_ids, league):
             if r["market_value_eur"]:
                 out[r["player_id"]] = dict(
                     amount=int(r["market_value_eur"]), currency="EUR",
+                    amount_usd=(int(r["market_value_usd"])
+                                if r["market_value_usd"] else None),
                     source=r["source"],
                     as_of=r["updated_at"].date().isoformat() if r["updated_at"] else None,
                     contract_expires=(r["contract_expires"].isoformat()
@@ -498,9 +501,17 @@ def analyze(name, league=None, comps=6):
                               % (len(peer_amounts),
                                  (", within %.1f years of age" % age_band)
                                  if age_band else " (age band could not be applied)"))
+            usd = [c["money"].get("amount_usd") for c in comparables
+                   if c.get("money") and c["money"].get("amount_usd")]
+            if len(usd) == len(peer_amounts):
+                band["low_usd"] = int(quantile(usd, 0.25))
+                band["mid_usd"] = int(median(usd))
+                band["high_usd"] = int(quantile(usd, 0.75))
             if my_money:
                 a = my_money["amount"]
                 band["actual"] = a
+                if my_money.get("amount_usd"):
+                    band["actual_usd"] = int(my_money["amount_usd"])
                 band["verdict"] = ("above" if a > hi else
                                    "below" if a < lo else "within")
                 band["gap_vs_mid"] = int(a - mid)
@@ -607,18 +618,29 @@ def main():
     print("\ncomparables")
     for cmp_ in obj["comparables"]:
         mo = cmp_["money"]
+        if mo:
+            cash = "%s %s" % (mo["currency"], format(mo["amount"], ","))
+            if mo.get("amount_usd") and mo["currency"] != "USD":
+                cash += "  (USD %s)" % format(mo["amount_usd"], ",")
+        else:
+            cash = "-"
         print("   %-24s %-22s d=%-6s %s"
-              % (cmp_["player"], cmp_["team"] or "-", cmp_["distance"],
-                 ("%s %s" % (mo["currency"], format(mo["amount"], ","))) if mo else "-"))
+              % (cmp_["player"], cmp_["team"] or "-", cmp_["distance"], cash))
     if m["band"]:
         b = m["band"]
         print("\nprojected band (%s): %s %s - %s   mid %s"
               % (m["axis"], b["currency"], format(b["low"], ","),
                  format(b["high"], ","), format(b["mid"], ",")))
+        if b.get("mid_usd"):
+            print("                 USD %s - %s   mid %s"
+                  % (format(b["low_usd"], ","), format(b["high_usd"], ","),
+                     format(b["mid_usd"], ",")))
         if "actual" in b:
-            print("actual: %s %s -> %s (gap vs mid %s)"
-                  % (b["currency"], format(b["actual"], ","), b["verdict"],
-                     format(b["gap_vs_mid"], ",")))
+            line = "actual: %s %s" % (b["currency"], format(b["actual"], ","))
+            if b.get("actual_usd") and b["currency"] != "USD":
+                line += " (USD %s)" % format(b["actual_usd"], ",")
+            print("%s -> %s (gap vs mid %s)"
+                  % (line, b["verdict"], format(b["gap_vs_mid"], ",")))
     elif not m["axis"]:
         print("\nno money axis for %s - percentile and comparables only" % p["league"])
 
