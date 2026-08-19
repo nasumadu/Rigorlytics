@@ -426,6 +426,83 @@ def money_for(cur, player_ids, league):
 
 # ------------------------------------------------------------------ core
 
+def history(name, league=None, max_seasons=30):
+    """Every stored season for a player, with Python-computed aggregates.
+
+    analyze() answers "how good is he this season". This answers "what does his
+    record look like across the seasons we hold" - which is what career and
+    multi-season comparison questions actually need. Without it the model does
+    the arithmetic itself, and it will get some of it right and some of it
+    wrong with identical confidence.
+    """
+    with get_conn() as c:
+        cur = c.cursor()
+        found = find_player(cur, name, league)
+        if not found:
+            return {"ok": False, "error": "no player named %r" % name}
+        me = found[0]
+        sport, lg = me["sport"], me["league"]
+        group = POS_GROUP.get(sport, {}).get((me["position"] or "").upper())
+        specs = metric_specs(sport, group) if group else []
+
+        cur.execute("""
+            SELECT s.year, s.season_type, ps.stats, ps.games_played, t.name AS team
+            FROM player_seasons ps
+            JOIN seasons s ON s.id = ps.season_id
+            LEFT JOIN teams t ON t.id = ps.team_id
+            WHERE ps.player_id = %s
+            ORDER BY s.year, s.season_type
+        """, (me["id"],))
+        seasons, post = [], []
+        for r in cur.fetchall():
+            r = dict(r)
+            st = r["stats"]
+            if isinstance(st, str):
+                try:
+                    st = json.loads(st)
+                except ValueError:
+                    continue
+            if not st:
+                continue
+            row = dict(year=r["year"], team=r["team"], games=r["games_played"],
+                       values={})
+            for key, label, mode, higher in specs:
+                v = metric_value(st, key, mode, sport)
+                if v is not None:
+                    row["values"][label] = round(v, 3)
+            (post if r["season_type"] == "postseason" else seasons).append(row)
+
+        seasons = seasons[-max_seasons:]
+        agg = {}
+        for key, label, mode, higher in specs:
+            vals = [sq["values"][label] for sq in seasons if label in sq["values"]]
+            if not vals:
+                continue
+            best = max(vals) if higher else min(vals)
+            best_year = next(sq["year"] for sq in seasons
+                             if sq["values"].get(label) == best)
+            entry = dict(seasons=len(vals), mean=round(sum(vals) / len(vals), 3),
+                         best=best, best_year=best_year,
+                         higher_is_better=higher)
+            if mode == "total":
+                entry["total"] = round(sum(vals), 3)
+            agg[label] = entry
+
+        return {
+            "ok": True,
+            "player": dict(id=me["id"], name=me["full_name"], league=lg,
+                           sport=sport, position=me["position"],
+                           age=age_from(me["birth_date"])),
+            "seasons_held": [sq["year"] for sq in seasons],
+            "season_rows": seasons,
+            "postseason_rows": post,
+            "aggregates": agg,
+            "caveat": "These aggregates cover ONLY the seasons listed in "
+                      "seasons_held. They are not career totals unless every "
+                      "season of the career happens to be stored.",
+        }
+
+
 def analyze(name, league=None, comps=6):
     with get_conn() as c:
         cur = c.cursor()

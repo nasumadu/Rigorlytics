@@ -3,7 +3,8 @@ import os
 from dotenv import load_dotenv
 from app.player_search import search_players
 from app.live import get_todays_games
-from app.valuation_prompt import valuation_context
+from app.valuation_prompt import valuation_context, history_context
+from app.coverage import coverage_line
 
 load_dotenv()
 client = anthropic.Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
@@ -27,6 +28,12 @@ def gather_context(question):
         val = valuation_context(question)
         if val:
             context += val + "\n"
+    except Exception:
+        pass
+    try:
+        hist = history_context(question)
+        if hist:
+            context += hist + "\n"
     except Exception:
         pass
     return context
@@ -100,7 +107,22 @@ def generate_response(question):
             user_message += "Any statistic not in the block above must not be stated as a specific figure.\n\n"
         else:
             user_message += "VERIFIED DATA: none retrieved for this question.\n"
-            user_message += "You may reference well-established career milestones and records, but do not state season-specific stats, salaries, or advanced metrics as precise figures.\n\n"
+            user_message += (
+                "You may reason about football concepts, evaluation frameworks and "
+                "what the data WOULD need to show. You may NOT state any player's "
+                "statistics, contract figures, team affiliations, or season-by-season "
+                "history as fact - none of it is in front of you. Say plainly that you "
+                "cannot verify it rather than reciting it from memory.\n\n")
+        cov = coverage_line()
+        if cov:
+            user_message = cov + "\n\n" + user_message
+        user_message += (
+            "PREMISE CHECK: if the question pairs a player with a team, a season, an "
+            "award or an event that is not confirmed in the verified data above, do "
+            "not describe that pairing as though it happened. Say you cannot verify "
+            "it. Never invent a plausible-sounding career detail to make an answer "
+            "read smoothly - a fabricated supporting detail attached to a correct "
+            "headline is the worst failure this system can produce.\n\n")
         user_message += "QUESTION: " + question
 
         message = client.messages.create(

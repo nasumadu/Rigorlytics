@@ -14,9 +14,19 @@ even if the model would like to invent one.
 import re
 
 try:
-    from app.valuation import analyze
+    from app.valuation import analyze, history
 except ImportError:
-    from valuation import analyze
+    from valuation import analyze, history
+
+# Questions that need more than one season. Without a precomputed history the
+# model averages the seasons itself, and it will get some of that arithmetic
+# right and some wrong in the same breath.
+CAREER_WORDS = (
+    "career", "compare", "comparison", "versus", " vs ", "better than",
+    "over the last", "across", "seasons", "peak", "prime", "trajectory",
+    "first six", "first five", "first three", "history", "all-time",
+    "through their", "best year", "best season", "fell off", "decline",
+)
 
 
 # Words that start a sentence or a question and are capitalised for grammar,
@@ -235,6 +245,66 @@ def render_for_prompt(obj):
         L.append("Confidence is %s - open your answer with that caveat before "
                  "any conclusion." % conf["tier"])
     return "\n".join(L)
+
+
+def render_history(h):
+    """Multi-season record, computed in Python so the model never adds up."""
+    if not h or not h.get("ok"):
+        return ""
+    p = h["player"]
+    L = ["MULTI-SEASON RECORD for %s (%s %s, age %s) - computed by Rigorlytics:"
+         % (p["name"], p["league"], p["position"], p["age"])]
+    yrs = h["seasons_held"]
+    L.append("Seasons held: %s%s"
+             % (", ".join(str(y) for y in yrs) if yrs else "none",
+                "  (%d seasons)" % len(yrs)))
+    if h.get("aggregates"):
+        L.append("Aggregates ACROSS THE SEASONS HELD (already calculated - use "
+                 "these exact figures, do not recompute or average anything):")
+        for label, a in h["aggregates"].items():
+            bits = ["mean %s" % a["mean"]]
+            if "total" in a:
+                bits.append("total %s" % a["total"])
+            bits.append("best %s in %s" % (a["best"], a["best_year"]))
+            L.append("  %s: %s  (over %d seasons)"
+                     % (label, ", ".join(bits), a["seasons"]))
+    if h.get("season_rows"):
+        L.append("Season by season:")
+        for row in h["season_rows"]:
+            vals = ", ".join("%s %s" % (k, v) for k, v in row["values"].items())
+            L.append("  %s%s: %s"
+                     % (row["year"], (" %s" % row["team"]) if row["team"] else "",
+                        vals or "no metrics"))
+    if h.get("postseason_rows"):
+        L.append("Postseason rows held: %s"
+                 % ", ".join(str(r["year"]) for r in h["postseason_rows"]))
+    L.append(h["caveat"])
+    L.append("If the question asks about seasons not listed above, say so rather "
+             "than filling them in.")
+    return "\n".join(L)
+
+
+def history_context(question, max_players=2):
+    """Career/comparison questions get precomputed multi-season blocks."""
+    q = (question or "").lower()
+    if not any(w in q for w in CAREER_WORDS):
+        return ""
+    blocks = []
+    for name in extract_names(question)[:4]:
+        try:
+            h = history(name)
+        except Exception:
+            continue
+        if h.get("ok") and h.get("seasons_held"):
+            blocks.append(render_history(h))
+            if len(blocks) >= max_players:
+                break
+    if len(blocks) > 1:
+        blocks.append("BOTH PLAYERS ABOVE: every number you need is already "
+                      "calculated. Compare the figures as given. Do not average, "
+                      "sum, or extrapolate anything yourself, and do not compare "
+                      "seasons that are not listed.")
+    return "\n\n".join(blocks)
 
 
 def valuation_context(question, max_players=1, max_tries=3):
