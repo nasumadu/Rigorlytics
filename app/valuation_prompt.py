@@ -302,12 +302,68 @@ def render_history(h):
     return "\n".join(L)
 
 
+def _n(v):
+    f = float(v)
+    return int(f) if f.is_integer() else round(f, 3)
+
+
+def render_head_to_head(objs):
+    """Who leads what, decided here rather than by the model.
+
+    Given 1,708 and 1,809 on separate lines, the model reported the smaller as
+    exceeding the larger. Comparing two printed numbers looks like narration,
+    but it is arithmetic, and arithmetic is this file's job.
+    """
+    a, b = objs[0], objs[1]
+    na, nb = a["player"]["name"], b["player"]["name"]
+    ya, yb = a.get("seasons_held") or [], b.get("seasons_held") or []
+    L = ["HEAD TO HEAD - every direction below is already resolved by "
+         "Rigorlytics. State them as given. Do not judge for yourself which "
+         "figure is larger, and never describe a smaller number as exceeding "
+         "a bigger one:"]
+    L.append("  Seasons held: %s %d, %s %d%s"
+             % (na, len(ya), nb, len(yb),
+                "" if len(ya) == len(yb) else
+                "  (unequal, so totals are not like for like - say so)"))
+    ag_a = a.get("aggregates") or {}
+    ag_b = b.get("aggregates") or {}
+    for label in ag_a:
+        x, y = ag_a[label], ag_b.get(label)
+        if not y:
+            continue
+        for field, word in (("total", "total"), ("mean", "per-season mean")):
+            if field not in x or field not in y:
+                continue
+            xv, yv = float(x[field]), float(y[field])
+            if xv == yv:
+                L.append("  %s, %s: level at %s" % (label, word, _n(xv)))
+            else:
+                hi = na if xv > yv else nb
+                L.append("  %s, %s: %s leads, %s against %s, margin %s"
+                         % (label, word, hi, _n(max(xv, yv)), _n(min(xv, yv)),
+                            _n(abs(xv - yv))))
+        if "best" in x and "best" in y:
+            xb, yb2 = float(x["best"]), float(y["best"])
+            if xb == yb2:
+                verdict = "level"
+            else:
+                verdict = "%s is higher" % (na if xb > yb2 else nb)
+            L.append("  %s, best single season: %s %s in %s against %s %s in "
+                     "%s - %s"
+                     % (label, na, _n(xb), x.get("best_year"),
+                        nb, _n(yb2), y.get("best_year"), verdict))
+    L.append("Only the labels above are comparable. If a metric belongs to one "
+             "player and not the other, do not set them side by side. Use each "
+             "metric's own name - yards per catch is not a per-target rate.")
+    return "\n".join(L)
+
+
 def history_context(question, max_players=2):
     """Career/comparison questions get precomputed multi-season blocks."""
     q = (question or "").lower()
     if not any(w in q for w in CAREER_WORDS):
         return ""
-    blocks = []
+    blocks, objs = [], []
     for name in extract_names(question)[:4]:
         try:
             h = history(name)
@@ -315,13 +371,18 @@ def history_context(question, max_players=2):
             continue
         if h.get("ok") and h.get("seasons_held"):
             blocks.append(render_history(h))
+            objs.append(h)
             if len(blocks) >= max_players:
                 break
-    if len(blocks) > 1:
+    if len(objs) > 1:
+        try:
+            blocks.append(render_head_to_head(objs))
+        except Exception:
+            pass
         blocks.append("BOTH PLAYERS ABOVE: every number you need is already "
-                      "calculated. Compare the figures as given. Do not average, "
-                      "sum, or extrapolate anything yourself, and do not compare "
-                      "seasons that are not listed.")
+                      "calculated. Compare the figures as given. Do not "
+                      "average, sum, or extrapolate anything yourself, and do "
+                      "not compare seasons that are not listed.")
     return "\n\n".join(blocks)
 
 

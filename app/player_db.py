@@ -90,12 +90,15 @@ LABELS = {k: dict(v) for k, v in FIELDS.items()}
 
 
 def find_players(name):
-    """Find matching players by name. Exact match first, then partial."""
+    """Resolve a name: exact, then prefix, then tolerant of misspelling."""
     name = resolve_alias(name)
-    rows = query("""
-        SELECT p.id, p.full_name, p.external_id, p.position, l.code AS league,
-               (SELECT count(*) FROM player_seasons ps WHERE ps.player_id = p.id) AS n
-        FROM players p JOIN leagues l ON l.id = p.league_id
+    cols = """SELECT p.id, p.full_name, p.external_id, p.position,
+                     l.code AS league,
+                     (SELECT count(*) FROM player_seasons ps
+                       WHERE ps.player_id = p.id) AS n
+              FROM players p JOIN leagues l ON l.id = p.league_id"""
+
+    rows = query(cols + """
         WHERE lower(p.full_name) = lower(%s)
         ORDER BY n DESC
         LIMIT 5
@@ -103,14 +106,32 @@ def find_players(name):
     if rows:
         return rows
 
-    return query("""
-        SELECT p.id, p.full_name, p.external_id, p.position, l.code AS league,
-               (SELECT count(*) FROM player_seasons ps WHERE ps.player_id = p.id) AS n
-        FROM players p JOIN leagues l ON l.id = p.league_id
+    rows = query(cols + """
         WHERE p.full_name ILIKE %s
         ORDER BY n DESC, length(p.full_name)
         LIMIT 5
     """, (name + "%",))
+    if rows:
+        return rows
+
+    # Last resort: the name was typed wrong. "Jamaar Chase" matches neither
+    # pass above, and reporting that the player does not exist because two
+    # letters were transposed is a worse answer than a ranked guess. Narrow on
+    # the surname in SQL, score the survivors in Python, and return nothing at
+    # all if none clear the threshold.
+    from app.namematch import rank_names
+    parts = name.split()
+    if len(parts) < 2:
+        return []
+    # Narrow on the surname AND the given name. When the surname is the part
+    # that was mistyped ("Justin Jeferson"), a surname search returns nothing
+    # to rank and the tolerant pass is useless.
+    cands = query(cols + """
+        WHERE p.full_name ILIKE %s OR p.full_name ILIKE %s
+        ORDER BY n DESC
+        LIMIT 300
+    """, ("%" + parts[-1] + "%", parts[0] + "%"))
+    return rank_names(name, cands, key=lambda r: r["full_name"])
 
 
 def get_seasons(player_id, season_type="regular", limit=30):

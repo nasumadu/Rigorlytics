@@ -297,7 +297,14 @@ def find_player(cur, name, league=None):
     if hit:
         return hit
     cur.execute(base + scope, args)
-    return sift(cur.fetchall())
+    everyone = [dict(r) for r in cur.fetchall()]
+    hit = sift(everyone)
+    if hit:
+        return hit
+    # Strict matching has failed. Before reporting that the player does not
+    # exist, allow for the name having been typed wrong.
+    from app.namematch import rank_names
+    return rank_names(name, everyone, key=lambda r: r["full_name"])
 
 
 def cohort_rows(cur, league, sport, group, season_year=None, player_id=None):
