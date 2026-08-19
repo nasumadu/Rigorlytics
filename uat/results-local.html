@@ -15,7 +15,7 @@
  td.f{max-width:220px;color:#a11}
 </style>
 <h1>Rigorlytics NFL UAT</h1>
-<div class="sub">2026-08-19 08:12 &middot; target: <b>local</b> &middot; 3 cases</div>
+<div class="sub">2026-08-19 08:15 &middot; target: <b>local</b> &middot; 3 cases</div>
 <div class="cards">
   <div class="card"><b>0</b><span>hard failures</span></div>
   <div class="card"><b>0</b><span>check failures</span></div>
@@ -24,21 +24,17 @@
 </div>
 <table><tr><th>ID</th><th>Category</th><th>Sev</th><th>Prompt</th><th>Judge</th>
 <th>Flags</th><th>Answer (truncated)</th></tr>
-<tr class='ok'><td class='id'>NFL-016</td><td>Ambiguous questions</td><td>high</td><td class='q'>What was Mahomes' best year?</td><td>-</td><td class='f'>1 figure(s) not found in our rows: 108.2 rating</td><td class='a'>**2022 was Mahomes' best season by volume and efficiency combined.** He posted **5,250 pass yards, 41 passing TDs, and a 105.2 passer rating** across 17 games—his highest TD total and only season cracking 105+ rating in this dataset. 
+<tr class='ok'><td class='id'>NFL-016</td><td>Ambiguous questions</td><td>high</td><td class='q'>What was Mahomes' best year?</td><td>-</td><td class='f'>1 figure(s) not found in our rows: 108.2 rating</td><td class='a'>**2022 was Mahomes' best season by volume and efficiency.** He threw 41 passing TDs against 12 INTs, posted a 105.2 passer rating, and logged 5,250 passing yards across 17 games—his highest marks in all three categories across the nine seasons in this dataset.
 
-2020 ranks close on efficiency (108.2 rating, 38 TDs in 15 games), and 2018 matched his TD volume with 50 passing TDs, but 2022 delivers the cleanest overall case: elite volume, elite accuracy (67.1 completion %), and the best ball security relative to output (12 INTs on 41 TDs is a 3.4:1 ratio).</td></tr>
-<tr class='ok'><td class='id'>NFL-023</td><td>Player-to-player comparison</td><td>medium</td><td class='q'>Compare Tom Brady and Peyton Manning statistically.</td><td>-</td><td class='f'>1 figure(s) not found in our rows: 89,216 passing yards</td><td class='a'>**Peyton Manning was the more efficient regular-season passer across the seasons held; Tom Brady had superior longevity and peak postseason performance.**
+2020 is a close second on efficiency (108.2 rating, 6 INT in 15 games), but the volume edge and TD:INT ratio make 2022 the cleaner answer.</td></tr>
+<tr class='ok'><td class='id'>NFL-023</td><td>Player-to-player comparison</td><td>medium</td><td class='q'>Compare Tom Brady and Peyton Manning statistically.</td><td>-</td><td class='f'>1 figure(s) not found in our rows: 89,216 yards</td><td class='a'>**Tom Brady edges Peyton Manning across the seasons we hold, driven by volume, efficiency, and longevity—but the gap is smaller than their reputations suggest.**
 
-Across the seasons in this database:
+Across the 16 seasons held for both:
 
-**Volume and Durability**
-Brady played **335 games** to Manning's **250**, a 34-game advantage. Brady accumulated **89,216 passing yards** vs. Manning's **68,201**—a 21,000-yard gap driven entirely by longevity, not annual rate. Brady's mean season length was **14.6 games**; Manning's was **15.6**.
+**Volume.** Brady totaled **649 passing TDs** vs. Manning's **513**—a 26% advantage. Brady also threw for **89,216 yards** to Manning's **68,201** (31% more). Brady played **335 games** to Manning's **250** (34% more games played).
 
-**Efficiency and Peak Performance**
-Manning's regular-season EPA/game was **8.77** (2,194.4 total across </td></tr>
-<tr class='ok'><td class='id'>NFL-059</td><td>Sample size</td><td>high</td><td class='q'>This rookie has played three games and has the highest passer rating in the league. Is he elite?</td><td>-</td><td class='f'></td><td class='a'>I can't verify this. You haven't named the player or specified the league, and I have no live game-by-game data showing a rookie with three games played and current passer ratings across the league.
+**Efficiency.** Brady's **Passing EPA mean of 101.744** per season trails Manning's **137.152**—Manning was more efficient per game. Brady's **completion % averaged 6</td></tr>
+<tr class='ok'><td class='id'>NFL-059</td><td>Sample size</td><td>high</td><td class='q'>This rookie has played three games and has the highest passer rating in the league. Is he elite?</td><td>-</td><td class='f'></td><td class='a'>I can't verify this claim against current data. You haven't named the player or specified the league, and the live game data I hold shows no in-progress or completed games with final passing statistics that would let me calculate passer ratings.
 
-If you're asking about **NFL 2025 preseason**, I hold complete 2025 NFL rosters but not play-by-play stats or live passer ratings. Tell me the player's name and I can confirm rookie status. Then we'd need to evaluate whether three preseason games—a tiny sample against backups—mean anything about elite potential. (They don't, historically.)
-
-If you mean a different league or season, specify and I'l</td></tr>
+Tell me the player name, league, and season, and I'll check whether he actually leads in passer rating and what that rating is. Then we can discuss whether three games of dominance signals elite-level play or early-season variance.</td></tr>
 </table>
