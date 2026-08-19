@@ -90,6 +90,12 @@ CLARIFY = [
     "once you tell me", "tell me what", "what you're valuing", "not going to name",
     "gets evaluated on", "dimensions", "need you to", "narrow it", "which era",
     "depends", "criteria",
+    # Naming the basis of an answer is stating assumptions, and asking for the
+    # missing subject is the correct handling of a pronoun with no antecedent.
+    "i need a name", "need a name", "need a player", "tell me the player",
+    "i need a", "give me a name", "in this database", "in this data",
+    "across the", "by that measure", "on that basis", "which season",
+    "what i can actually access", "not in 2025",
 ]
 UNCERTAIN = [
     "uncertain", "sample", "small sample", "regress", "variance", "noise",
@@ -123,12 +129,13 @@ def db_figures(entities):
     key = tuple(sorted(entities))
     if key in _FIG_CACHE:
         return _FIG_CACHE[key]
-    vals, per_key = set(), {}
+    vals = set()
     try:
         from app.db import get_conn
         with get_conn() as c:
             cur = c.cursor()
             for e in entities:
+                per_key = {}          # per player: Brady's total is not Brady+Manning
                 cur.execute("""SELECT ps.stats AS st, s.year AS yr
                                FROM players p
                                JOIN player_seasons ps ON ps.player_id = p.id
