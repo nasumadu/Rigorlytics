@@ -136,7 +136,7 @@ def db_figures(entities):
             cur = c.cursor()
             for e in entities:
                 per_key = {}          # per player: Brady's total is not Brady+Manning
-                cur.execute("""SELECT ps.stats AS st, s.year AS yr
+                cur.execute("""SELECT ps.stats AS st, s.year AS yr, p.id AS pid
                                FROM players p
                                JOIN player_seasons ps ON ps.player_id = p.id
                                JOIN seasons s ON s.id = ps.season_id
@@ -153,7 +153,11 @@ def db_figures(entities):
                     for k, v in (st or {}).items():
                         if isinstance(v, (int, float)):
                             vals.add(float(v))
-                            per_key.setdefault(k, []).append(float(v))
+                            # Keyed by player, not by search term: "Brady"
+                            # also matches Brady Quinn, and summing them
+                            # together produces a career total belonging to
+                            # nobody.
+                            per_key.setdefault((row["pid"], k), []).append(float(v))
                     if row["yr"]:
                         vals.add(float(row["yr"]))
                 # Totals and means are legitimate figures: Rigorlytics computes
