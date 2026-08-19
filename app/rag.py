@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from app.player_search import search_players
 from app.live import get_todays_games
+from app.valuation_prompt import valuation_context
 
 load_dotenv()
 client = anthropic.Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
@@ -20,6 +21,12 @@ def gather_context(question):
         players = search_players(question)
         if players:
             context += "PLAYER STATISTICS:\n" + players + "\n"
+    except Exception:
+        pass
+    try:
+        val = valuation_context(question)
+        if val:
+            context += val + "\n"
     except Exception:
         pass
     return context

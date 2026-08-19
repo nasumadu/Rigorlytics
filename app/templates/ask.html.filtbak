@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask - Rigorlytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
+        nav { background: #fff; border-bottom: 1px solid #e8e9ec; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 58px; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.25rem; font-weight: 800; color: #0f1923; letter-spacing: -0.5px; text-decoration: none; }
+        .logo span { color: #e94560; }
+        .nav-links { display: flex; }
+        .nav-link { padding: 0 16px; height: 58px; display: flex; align-items: center; font-size: 13px; font-weight: 500; color: #666; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover { color: #0f1923; }
+        .nav-link.active { color: #0f1923; border-bottom-color: #e94560; font-weight: 600; }
+        .nav-link.pro-link { color: #0f3460; font-weight: 600; }
+        .nav-btn { background: #0f1923; color: #fff; border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .layout { display: grid; grid-template-columns: 240px 1fr 240px; gap: 1.5rem; max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .left-panel, .right-panel { display: none; } .nav-links { display: none; } }
+        .left-panel, .right-panel { display: flex; flex-direction: column; gap: 1rem; }
+        .panel-card { background: #fff; border-radius: 12px; border: 1px solid #e8e9ec; padding: 1.1rem; }
+        .panel-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #999; margin-bottom: 12px; }
+        .cat-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #ccc; margin: 10px 0 5px; }
+        .cat-label:first-of-type { margin-top: 0; }
+        .ex-item { padding: 7px 9px; border-radius: 7px; font-size: 12px; color: #555; cursor: pointer; line-height: 1.4; margin-bottom: 2px; border: 1px solid transparent; transition: all 0.15s; }
+        .ex-item:hover { background: rgba(233,69,96,0.05); border-color: rgba(233,69,96,0.15); color: #e94560; }
+        .hist-item { display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
+        .hist-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .hist-item:hover .hist-text { color: #e94560; }
+        .hist-icon { color: #ddd; font-size: 11px; margin-top: 1px; flex-shrink: 0; }
+        .hist-text { font-size: 12px; color: #666; line-height: 1.35; transition: color 0.15s; }
+        .hist-empty { font-size: 12px; color: #ccc; font-style: italic; }
+        .sport-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
+        .sport-tag.fantasy { background: rgba(16,185,129,0.1); color: #065f46; }
+        .sport-tag.betting { background: rgba(233,69,96,0.1); color: #c0392b; }
+        .sport-tag.pro { background: rgba(79,38,193,0.1); color: #4c1d95; }
+        .sport-tag.fan { background: rgba(15,52,96,0.1); color: #0f3460; }
+        .main { display: flex; flex-direction: column; gap: 1.25rem; }
+        .ask-hero { background: #0f1923; border-radius: 16px; padding: 2rem; }
+        .hero-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        .hero-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-transform: uppercase; }
+        .hero-title { font-size: 1.5rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.5rem; }
+        .hero-title em { color: #e94560; font-style: normal; }
+        .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+        .filter-btn { padding: 5px 13px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); background: transparent; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.15s; }
+        .filter-btn.active { border-color: #e94560; background: rgba(233,69,96,0.2); color: #fff; }
+        .filter-btn:hover:not(.active) { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.75); }
+        .input-row { display: flex; gap: 8px; align-items: flex-end; }
+        .input-wrap { flex: 1; position: relative; }
+        .input-wrap textarea { width: 100%; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 12px 16px; color: #fff; font-size: 13px; outline: none; font-family: inherit; resize: none; height: 80px; line-height: 1.5; }
+        .input-wrap textarea::placeholder { color: rgba(255,255,255,0.3); }
+        .input-wrap textarea:focus { border-color: #e94560; }
+        .hint { font-size: 10px; color: rgba(255,255,255,0.2); margin-top: 5px; }
+        .submit-btn { background: #e94560; color: #fff; border: none; padding: 14px 24px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; align-self: flex-start; }
+        .submit-btn:hover { background: #c0392b; }
+        .response-wrap { display: none; }
+        .response-card { background: #fff; border-radius: 14px; border: 1px solid #e8e9ec; overflow: hidden; }
+        .resp-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid #f5f5f5; }
+        .resp-left { display: flex; align-items: center; gap: 10px; }
+        .resp-logo { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, #0f3460, #e94560); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+        .resp-label { font-size: 11px; font-weight: 700; color: #0f3460; text-transform: uppercase; letter-spacing: 0.5px; }
+        .resp-q { font-size: 11px; color: #aaa; margin-top: 2px; }
+        .clear-btn { font-size: 11px; color: #bbb; background: none; border: 1px solid #e8e9ec; cursor: pointer; padding: 5px 10px; border-radius: 6px; transition: all 0.15s; }
+        .clear-btn:hover { color: #555; background: #f5f5f5; }
+        .resp-body { padding: 1.5rem; }
+        .resp-text { font-size: 0.95rem; line-height: 1.8; color: #333; }
+        .resp-text h1, .resp-text h2, .resp-text h3 { color: #0f3460; margin: 14px 0 6px; font-size: 1rem; }
+        .resp-text h1:first-child, .resp-text h2:first-child, .resp-text h3:first-child { margin-top: 0; }
+        .resp-text strong { color: #1a1a2e; }
+        .resp-text ul, .resp-text ol { margin-left: 20px; margin-bottom: 10px; }
+        .resp-text li { margin-bottom: 5px; }
+        .resp-text p { margin-bottom: 12px; }
+        .resp-text p:last-child { margin-bottom: 0; }
+        .loading { color: #0f3460; font-style: italic; display: flex; align-items: center; gap: 8px; padding: 0.5rem 0; }
+        .loading::before { content: ''; width: 14px; height: 14px; border: 2px solid #e8e9ec; border-top-color: #0f3460; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .diff-banner { background: #fff; border-radius: 12px; border: 1px solid #e8e9ec; padding: 1.1rem 1.25rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .diff-item { display: flex; flex-direction: column; gap: 4px; }
+        .diff-icon { font-size: 1.2rem; margin-bottom: 2px; }
+        .diff-title { font-size: 12px; font-weight: 700; color: #0f1923; }
+        .diff-desc { font-size: 11px; color: #888; line-height: 1.4; }
+    
+        .cmp-card { background:#fff; border:1px solid #e8e9ec; border-radius:14px; overflow:hidden; margin-bottom:1rem; }
+        .cmp-head { display:grid; grid-template-columns:1fr 60px 1fr; align-items:start; padding:1.25rem 1rem 1rem; border-bottom:1px solid #eee; }
+        .cmp-player { text-align:center; }
+        .cmp-photo { width:74px; height:74px; border-radius:50%; object-fit:cover; background:#f0f0f0; border:2px solid #f0f0f0; }
+        .cmp-photo-blank { display:flex; align-items:center; justify-content:center; font-weight:700; color:#999; font-size:20px; margin:0 auto; }
+        .cmp-name { font-size:15px; font-weight:700; color:#0f1923; margin-top:8px; }
+        .cmp-meta { font-size:11px; color:#999; margin-top:2px; }
+        .cmp-vs { text-align:center; font-size:12px; font-weight:700; color:#ccc; padding-top:32px; letter-spacing:1px; }
+        .cmp-rows { }
+        .cmp-section { background:#f8f9fc; padding:7px 1rem; font-size:11px; font-weight:700; color:#0f3460; text-transform:uppercase; letter-spacing:.6px; border-bottom:1px solid #eee; }
+        .cmp-row { display:grid; grid-template-columns:1fr 150px 1fr; align-items:center; border-bottom:1px solid #f5f5f5; }
+        .cmp-row:last-child { border-bottom:none; }
+        .cmp-cell { text-align:center; font-size:14px; color:#777; padding:9px 6px; }
+        .cmp-cell.win { background:rgba(16,185,129,.10); color:#0f1923; font-weight:700; }
+        .cmp-label { text-align:center; font-size:12px; font-weight:600; color:#555; padding:9px 4px; }
+        .cmp-foot { padding:.85rem 1rem; border-top:1px solid #eee; background:#f8f9fc; font-size:12px; color:#666; text-align:center; }
+    
+#thread{display:flex;flex-direction:column;gap:20px;margin-bottom:22px}
+.chat-turn{display:flex;flex-direction:column;gap:10px}
+.chat-q{align-self:flex-end;max-width:82%;background:#0f3460;color:#fff;padding:12px 16px;
+  border-radius:14px 14px 4px 14px;font-size:14px;font-weight:600;line-height:1.45}
+.chat-a{background:#fff;border:1px solid #e8e9ec;border-radius:14px;padding:16px 18px}
+.chat-a-head{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;
+  letter-spacing:1px;text-transform:uppercase;color:#888;margin-bottom:10px}
+.chat-logo{width:20px;height:20px;border-radius:6px;background:#0f3460;color:#fff;display:flex;
+  align-items:center;justify-content:center;font-size:11px;font-weight:800}
+.chat-a-body{font-size:14.5px;line-height:1.65;color:#333}
+.chat-err{color:#c0392b}
+</style>
+</head>
+<body>
+<nav>
+    <a href="/" class="logo">RIGOR<span>LYTICS</span></a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/stats" class="nav-link">Stats</a>
+        <a href="/scores" class="nav-link">Scores</a>
+        <a href="/ask" class="nav-link active">Ask</a>
+        <a href="/fantasy" class="nav-link">Fantasy</a>
+        <a href="/betting" class="nav-link">Betting</a>
+        <a href="/pro" class="nav-link pro-link">Pro</a>
+        <a href="/research" class="nav-link">Research</a>
+        <a href="/about" class="nav-link">About</a>
+    </div>
+    <div><a href="/ask" class="nav-btn" style="text-decoration:none;display:inline-block;">Ask Rigorlytics</a></div>
+</nav>
+
+<div class="layout">
+    <div class="left-panel">
+        <div class="panel-card">
+            <div class="panel-title">Example questions</div>
+            <div class="cat-label">Everyday fans</div>
+            <div class="ex-item" onclick="setQ(this)">Who was better — Kobe or LeBron?</div>
+            <div class="ex-item" onclick="setQ(this)">Best NBA season in history?</div>
+            <div class="ex-item" onclick="setQ(this)">Is Mahomes the GOAT QB?</div>
+            <div class="ex-item" onclick="setQ(this)">Gretzky vs McDavid — who was more dominant?</div>
+            <div class="cat-label">Fantasy</div>
+            <div class="ex-item" onclick="setQ(this)">Should I start Ja Morant this week?</div>
+            <div class="ex-item" onclick="setQ(this)">Best value RBs for Week 1?</div>
+            <div class="ex-item" onclick="setQ(this)">Top waiver pickups this week?</div>
+            <div class="cat-label">Betting</div>
+            <div class="ex-item" onclick="setQ(this)">Where is the statistical edge in MLB tonight?</div>
+            <div class="ex-item" onclick="setQ(this)">Best value bets this weekend?</div>
+            <div class="cat-label">Pro</div>
+            <div class="ex-item" onclick="setQ(this)">What should Ja Morant next contract be worth?</div>
+            <div class="ex-item" onclick="setQ(this)">Is Jokic underpaid or overpaid?</div>
+            <div class="ex-item" onclick="setQ(this)">Who wins the Anthony Davis trade?</div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div id="thread"></div>
+        <div class="ask-hero">
+            <div class="hero-top">
+                <div class="live-dot"></div>
+                <span class="hero-label">Research mode — ask anything</span>
+            </div>
+            <div class="hero-title">Go deeper with<br><em>sports intelligence</em></div>
+            <div class="filters">
+                <div class="filter-btn active" onclick="setFilter(this, '')">All sports</div>
+                <div class="filter-btn" onclick="setFilter(this, 'NBA')">🏀 NBA</div>
+                <div class="filter-btn" onclick="setFilter(this, 'NFL')">🏈 NFL</div>
+                <div class="filter-btn" onclick="setFilter(this, 'MLB')">⚾ MLB</div>
+                <div class="filter-btn" onclick="setFilter(this, 'NHL')">🏒 NHL</div>
+                <div class="filter-btn" onclick="setFilter(this, 'WNBA')">🏀 WNBA</div>
+            </div>
+            <div class="input-row">
+                <div class="input-wrap">
+                    <textarea id="question" placeholder="Ask a detailed sports question — player analysis, contract value, trade breakdown, fantasy advice, betting edge..."></textarea>
+                    <div class="hint">Press Enter to submit · Shift+Enter for new line</div>
+                </div>
+                <button class="submit-btn" onclick="askQuestion()">Analyze ↗</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function renderComparison(d) {
+      const body = d.rows.map(r => {
+        if (r.section) {
+          return `<div class="cmp-section">${r.section}</div>`;
+        }
+        const aWin = r.winner === 'a', bWin = r.winner === 'b';
+        const fmt = v => v.toLocaleString();
+        return `<div class="cmp-row">
+          <div class="cmp-cell ${aWin?'win':''}">${fmt(r.a)}</div>
+          <div class="cmp-label">${r.label}</div>
+          <div class="cmp-cell ${bWin?'win':''}">${fmt(r.b)}</div>
+        </div>`;
+      }).join('');
+
+      const lead = d.wins.a > d.wins.b ? d.a.name : (d.wins.b > d.wins.a ? d.b.name : null);
+      const total = d.rows.filter(r => !r.section).length;
+      const foot = lead
+        ? `${lead} leads in ${Math.max(d.wins.a, d.wins.b)} of ${total} categories.`
+        : `Even split \u2014 ${d.wins.a} categories each.`;
+
+      const photo = (p, align) => p.headshot
+        ? `<img src="${p.headshot}" alt="${p.name}" class="cmp-photo" />`
+        : `<div class="cmp-photo cmp-photo-blank">${p.name.split(' ').map(x=>x[0]).join('')}</div>`;
+
+      return `<div class="cmp-card">
+        <div class="cmp-head">
+          <div class="cmp-player">
+            ${photo(d.a)}
+            <div class="cmp-name">${d.a.name}</div>
+            <div class="cmp-meta">${d.a.position || ''}${d.a.jersey ? ' \u00b7 #' + d.a.jersey : ''} \u00b7 ${d.a.seasons} seasons</div>
+          </div>
+          <div class="cmp-vs">VS</div>
+          <div class="cmp-player">
+            ${photo(d.b)}
+            <div class="cmp-name">${d.b.name}</div>
+            <div class="cmp-meta">${d.b.position || ''}${d.b.jersey ? ' \u00b7 #' + d.b.jersey : ''} \u00b7 ${d.b.seasons} seasons</div>
+          </div>
+        </div>
+        <div class="cmp-rows">${body}</div>
+        <div class="cmp-foot">${foot}</div>
+      </div>`;
+    }
+
+    function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+    function qEl(){ return document.getElementById('question'); }
+    function setQ(el){ qEl().value = el.innerText; qEl().focus(); }
+    function setFilter(){ }
+    function clearResp(){ document.getElementById('thread').innerHTML=''; qEl().value=''; qEl().focus(); }
+
+    function addTurn(q){
+        var w = document.createElement('div');
+        w.className = 'chat-turn';
+        w.innerHTML = '<div class="chat-q">' + esc(q) + '</div>' +
+          '<div class="chat-a"><div class="chat-a-head"><span class="chat-logo">R</span>' +
+          'Rigorlytics Analysis</div><div class="chat-a-body">' +
+          '<div class="loading">Analyzing\u2026</div></div></div>';
+        document.getElementById('thread').appendChild(w);
+        return w.querySelector('.chat-a-body');
+    }
+
+    qEl().addEventListener('keydown', function(e){
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); askQuestion(); }
+    });
+
+    async function askQuestion(){
+        var el = qEl();
+        var q = el.value.trim();
+        if (!q) return;
+        el.value = '';
+        var body = addTurn(q);
+        body.scrollIntoView({ behavior:'smooth', block:'center' });
+        try {
+            var cardHtml = '';
+            try {
+                var cmp = await fetch('/api/compare', { method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify({ question: q }) });
+                var cmpData = await cmp.json();
+                if (cmpData && cmpData.type === 'comparison') cardHtml = renderComparison(cmpData);
+            } catch(e) {}
+            var res = await fetch('/ask', { method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({ question: q }) });
+            var data = await res.json();
+            var ans = data.answer || data.error || 'No answer returned.';
+            body.innerHTML = cardHtml + (window.marked ? marked.parse(ans) : esc(ans));
+        } catch(err) {
+            body.innerHTML = '<div class="chat-err">Error connecting to Rigorlytics. Please try again.</div>';
+        }
+        el.focus();
+    }
+</script>
+</body>
+</html>
