@@ -125,6 +125,19 @@ def render_for_prompt(obj):
     """Analysis object -> the text block handed to the model."""
     if not obj or not obj.get("ok"):
         return ""
+    if obj.get("mode") == "leaders_only":
+        p = obj["player"]
+        L = ["LEAGUE-LEADER RECORD (pre-1999 curated data, not a full season):"]
+        L.append("Player: %s | %s | %s | %s season%s"
+                 % (p["name"], p["league"], p["position"], obj["season"]["year"],
+                    (" | " + p["team"]) if p.get("team") else ""))
+        for label, val in (obj.get("held") or {}).items():
+            L.append("  %s: %s" % (label, val))
+        L.append(obj["note"])
+        L.append("Source: Wikipedia, CC BY-SA. Say plainly that this is a "
+                 "league-leader record rather than a full statistical profile.")
+        return "\n".join(L)
+
     p, c, m = obj["player"], obj["cohort"], obj["money"]
     conf = obj["confidence"]
     L = []

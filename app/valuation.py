@@ -304,7 +304,7 @@ def cohort_rows(cur, league, sport, group, season_year=None):
     """Every player in the league whose position maps to the same group."""
     cur.execute("""
         SELECT p.id, p.full_name, p.position, p.birth_date,
-               ps.stats, ps.games_played, s.year, t.name AS team_name
+               ps.stats, ps.games_played, ps.source, s.year, t.name AS team_name
         FROM player_seasons ps
         JOIN players p ON p.id = ps.player_id
         JOIN leagues l ON l.id = p.league_id
@@ -535,9 +535,40 @@ def analyze(name, league=None, comps=6):
         mine = max(mine, key=lambda r: workload(r["stats"], sport))
         my_stats, my_year = mine["stats"], mine["year"]
 
+        # Curated league-leader rows (pre-1999 Wikipedia) hold a handful of
+        # players per season. They answer "who led the league in 1972" but they
+        # are not a cohort: ranking someone against the eight other people we
+        # happen to hold would manufacture a percentile out of nothing.
+        if (mine.get("source") or "") == "wikipedia_leaders":
+            held = {}
+            for key, label, mode, higher in metric_specs(sport, group):
+                v = my_stats.get(key)
+                if v is not None:
+                    held[label] = v
+            return {
+                "ok": True, "mode": "leaders_only",
+                "player": dict(id=me["id"], name=me["full_name"], league=lg,
+                               sport=sport, position=me["position"],
+                               position_group=group, age=age_from(me["birth_date"]),
+                               team=mine["team_name"]),
+                "season": dict(year=my_year, games_played=mine["games_played"]),
+                "held": held,
+                "note": ("Rigorlytics holds %s only as a league-leader record for "
+                         "%s, not a full season of rosters. The figures above are "
+                         "real and may be quoted. Percentiles, comparable players "
+                         "and value bands CANNOT be computed for this season and "
+                         "must not be stated or estimated - there is no cohort to "
+                         "rank against." % (me["full_name"], my_year)),
+                "confidence": dict(tier="low", reasons=[
+                    "league-leader record only; no cohort exists for %s" % my_year]),
+                "provenance": [dict(field="season statistics",
+                                    source="Wikipedia (CC BY-SA)", as_of=my_year)],
+            }
+
         floor = MIN_WORKLOAD.get(sport, 0.0)
         peers = [r for r in rows
-                 if r["id"] != me["id"] and workload(r["stats"], sport) >= floor]
+                 if r["id"] != me["id"] and workload(r["stats"], sport) >= floor
+                 and (r.get("source") or "") != "wikipedia_leaders"]
         my_age = age_from(me["birth_date"])
 
         # ---- metrics + percentiles (derived)
