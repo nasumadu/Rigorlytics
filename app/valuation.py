@@ -532,7 +532,9 @@ def analyze(name, league=None, comps=6):
         if not mine:
             return {"ok": False, "error": "no season stats stored for %s"
                                           % me["full_name"]}
-        mine = max(mine, key=lambda r: workload(r["stats"], sport))
+        # Most recent season first, workload as the tie-break. "How good is he"
+        # means now, not whichever year he happened to play the most games.
+        mine = max(mine, key=lambda r: (r["year"] or 0, workload(r["stats"], sport)))
         my_stats, my_year = mine["stats"], mine["year"]
 
         # Curated league-leader rows (pre-1999 Wikipedia) hold a handful of
@@ -565,9 +567,14 @@ def analyze(name, league=None, comps=6):
                                     source="Wikipedia (CC BY-SA)", as_of=my_year)],
             }
 
+        # Rank within the same season. Pooling 1999-2025 into one cohort would
+        # measure a 2021 quarterback against 2003 passing rules and report the
+        # difference as if it were talent - the era error this engine exists to
+        # avoid. A cohort is a season, not an archive.
         floor = MIN_WORKLOAD.get(sport, 0.0)
         peers = [r for r in rows
-                 if r["id"] != me["id"] and workload(r["stats"], sport) >= floor
+                 if r["id"] != me["id"] and r["year"] == my_year
+                 and workload(r["stats"], sport) >= floor
                  and (r.get("source") or "") != "wikipedia_leaders"]
         my_age = age_from(me["birth_date"])
 
@@ -749,9 +756,11 @@ def analyze(name, league=None, comps=6):
             "cohort": dict(league=lg, position_group=group, n=len(peers),
                            comparable_pool=len(comp_peers), age_band=age_band,
                            workload_floor=floor,
-                           definition="same league, same position group, at least "
-                                      "%d %s" % (floor, "minutes" if sport != "football"
-                                                 else "games")),
+                           season=my_year,
+                           definition="same league, same position group, SAME "
+                                      "SEASON (%s), at least %d %s"
+                                      % (my_year, floor,
+                                         "minutes" if sport != "football" else "games")),
             "metrics": metrics,
             "composite_percentile": composite,
             "comparables": comparables,
