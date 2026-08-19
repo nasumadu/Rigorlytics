@@ -156,15 +156,18 @@ def db_figures(entities):
                             per_key.setdefault(k, []).append(float(v))
                     if row["yr"]:
                         vals.add(float(row["yr"]))
-            # Totals and means are legitimate figures: Rigorlytics computes them
-            # in history() and hands them over. They appear in no single row, so
-            # corroboration has to include them or every aggregate looks invented.
-            for k, series in per_key.items():
-                if series:
-                    vals.add(float(sum(series)))
-                    vals.add(round(sum(series) / len(series), 3))
-                    vals.add(float(max(series)))
-                    vals.add(float(min(series)))
+                # Totals and means are legitimate figures: Rigorlytics computes
+                # them in history() and hands them over. They appear in no single
+                # row, so corroboration must include them - and they must be
+                # computed INSIDE this loop, per player. Left outside it, the
+                # per_key reset meant only the last entity's aggregates survived,
+                # so Brady's career total looked invented.
+                for k, series in per_key.items():
+                    if series:
+                        vals.add(float(sum(series)))
+                        vals.add(round(sum(series) / len(series), 3))
+                        vals.add(float(max(series)))
+                        vals.add(float(min(series)))
     except Exception:
         return None
     _FIG_CACHE[key] = vals
