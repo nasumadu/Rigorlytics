@@ -181,9 +181,38 @@ def db_figures(entities):
 NUMTOK = re.compile(r"\d[\d,]*(?:\.\d+)?")
 
 
-def uncorroborated(text, entities):
+def leaderboard_figures(question, depth=60):
+    """Every value on the ranking a leader question asks about.
+
+    A question like "who led the NFL in passing yards in 2020" names no player,
+    so entity-based corroboration has nothing to check against. The ranking
+    itself is the ground truth.
+    """
+    try:
+        from app.leaders import detect, leaders
+    except Exception:
+        return None
+    spec = detect(question)
+    if not spec:
+        return None
+    try:
+        rows, meta = leaders(spec["stat"], spec["league"], spec["year"],
+                             spec["season_type"], depth)
+    except Exception:
+        return None
+    if not rows:
+        return None
+    vals = {float(r["v"]) for r in rows if r.get("v") is not None}
+    if meta and meta.get("year"):
+        vals.add(float(meta["year"]))
+    return vals
+
+
+def uncorroborated(text, entities, extra=None):
     """Figures asserted in the answer that match nothing we hold or computed."""
     held = db_figures(entities)
+    if extra:
+        held = (held or set()) | extra
     if held is None:
         return []
     missing = []
@@ -247,7 +276,19 @@ def mechanical(case, answer):
 
     if "db_absent" in tags or "impossible" in tags or "no_contract_data" in tags:
         acknowledged = bool(has_any(a, REFUSAL))
-        if "impossible" in tags or not case["entities"]:
+        board = None
+        if "impossible" not in tags:
+            q = case["prompt"] if isinstance(case["prompt"], str) else case["prompt"][0]
+            board = leaderboard_figures(q)
+        if board:
+            # A leader question: check the answer against the real ranking.
+            miss = uncorroborated(a, case["entities"], extra=board)
+            ok = acknowledged or len(miss) < 2
+            checks["figures_corroborated"] = ok
+            if miss:
+                flags.append("%d figure(s) not on the ranking: %s"
+                             % (len(miss), "; ".join(miss[:4])))
+        elif "impossible" in tags or not case["entities"]:
             stats = find_stats(a)
             checks["no_fabricated_figures"] = not stats or acknowledged
             if stats and not acknowledged:
