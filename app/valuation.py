@@ -265,8 +265,9 @@ def find_player(cur, name, league=None):
     """Resolve a name to player rows.
 
     Narrowed in SQL on the surname first so a chat request does not scan the
-    whole players table; falls back to a full scan only when the narrow pass
-    finds nothing, which is what catches accented spellings the LIKE misses.
+    whole players table. Only when that finds nothing does it widen, and even
+    then it reads two columns and keeps a handful of candidates - which is
+    what catches accented spellings and typos the LIKE misses.
     """
     n = norm_name(name)
     if not n:
@@ -296,15 +297,46 @@ def find_player(cur, name, league=None):
     hit = sift(cur.fetchall())
     if hit:
         return hit
-    cur.execute(base + scope, args)
-    everyone = [dict(r) for r in cur.fetchall()]
-    hit = sift(everyone)
-    if hit:
-        return hit
-    # Strict matching has failed. Before reporting that the player does not
-    # exist, allow for the name having been typed wrong.
-    from app.namematch import rank_names
-    return rank_names(name, everyone, key=lambda r: r["full_name"])
+    # Strict matching has failed, so widen - but never by materialising the
+    # whole players table. Doing that cost ~40 MB a call, and a two-player
+    # comparison does it twice, which exhausts a 512 MB instance mid-request
+    # and surfaces as a 500. Scan two columns, keep only the best handful,
+    # then fetch full rows for those.
+    from app.namematch import rank_names, score
+    ids_sql = ("""SELECT p.id, p.full_name
+                  FROM players p JOIN leagues l ON l.id = p.league_id
+                  WHERE p.full_name IS NOT NULL""")
+    cur.execute(ids_sql + scope, args)
+    best = []
+    q_last = n.split()[-1]
+    for r in cur.fetchall():
+        r = dict(r)
+        rn = norm_name(r["full_name"])
+        if rn == n:
+            s = 1.0
+        elif n in rn:
+            s = 0.9
+        else:
+            # difflib across 76,743 names costs twenty seconds. A misspelling
+            # keeps the first letter and roughly the length of the surname;
+            # anything failing both is a different name, not a typo. This
+            # skips ~95% of the table before the expensive comparison.
+            r_last = rn.split()[-1] if rn else ""
+            if (not r_last or r_last[0] != q_last[0]
+                    or abs(len(r_last) - len(q_last)) > 2):
+                continue
+            s = score(n, r["full_name"])
+        if s >= 0.82:
+            best.append((s, r["id"]))
+    if not best:
+        return []
+    best.sort(key=lambda t: -t[0])
+    ids = [i for _, i in best[:8]]
+    cur.execute(base + scope + " AND p.id = ANY(%s)", args + [ids])
+    rank = {pid: k for k, pid in enumerate(ids)}
+    rows = [dict(r) for r in cur.fetchall()]
+    rows.sort(key=lambda r: rank.get(r["id"], 99))
+    return rows
 
 
 def cohort_rows(cur, league, sport, group, season_year=None, player_id=None):
