@@ -34,11 +34,12 @@ UA = {"User-Agent": "Rigorlytics/1.0 (+https://rigorlytics.net)"}
 CORE = "https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{path}"
 
 LEAGUES = {
-    "nfl":  dict(code="NFL",  name="National Football League",                sport="football",   path="nfl",              year=2025, groups=None, seed=False, stype=2),
-    "cfb":  dict(code="CFB",  name="NCAA Football",                           sport="football",   path="college-football", year=2025, groups="80", seed=True,  stype=2),
-    "wnba": dict(code="WNBA", name="Women's National Basketball Association", sport="basketball", path="wnba",             year=2025, groups=None, seed=False, stype=2),
-    "epl":  dict(code="EPL",  name="Premier League",                          sport="soccer",     path="eng.1",            year=2025, groups=None, seed=True,  stype=2),
-    "mls":  dict(code="MLS",  name="Major League Soccer",                     sport="soccer",     path="usa.1",            year=2025, groups=None, seed=True,  stype=1),
+    "nfl":  dict(code="NFL",  name="National Football League",                sport="football",   path="nfl",              year=2025, groups=None, seed=False, stype=2, post=3),
+    "cfb":  dict(code="CFB",  name="NCAA Football",                           sport="football",   path="college-football", year=2025, groups="80", seed=True,  stype=2, post=3),
+    "wnba": dict(code="WNBA", name="Women's National Basketball Association", sport="basketball", path="wnba",             year=2025, groups=None, seed=False, stype=2, post=3),
+    "nba":  dict(code="NBA",  name="National Basketball Association",         sport="basketball", path="nba",              year=2025, groups=None, seed=False, stype=2, post=3),
+    "epl":  dict(code="EPL",  name="Premier League",                          sport="soccer",     path="eng.1",            year=2025, groups=None, seed=True,  stype=2, post=None),
+    "mls":  dict(code="MLS",  name="Major League Soccer",                     sport="soccer",     path="usa.1",            year=2025, groups=None, seed=True,  stype=1, post=3),
 }
 
 
@@ -130,13 +131,14 @@ def league_id(cur, cfg, create=True):
     return r["id"] if hasattr(r, "keys") else r[0]
 
 
-def season_id(cur, lid, year):
-    cur.execute("SELECT id FROM seasons WHERE league_id=%s AND year=%s AND season_type='regular'", (lid, year))
+def season_id(cur, lid, year, season_type="regular"):
+    cur.execute("SELECT id FROM seasons WHERE league_id=%s AND year=%s AND season_type=%s",
+                (lid, year, season_type))
     r = cur.fetchone()
     if r:
         return r["id"] if hasattr(r, "keys") else r[0]
-    cur.execute("INSERT INTO seasons (league_id, year, season_type) VALUES (%s,%s,'regular') RETURNING id",
-                (lid, year))
+    cur.execute("INSERT INTO seasons (league_id, year, season_type) VALUES (%s,%s,%s) RETURNING id",
+                (lid, year, season_type))
     r = cur.fetchone()
     return r["id"] if hasattr(r, "keys") else r[0]
 
@@ -263,9 +265,11 @@ def upsert_season_row(cur, player_id, sid, stats, team_id=None, dry=False):
 
 # ------------------------------------------------------------------ main
 
-def stats_url(cfg, year, ext_id):
+def stats_url(cfg, year, ext_id, espn_type=None):
+    if espn_type is None:
+        espn_type = cfg.get("stype", 2)
     return (CORE.format(sport=cfg["sport"], path=cfg["path"])
-            + "/seasons/%s/types/%s/athletes/%s/statistics" % (year, cfg.get("stype", 2), ext_id))
+            + "/seasons/%s/types/%s/athletes/%s/statistics" % (year, espn_type, ext_id))
 
 
 def do_probe(key):
@@ -288,16 +292,23 @@ def do_probe(key):
         print("   %-38s %s" % (k, st[k]))
 
 
-def run(keys, year_override, limit, dry, pause, reseed, seed_only, roster_only):
+def run(keys, year_override, limit, dry, pause, reseed, seed_only, roster_only,
+        postseason=False):
     for key in keys:
         cfg = LEAGUES[key]
         year = year_override or cfg["year"]
         print("=" * 60)
-        print("%s  season %s" % (cfg["code"], year))
+        espn_type = cfg.get("post") if postseason else cfg.get("stype", 2)
+        sql_type = "postseason" if postseason else "regular"
+        if postseason and not espn_type:
+            print("%s has no postseason - skipping" % cfg["code"])
+            continue
+        print("%s  season %s  (%s, espn type %s)"
+              % (cfg["code"], year, sql_type, espn_type))
         with get_conn() as c:
             cur = c.cursor()
             lid = league_id(cur, cfg)
-            sid = season_id(cur, lid, year)
+            sid = season_id(cur, lid, year, sql_type)
             c.commit()
             cur.execute("SELECT count(*) AS n FROM players WHERE league_id=%s", (lid,))
             r = cur.fetchone()
@@ -325,16 +336,39 @@ def run(keys, year_override, limit, dry, pause, reseed, seed_only, roster_only):
                        for x in cur.fetchall()]
             if limit and not roster_only:
                 players = players[:limit]
+            # ESPN echoes the regular-season line for leagues that have no
+            # postseason, so refuse to store a playoff row identical to it.
+            reg = {}
+            if postseason:
+                cur.execute("""SELECT ps.player_id, ps.stats FROM player_seasons ps
+                               JOIN seasons s ON s.id = ps.season_id
+                               WHERE s.league_id=%s AND s.year=%s
+                                 AND s.season_type='regular'""", (lid, year))
+                for r in cur.fetchall():
+                    r = dict(r)
+                    st0 = r["stats"]
+                    if isinstance(st0, str):
+                        try:
+                            st0 = json.loads(st0)
+                        except ValueError:
+                            st0 = None
+                    if st0:
+                        reg[r["player_id"]] = {k: float(v) for k, v in st0.items()
+                                               if isinstance(v, (int, float))}
+            dup = 0
             print("  %d players to process" % len(players))
             ins = upd = skip = err = 0
             for i, p in enumerate(players, 1):
                 try:
-                    payload = fetch(stats_url(cfg, year, p["external_id"]), tries=2)
+                    payload = fetch(stats_url(cfg, year, p["external_id"], espn_type),
+                                    tries=2)
                 except Exception:
                     skip += 1; continue
                 st = flatten_stats(payload)
                 if not st or not any(v for v in st.values()):
                     skip += 1; continue
+                if postseason and reg.get(p["id"]) == st:
+                    dup += 1; continue
                 try:
                     res = upsert_season_row(cur, p["id"], sid, st,
                                             team_id=roster.get(p["id"]), dry=dry)
@@ -348,7 +382,9 @@ def run(keys, year_override, limit, dry, pause, reseed, seed_only, roster_only):
                     print("    %d/%d  ins=%d upd=%d skip=%d err=%d" % (i, len(players), ins, upd, skip, err))
                 time.sleep(pause)
             if not dry: c.commit()
-            print("  DONE %s: inserted=%d updated=%d no-stats=%d errors=%d" % (cfg["code"], ins, upd, skip, err))
+            print("  DONE %s %s: inserted=%d updated=%d no-stats=%d "
+                  "identical-to-regular=%d errors=%d"
+                  % (cfg["code"], sql_type, ins, upd, skip, dup, err))
 
 
 def main():
@@ -361,6 +397,8 @@ def main():
     ap.add_argument("--pause", type=float, default=0.25)
     ap.add_argument("--reseed", action="store_true", help="seed rosters even if players already exist")
     ap.add_argument("--seed-only", action="store_true", help="seed rosters and stop before stats")
+    ap.add_argument("--postseason", action="store_true",
+                    help="pull playoff stats into season_type='postseason'")
     ap.add_argument("--roster-only", action="store_true",
                     help="seed from current rosters, then pull stats for those players only")
     a = ap.parse_args()
@@ -370,7 +408,8 @@ def main():
     keys = [k.strip().lower() for k in a.leagues.split(",") if k.strip()]
     bad = [k for k in keys if k not in LEAGUES]
     if bad: sys.exit("unknown league(s): %s" % bad)
-    run(keys, a.year, a.limit, a.dry_run, a.pause, a.reseed, a.seed_only, a.roster_only)
+    run(keys, a.year, a.limit, a.dry_run, a.pause, a.reseed, a.seed_only, a.roster_only,
+        postseason=a.postseason)
 
 
 if __name__ == "__main__":

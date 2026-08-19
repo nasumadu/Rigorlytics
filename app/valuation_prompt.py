@@ -138,6 +138,8 @@ def render_for_prompt(obj):
     L.append("METRICS (value | percentile within cohort | cohort median):")
     for x in obj["metrics"]:
         note = "" if x["higher_is_better"] else "  [lower is better]"
+        if x.get("no_variance"):
+            note += "  [every peer records the same value - not a differentiator]"
         L.append("  %s (%s): %s | %s | %s%s"
                  % (x["label"], x["mode"], x["value"],
                     "n/a" if x["percentile"] is None else "%.0f" % x["percentile"],
@@ -151,11 +153,35 @@ def render_for_prompt(obj):
                  % (" (within %.1f years of age)" % ab if ab else ""))
         for cmp_ in obj["comparables"]:
             mo = cmp_.get("money")
-            L.append("  %s%s%s - %s"
+            pp = cmp_.get("postseason")
+            play = ("; %s playoffs: %s games" % (pp["year"], pp.get("games") or "?")
+                    if pp else "; no postseason record")
+            L.append("  %s%s%s - %s%s"
                      % (cmp_["player"],
                         (" (%s)" % cmp_["team"]) if cmp_.get("team") else "",
                         (", age %s" % cmp_["age"]) if cmp_.get("age") else "",
-                        both_str(mo)))
+                        both_str(mo), play))
+
+    ps = obj.get("postseason") or {}
+    L.append("")
+    if not ps.get("has_data"):
+        L.append("POSTSEASON: %s" % ps.get("note", "no playoff data held."))
+    else:
+        L.append("POSTSEASON (%s playoffs, %s games):"
+                 % (ps.get("year"), ps.get("games") or "?"))
+        if ps.get("split"):
+            L.append("  Playoff rate vs this player's OWN regular-season rate:")
+            for r in ps["split"]:
+                arrow = ("" if r.get("change_pct") is None
+                         else "  (%+.1f%%)" % r["change_pct"])
+                L.append("    %s: %s regular -> %s playoffs%s"
+                         % (r["label"], r["regular"], r["postseason"], arrow))
+            L.append("  A rise or fall here is about this player only. It is a "
+                     "small sample by nature - say so rather than declaring him "
+                     "clutch or a choker.")
+        else:
+            L.append("  Playoff row held, but no rate metric overlaps the regular "
+                     "season, so no comparison is possible.")
 
     L.append("")
     if not m.get("axis"):

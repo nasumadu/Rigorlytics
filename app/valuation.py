@@ -305,6 +305,7 @@ def cohort_rows(cur, league, sport, group, season_year=None):
         JOIN seasons s ON s.id = ps.season_id
         LEFT JOIN teams t ON t.id = ps.team_id
         WHERE l.code = %s AND p.position IS NOT NULL
+          AND s.season_type = 'regular'
     """, (league,))
     out = []
     gmap = POS_GROUP.get(sport, {})
@@ -323,6 +324,66 @@ def cohort_rows(cur, league, sport, group, season_year=None):
         r["stats"] = st
         out.append(r)
     return out
+
+
+def postseason_for(cur, league, player_ids):
+    """Most recent playoff row per player, keyed by players.id."""
+    if not player_ids:
+        return {}
+    cur.execute("""
+        SELECT ps.player_id, ps.stats, ps.games_played, s.year
+        FROM player_seasons ps
+        JOIN seasons s ON s.id = ps.season_id
+        JOIN players p ON p.id = ps.player_id
+        JOIN leagues l ON l.id = p.league_id
+        WHERE l.code = %s AND s.season_type = 'postseason'
+          AND ps.player_id = ANY(%s)
+        ORDER BY s.year DESC
+    """, (league, list(player_ids)))
+    out = {}
+    for r in cur.fetchall():
+        r = dict(r)
+        if r["player_id"] in out:
+            continue
+        st = r["stats"]
+        if isinstance(st, str):
+            try:
+                st = json.loads(st)
+            except ValueError:
+                continue
+        if not st:
+            continue
+        out[r["player_id"]] = dict(stats=st, year=r["year"],
+                                   games_played=r["games_played"])
+    return out
+
+
+def playoff_split(reg_stats, post_stats, specs, sport):
+    """Regular season versus postseason, on rate metrics only.
+
+    Season totals cannot be compared against a three-game playoff run, so only
+    per-90, per-game and percentage metrics are set side by side. The change is
+    expressed against the player's own regular-season rate, which is the honest
+    comparison: it asks whether he raised his level, not whether his team went
+    deep.
+    """
+    rows = []
+    for key, label, mode, higher in specs:
+        if mode == "total":
+            continue
+        rv = metric_value(reg_stats, key, mode, sport)
+        pv = metric_value(post_stats, key, mode, sport)
+        if rv is None or pv is None:
+            continue
+        change = None
+        if rv:
+            change = round((pv - rv) / abs(rv) * 100.0, 1)
+            if not higher:
+                change = -change
+        rows.append(dict(key=key, label=label, mode=mode,
+                         regular=round(rv, 3), postseason=round(pv, 3),
+                         change_pct=change, higher_is_better=higher))
+    return rows
 
 
 def money_for(cur, player_ids, league):
@@ -409,7 +470,8 @@ def analyze(name, league=None, comps=6):
                 pv = metric_value(r["stats"], key, mode, sport)
                 if pv is not None:
                     pool.append(pv)
-            pr = pct_rank(pool, mv)
+            flat = bool(pool) and max(pool) == min(pool)
+            pr = None if flat else pct_rank(pool, mv)
             if pr is not None and not higher:
                 pr = round(100.0 - pr, 1)
             mu = sum(pool) / len(pool) if pool else None
@@ -418,7 +480,7 @@ def analyze(name, league=None, comps=6):
             if sd:
                 zvec[key] = ((mv - mu) / sd) * (1 if higher else -1)
             metrics.append(dict(key=key, label=label, mode=mode, value=round(mv, 3),
-                                percentile=pr, cohort_n=len(pool),
+                                percentile=pr, no_variance=flat, cohort_n=len(pool),
                                 cohort_median=round(median(pool), 3) if pool else None,
                                 higher_is_better=higher))
 
@@ -473,14 +535,38 @@ def analyze(name, league=None, comps=6):
 
         ids = [r["id"] for _, r in near] + [me["id"]]
         money, axis, axis_label = money_for(cur, ids, lg)
+        post = postseason_for(cur, lg, ids)
 
         comparables = []
         for dist, r in near:
             m = money.get(r["id"])
+            pp = post.get(r["id"])
             comparables.append(dict(
                 player=r["full_name"], team=r["team_name"], position=r["position"],
                 age=age_from(r["birth_date"]), distance=round(dist, 3),
-                money=m))
+                money=m,
+                postseason=(dict(year=pp["year"], games=pp["games_played"],
+                                 workload=workload(pp["stats"], sport),
+                                 split=playoff_split(
+                                     next((x["stats"] for x in rows
+                                           if x["id"] == r["id"]), {}),
+                                     pp["stats"], specs, sport))
+                            if pp else None)))
+
+        my_post = post.get(me["id"])
+        if my_post:
+            postseason = dict(
+                has_data=True, year=my_post["year"],
+                games=my_post["games_played"],
+                workload=workload(my_post["stats"], sport),
+                split=playoff_split(my_stats, my_post["stats"], specs, sport),
+                basis="playoff rates against this player's own regular-season rates")
+        else:
+            postseason = dict(
+                has_data=False,
+                note="No postseason appearances in the data for %s. That is an "
+                     "absence of playoff games, not weak playoff performance, and "
+                     "must not be read as a negative." % me["full_name"])
 
         # ---- market position (fact) + projection (inference)
         my_money = money.get(me["id"])
@@ -534,9 +620,6 @@ def analyze(name, league=None, comps=6):
         if axis and not peer_amounts:
             tier = "low" if tier == "low" else "medium"
             reasons.append("no %s data for the comparable set" % axis.replace("_", " "))
-        if not axis:
-            reasons.append("%s publishes no salary data, so no money claim is made"
-                           % lg)
         if not reasons:
             reasons.append("full metric coverage against a cohort of %d peers"
                            % len(peers))
@@ -558,6 +641,7 @@ def analyze(name, league=None, comps=6):
             "metrics": metrics,
             "composite_percentile": composite,
             "comparables": comparables,
+            "postseason": postseason,
             "money": dict(axis=axis, axis_label=axis_label, player=my_money,
                           band=band),
             "confidence": dict(tier=tier, reasons=reasons,
@@ -626,6 +710,16 @@ def main():
             cash = "-"
         print("   %-24s %-22s d=%-6s %s"
               % (cmp_["player"], cmp_["team"] or "-", cmp_["distance"], cash))
+    ps = obj.get("postseason") or {}
+    if ps.get("has_data"):
+        print("\npostseason (%s, %s games)" % (ps.get("year"), ps.get("games")))
+        for r in ps.get("split", []):
+            chg = "" if r.get("change_pct") is None else "  %+.1f%%" % r["change_pct"]
+            print("   %-22s %-10s -> %-10s%s"
+                  % (r["label"], r["regular"], r["postseason"], chg))
+    else:
+        print("\npostseason: none on record")
+
     if m["band"]:
         b = m["band"]
         print("\nprojected band (%s): %s %s - %s   mid %s"
