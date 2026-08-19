@@ -300,9 +300,20 @@ def find_player(cur, name, league=None):
     return sift(cur.fetchall())
 
 
-def cohort_rows(cur, league, sport, group, season_year=None):
-    """Every player in the league whose position maps to the same group."""
-    cur.execute("""
+def cohort_rows(cur, league, sport, group, season_year=None, player_id=None):
+    """Rows for one position group, narrowed by the database rather than by us.
+
+    This used to select every regular-season row in the league and discard the
+    wrong positions in Python. On NFL that is 49,669 rows of hundred-key JSONB,
+    roughly 1.2 GB once psycopg has built the dicts - more than the entire web
+    instance is allowed to touch, so the first real question killed it. The
+    season_year argument existed all along and was never put in the query.
+    """
+    gmap = POS_GROUP.get(sport, {})
+    positions = sorted(p for p, g in gmap.items() if g == group)
+    if not positions:
+        return []
+    sql = ["""
         SELECT p.id, p.full_name, p.position, p.birth_date,
                ps.stats, ps.games_played, ps.source, s.year, t.name AS team_name
         FROM player_seasons ps
@@ -310,15 +321,20 @@ def cohort_rows(cur, league, sport, group, season_year=None):
         JOIN leagues l ON l.id = p.league_id
         JOIN seasons s ON s.id = ps.season_id
         LEFT JOIN teams t ON t.id = ps.team_id
-        WHERE l.code = %s AND p.position IS NOT NULL
-          AND s.season_type = 'regular'
-    """, (league,))
+        WHERE l.code = %s AND s.season_type = 'regular'
+          AND upper(p.position) = ANY(%s)
+    """]
+    args = [league, positions]
+    if player_id is not None:
+        sql.append(" AND p.id = %s")
+        args.append(player_id)
+    if season_year is not None:
+        sql.append(" AND s.year = %s")
+        args.append(season_year)
+    cur.execute("".join(sql), tuple(args))
     out = []
-    gmap = POS_GROUP.get(sport, {})
     for r in cur.fetchall():
         r = dict(r)
-        if gmap.get((r["position"] or "").upper()) != group:
-            continue
         st = r["stats"]
         if isinstance(st, str):
             try:
@@ -527,15 +543,18 @@ def analyze(name, league=None, comps=6):
             return {"ok": False, "error": "unmapped position %r for %s"
                                           % (me["position"], lg)}
 
-        rows = cohort_rows(cur, lg, sport, group)
-        mine = [r for r in rows if r["id"] == me["id"]]
-        if not mine:
+        # Two narrow queries instead of one enormous one. The player's own rows
+        # are a handful; the cohort is one season of one position group.
+        mine_rows = cohort_rows(cur, lg, sport, group, player_id=me["id"])
+        if not mine_rows:
             return {"ok": False, "error": "no season stats stored for %s"
                                           % me["full_name"]}
         # Most recent season first, workload as the tie-break. "How good is he"
         # means now, not whichever year he happened to play the most games.
-        mine = max(mine, key=lambda r: (r["year"] or 0, workload(r["stats"], sport)))
+        mine = max(mine_rows,
+                   key=lambda r: (r["year"] or 0, workload(r["stats"], sport)))
         my_stats, my_year = mine["stats"], mine["year"]
+        rows = cohort_rows(cur, lg, sport, group, season_year=my_year)
 
         # Curated league-leader rows (pre-1999 Wikipedia) hold a handful of
         # players per season. They answer "who led the league in 1972" but they

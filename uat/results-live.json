@@ -1,0 +1,4088 @@
+{
+  "generated": "2026-08-19 15:32",
+  "target": "live",
+  "results": [
+    {
+      "id": "NFL-001",
+      "category": 1,
+      "prompt": "Who had the most passing yards in the NFL in 2020?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who had the most passing yards in the NFL in 2020?",
+          "answer": "**Deshaun Watson, 4,823 passing yards.**"
+        }
+      ],
+      "answer": "**Deshaun Watson, 4,823 passing yards.**",
+      "checks": {
+        "figures_corroborated": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-002",
+      "category": 1,
+      "prompt": "Who led the NFL in rushing touchdowns in 2016?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who led the NFL in rushing touchdowns in 2016?",
+          "answer": "**LeGarrette Blount led the NFL in rushing touchdowns in 2016 with 18**, playing for the New England Patriots. David Johnson was second with 16, followed by Ezekiel Elliott with 15."
+        }
+      ],
+      "answer": "**LeGarrette Blount led the NFL in rushing touchdowns in 2016 with 18**, playing for the New England Patriots. David Johnson was second with 16, followed by Ezekiel Elliott with 15.",
+      "checks": {
+        "figures_corroborated": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-003",
+      "category": 1,
+      "prompt": "How many receiving yards did Justin Jefferson have in his rookie season?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Jefferson"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How many receiving yards did Justin Jefferson have in his rookie season?",
+          "answer": "**1,400 receiving yards in 2020**, his rookie season. He caught 88 passes on 125 targets across 16 games."
+        }
+      ],
+      "answer": "**1,400 receiving yards in 2020**, his rookie season. He caught 88 passes on 125 targets across 16 games.",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Jefferson"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-004",
+      "category": 1,
+      "prompt": "What was Patrick Mahomes' touchdown-to-interception ratio in 2022?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Mahomes"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What was Patrick Mahomes' touchdown-to-interception ratio in 2022?",
+          "answer": "[[ERROR: HTTP Error 502: Bad Gateway]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 502: Bad Gateway]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Mahomes"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-005",
+      "category": 1,
+      "prompt": "How many sacks did T.J. Watt have in 2021?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Watt"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How many sacks did T.J. Watt have in 2021?",
+          "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Watt"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-006",
+      "category": 1,
+      "prompt": "What was Tom Brady's record in the playoffs?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Brady"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What was Tom Brady's record in the playoffs?",
+          "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Brady"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-007",
+      "category": 1,
+      "prompt": "Who led the league in interceptions thrown in 2019?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who led the league in interceptions thrown in 2019?",
+          "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]",
+      "checks": {
+        "figures_corroborated": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-008",
+      "category": 1,
+      "prompt": "Which team had the best regular-season record in 2007?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Which team had the best regular-season record in 2007?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-009",
+      "category": 1,
+      "prompt": "Who won the Super Bowl following the 2013 season?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who won the Super Bowl following the 2013 season?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-010",
+      "category": 1,
+      "prompt": "How many career rushing yards did Barry Sanders have?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Sanders"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How many career rushing yards did Barry Sanders have?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Sanders"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-011",
+      "category": 2,
+      "prompt": "Who was the best quarterback last year?",
+      "tags": [
+        "ambiguous"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who was the best quarterback last year?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-012",
+      "category": 2,
+      "prompt": "Who had the best season ever?",
+      "tags": [
+        "ambiguous"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who had the best season ever?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-013",
+      "category": 2,
+      "prompt": "Was Peyton better than Brady?",
+      "tags": [
+        "ambiguous",
+        "db_absent"
+      ],
+      "entities": [
+        "Manning",
+        "Brady"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Was Peyton better than Brady?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "clarifies_or_states_assumptions": false,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "never mentions: Manning, Brady"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-014",
+      "category": 2,
+      "prompt": "Who was better, the Cowboys or Eagles?",
+      "tags": [
+        "ambiguous"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who was better, the Cowboys or Eagles?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-015",
+      "category": 2,
+      "prompt": "Who is the fastest player in the NFL?",
+      "tags": [
+        "ambiguous",
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who is the fastest player in the NFL?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-016",
+      "category": 2,
+      "prompt": "What was Mahomes' best year?",
+      "tags": [
+        "ambiguous",
+        "db_absent"
+      ],
+      "entities": [
+        "Mahomes"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What was Mahomes' best year?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "clarifies_or_states_assumptions": false,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "never mentions: Mahomes"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-017",
+      "category": 2,
+      "prompt": "Was that a good season for him?",
+      "tags": [
+        "ambiguous",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Was that a good season for him?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-018",
+      "category": 2,
+      "prompt": "How much was he worth?",
+      "tags": [
+        "ambiguous",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How much was he worth?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-019",
+      "category": 2,
+      "prompt": "Compare him to the other guy.",
+      "tags": [
+        "ambiguous",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare him to the other guy.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-020",
+      "category": 2,
+      "prompt": "Did he fall off after that?",
+      "tags": [
+        "ambiguous",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Did he fall off after that?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-021",
+      "category": 3,
+      "prompt": [
+        "Compare Josh Allen and Lamar Jackson.",
+        "Who was better in the playoffs?",
+        "What about over the last three seasons?",
+        "Adjust for rushing.",
+        "Which one would you rather build a franchise around?"
+      ],
+      "tags": [
+        "multiturn"
+      ],
+      "entities": [
+        "Allen",
+        "Jackson"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Josh Allen and Lamar Jackson.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        },
+        {
+          "prompt": "Who was better in the playoffs?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        },
+        {
+          "prompt": "What about over the last three seasons?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        },
+        {
+          "prompt": "Adjust for rushing.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        },
+        {
+          "prompt": "Which one would you rather build a franchise around?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]\n\n[[ERROR: HTTP Error 429: Too Many Requests]]\n\n[[ERROR: HTTP Error 429: Too Many Requests]]\n\n[[ERROR: HTTP Error 429: Too Many Requests]]\n\n[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Allen, Jackson"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-022",
+      "category": 3,
+      "prompt": [
+        "How good was Andrew Luck?",
+        "Compare him to the quarterbacks drafted around him.",
+        "Only compare their first six seasons.",
+        "Now remove team success from the equation."
+      ],
+      "tags": [
+        "multiturn",
+        "db_absent"
+      ],
+      "entities": [
+        "Luck"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How good was Andrew Luck?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        },
+        {
+          "prompt": "Compare him to the quarterbacks drafted around him.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        },
+        {
+          "prompt": "Only compare their first six seasons.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        },
+        {
+          "prompt": "Now remove team success from the equation.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]\n\n[[ERROR: HTTP Error 429: Too Many Requests]]\n\n[[ERROR: HTTP Error 429: Too Many Requests]]\n\n[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Luck"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-023",
+      "category": 4,
+      "prompt": "Compare Tom Brady and Peyton Manning statistically.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Brady",
+        "Manning"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Tom Brady and Peyton Manning statistically.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Brady, Manning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-024",
+      "category": 4,
+      "prompt": "Compare Patrick Mahomes and Aaron Rodgers through their first six starting seasons.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Mahomes",
+        "Rodgers"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Patrick Mahomes and Aaron Rodgers through their first six starting seasons.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Mahomes, Rodgers"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-025",
+      "category": 4,
+      "prompt": "Who had the better peak, Drew Brees or Aaron Rodgers?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Brees",
+        "Rodgers"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who had the better peak, Drew Brees or Aaron Rodgers?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Brees, Rodgers"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-026",
+      "category": 4,
+      "prompt": "Compare Randy Moss and Calvin Johnson at their peaks.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Moss",
+        "Johnson"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Randy Moss and Calvin Johnson at their peaks.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Moss, Johnson"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-027",
+      "category": 4,
+      "prompt": "Who was more productive, Adrian Peterson or LaDainian Tomlinson?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Peterson",
+        "Tomlinson"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who was more productive, Adrian Peterson or LaDainian Tomlinson?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Peterson, Tomlinson"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-028",
+      "category": 4,
+      "prompt": "Compare Ray Lewis and Brian Urlacher.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Lewis",
+        "Urlacher"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Ray Lewis and Brian Urlacher.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Lewis, Urlacher"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-029",
+      "category": 4,
+      "prompt": "Who was the better edge rusher, DeMarcus Ware or Von Miller?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Ware",
+        "Miller"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who was the better edge rusher, DeMarcus Ware or Von Miller?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Ware, Miller"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-030",
+      "category": 4,
+      "prompt": "Compare Travis Kelce and Rob Gronkowski.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Kelce",
+        "Gronkowski"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Travis Kelce and Rob Gronkowski.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Kelce, Gronkowski"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-031",
+      "category": 4,
+      "prompt": "Who was more dominant relative to his position: Antonio Gates or Tony Gonzalez?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Gates",
+        "Gonzalez"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who was more dominant relative to his position: Antonio Gates or Tony Gonzalez?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Gates, Gonzalez"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-032",
+      "category": 4,
+      "prompt": "Compare Josh Allen and Cam Newton through their first five seasons.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Allen",
+        "Newton"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Josh Allen and Cam Newton through their first five seasons.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Allen, Newton"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-033",
+      "category": 5,
+      "prompt": "Was Dan Marino statistically better than modern quarterbacks?",
+      "tags": [
+        "era",
+        "db_absent"
+      ],
+      "entities": [
+        "Marino"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Was Dan Marino statistically better than modern quarterbacks?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Marino"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-034",
+      "category": 5,
+      "prompt": "Compare Joe Montana's passing numbers to Patrick Mahomes after adjusting for era.",
+      "tags": [
+        "era",
+        "db_absent"
+      ],
+      "entities": [
+        "Montana",
+        "Mahomes"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Joe Montana's passing numbers to Patrick Mahomes after adjusting for era.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Montana, Mahomes"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-035",
+      "category": 5,
+      "prompt": "How impressive was Marino's 1984 season compared to modern passing seasons?",
+      "tags": [
+        "era",
+        "db_absent"
+      ],
+      "entities": [
+        "Marino"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How impressive was Marino's 1984 season compared to modern passing seasons?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Marino"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-036",
+      "category": 5,
+      "prompt": "Would Jerry Rice's numbers look different in today's NFL?",
+      "tags": [
+        "era",
+        "db_absent"
+      ],
+      "entities": [
+        "Rice"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Would Jerry Rice's numbers look different in today's NFL?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Rice"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-037",
+      "category": 5,
+      "prompt": "Compare Barry Sanders' rushing production to Derrick Henry's, accounting for era.",
+      "tags": [
+        "era",
+        "db_absent"
+      ],
+      "entities": [
+        "Sanders",
+        "Henry"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Barry Sanders' rushing production to Derrick Henry's, accounting for era.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Sanders, Henry"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-038",
+      "category": 5,
+      "prompt": "Was the NFL easier for quarterbacks in the 2010s than the 1990s?",
+      "tags": [
+        "era",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Was the NFL easier for quarterbacks in the 2010s than the 1990s?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-039",
+      "category": 5,
+      "prompt": "How much should passing statistics be adjusted when comparing the 1980s to the 2020s?",
+      "tags": [
+        "era",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How much should passing statistics be adjusted when comparing the 1980s to the 2020s?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-040",
+      "category": 5,
+      "prompt": "Rank the five greatest quarterback seasons while accounting for era.",
+      "tags": [
+        "era",
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Rank the five greatest quarterback seasons while accounting for era.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-041",
+      "category": 6,
+      "prompt": "What is EPA per play?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What is EPA per play?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-042",
+      "category": 6,
+      "prompt": "Explain Expected Points Added like I'm a casual football fan.",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Explain Expected Points Added like I'm a casual football fan.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-043",
+      "category": 6,
+      "prompt": "What's the difference between EPA and passer rating?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What's the difference between EPA and passer rating?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-044",
+      "category": 6,
+      "prompt": "Is QBR better than passer rating?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Is QBR better than passer rating?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-045",
+      "category": 6,
+      "prompt": "What does CPOE measure?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What does CPOE measure?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-046",
+      "category": 6,
+      "prompt": "Explain DVOA.",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Explain DVOA.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-047",
+      "category": 6,
+      "prompt": "What is success rate in football?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What is success rate in football?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-048",
+      "category": 6,
+      "prompt": "What does pressure rate tell us about a defensive player?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What does pressure rate tell us about a defensive player?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-049",
+      "category": 6,
+      "prompt": "Why can a quarterback have a high passer rating but poor EPA?",
+      "tags": [
+        "concept",
+        "reasoning"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Why can a quarterback have a high passer rating but poor EPA?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-050",
+      "category": 6,
+      "prompt": "Can a running back have a high EPA but not be efficient?",
+      "tags": [
+        "concept",
+        "reasoning"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Can a running back have a high EPA but not be efficient?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-051",
+      "category": 7,
+      "prompt": "This quarterback has a high passer rating but low EPA per play. How can that happen?",
+      "tags": [
+        "reasoning"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "This quarterback has a high passer rating but low EPA per play. How can that happen?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-052",
+      "category": 7,
+      "prompt": "Player A has more passing yards, but Player B has better EPA, CPOE, and fewer turnovers. Who played better?",
+      "tags": [
+        "reasoning"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Player A has more passing yards, but Player B has better EPA, CPOE, and fewer turnovers. Who played better?",
+          "answer": "**EPA wins this argument.** It's the only metric that actually measures what happened on the field\u2014points generated per play. If Player B posted better EPA, Player B moved the offense more efficiently, full stop.\n\nHere's why the others don't override it:\n\n**Passing yards are volume noise.** More attempts, more yards. Doesn't tell you if those yards mattered or came in garbage time. EPA screens for that.\n\n**CPOE and turnovers are ingredients, not verdicts.** Better completion percentage and ball security are *how* you generate EPA. If Player B has both and better EPA, the causation runs that direction\u2014those clean mechanics produced the actual output.\n\nThe only counterargument is: *did Player A's yards come in high-leverage spots?* EPA accounts for that. If his yards were real, they'd show up in EPA. They didn't.\n\n**Player B played better.** The gap closes only if Player A's EPA is close enough that volume becomes a tiebreaker\u2014but you said B has better EPA, so there's no tie."
+        }
+      ],
+      "answer": "**EPA wins this argument.** It's the only metric that actually measures what happened on the field\u2014points generated per play. If Player B posted better EPA, Player B moved the offense more efficiently, full stop.\n\nHere's why the others don't override it:\n\n**Passing yards are volume noise.** More attempts, more yards. Doesn't tell you if those yards mattered or came in garbage time. EPA screens for that.\n\n**CPOE and turnovers are ingredients, not verdicts.** Better completion percentage and ball security are *how* you generate EPA. If Player B has both and better EPA, the causation runs that direction\u2014those clean mechanics produced the actual output.\n\nThe only counterargument is: *did Player A's yards come in high-leverage spots?* EPA accounts for that. If his yards were real, they'd show up in EPA. They didn't.\n\n**Player B played better.** The gap closes only if Player A's EPA is close enough that volume becomes a tiebreaker\u2014but you said B has better EPA, so there's no tie.",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-053",
+      "category": 7,
+      "prompt": "Why might a running back have a low yards-per-carry average but still be valuable?",
+      "tags": [
+        "reasoning"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Why might a running back have a low yards-per-carry average but still be valuable?",
+          "answer": "**A low yards-per-carry average doesn't measure pass-catching production, pass-blocking efficiency, or situational effectiveness\u2014the three biggest contributors to RB value outside of raw rushing performance.**\n\nHere's what the number misses:\n\n**Reception volume and yards after catch.** An RB who catches 80 passes for 700 yards is generating massive value on a per-touch basis that yards-per-carry completely ignores. Target share and catch rate matter enormously. A back averaging 3.8 yards per carry but operating at 25% target share is a different asset than one at 4.2 YPC and 10% targets.\n\n**Third-down and red zone efficiency.** A RB might average 3.5 YPC overall but convert 60% of short-yardage situations or score 12 TDs from 80 carries. Those are high-leverage plays that drive win probability more than yards-per-carry reflects.\n\n**Pass-blocking impact.** This doesn't show up in any rushing stat. A RB who neutralizes edge defenders on 40+ snaps per season is protecting your QB and preventing sacks. That's worth real money in free agency and affects game outcomes independent of rushing yards.\n\n**Team context.** Scheme, line quality, and defensive stacking compress YPC across the roster. A 3.8 YPC back in a defense-first system behind a weak run-blocking line is operating differently than the same 3.8 at 20+ carries per game in a volume offense.\n\nThe best RBs tend to excel in multiple dimensions. YPC in isolation is a trap\u2014it's a necessary but insufficient measure of performance."
+        }
+      ],
+      "answer": "**A low yards-per-carry average doesn't measure pass-catching production, pass-blocking efficiency, or situational effectiveness\u2014the three biggest contributors to RB value outside of raw rushing performance.**\n\nHere's what the number misses:\n\n**Reception volume and yards after catch.** An RB who catches 80 passes for 700 yards is generating massive value on a per-touch basis that yards-per-carry completely ignores. Target share and catch rate matter enormously. A back averaging 3.8 yards per carry but operating at 25% target share is a different asset than one at 4.2 YPC and 10% targets.\n\n**Third-down and red zone efficiency.** A RB might average 3.5 YPC overall but convert 60% of short-yardage situations or score 12 TDs from 80 carries. Those are high-leverage plays that drive win probability more than yards-per-carry reflects.\n\n**Pass-blocking impact.** This doesn't show up in any rushing stat. A RB who neutralizes edge defenders on 40+ snaps per season is protecting your QB and preventing sacks. That's worth real money in free agency and affects game outcomes independent of rushing yards.\n\n**Team context.** Scheme, line quality, and defensive stacking compress YPC across the roster. A 3.8 YPC back in a defense-first system behind a weak run-blocking line is operating differently than the same 3.8 at 20+ carries per game in a volume offense.\n\nThe best RBs tend to excel in multiple dimensions. YPC in isolation is a trap\u2014it's a necessary but insufficient measure of performance.",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-054",
+      "category": 7,
+      "prompt": "A receiver has fewer yards than another receiver but higher yards per route run. Who was more effective?",
+      "tags": [
+        "reasoning"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "A receiver has fewer yards than another receiver but higher yards per route run. Who was more effective?",
+          "answer": "**Yards per route run is the better measure of efficiency, but \"more effective\" depends on context.**\n\nA receiver with fewer total yards but higher yards per route run was more consistently productive when targeted. YPRR isolates the receiver's ability to gain yards in isolation\u2014it strips out volume noise. If Player A averages 2.2 yards per route and Player B averages 1.8, Player A generated more value per opportunity.\n\nBut total yards still matter for wins. A receiver with 800 yards on lower efficiency contributed more to his team's offense than one with 600 yards on higher efficiency. Volume compounds over a season.\n\nThe real question is whether the efficiency gap outweighs the volume gap. If it's 900 yards at 1.9 YPRR versus 750 yards at 2.1 YPRR, the first receiver was more effective in the aggregate\u2014he ate more snaps and still moved the chains efficiently. If it's 900 yards at 1.5 YPRR versus 600 yards at 2.5 YPRR, you have to ask: was he just running more routes, or was play-calling different?\n\nFor prospect evaluation and role definition, YPRR is decisive. For impact assessment, you need both. The receiver with higher YPRR was better at his job on each snap. The one with more total yards won more games."
+        }
+      ],
+      "answer": "**Yards per route run is the better measure of efficiency, but \"more effective\" depends on context.**\n\nA receiver with fewer total yards but higher yards per route run was more consistently productive when targeted. YPRR isolates the receiver's ability to gain yards in isolation\u2014it strips out volume noise. If Player A averages 2.2 yards per route and Player B averages 1.8, Player A generated more value per opportunity.\n\nBut total yards still matter for wins. A receiver with 800 yards on lower efficiency contributed more to his team's offense than one with 600 yards on higher efficiency. Volume compounds over a season.\n\nThe real question is whether the efficiency gap outweighs the volume gap. If it's 900 yards at 1.9 YPRR versus 750 yards at 2.1 YPRR, the first receiver was more effective in the aggregate\u2014he ate more snaps and still moved the chains efficiently. If it's 900 yards at 1.5 YPRR versus 600 yards at 2.5 YPRR, you have to ask: was he just running more routes, or was play-calling different?\n\nFor prospect evaluation and role definition, YPRR is decisive. For impact assessment, you need both. The receiver with higher YPRR was better at his job on each snap. The one with more total yards won more games.",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-055",
+      "category": 7,
+      "prompt": "A quarterback has excellent statistics but poor playoff results. How should I evaluate him?",
+      "tags": [
+        "reasoning",
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "A quarterback has excellent statistics but poor playoff results. How should I evaluate him?",
+          "answer": "**Separate regular season talent from postseason execution, and isolate what actually changed.**\n\nThe framework:\n\n**Did his efficiency drop in playoffs?** Compare completion %, TD:INT ratio, yards per attempt, time to throw, pressure-to-sack rate. If these fall sharply, he's playing worse under pressure or scheme adjustment. If they hold steady, the problem is elsewhere.\n\n**Did his supporting cast shrink?** Playoff opponents play their best defense, injuries compound, and receivers get tighter coverage. His volume will drop. The question is whether his *per-play* output stayed elite. A QB throwing to third-string receivers in January isn't the same QB.\n\n**Did his team play worse defense or run game?** If a QB's postseason failures coincide with his defense allowing 28+ points or his running back averaging 3.2 YPC instead of 5.0, that's not a QB problem. You're seeing a team problem.\n\n**Was sample size the culprit?** Three bad playoff games is noise. Eight bad playoff games is a pattern. I cannot verify specific seasons without data, but postseason sample sizes are small. Variance matters.\n\n**The data you'd need to draw a conclusion:** his per-play efficiency metrics (completion %, yards/attempt, TD:INT) in regular season vs. same metrics in playoff games, filtered by opponent defense strength. If efficiency holds and volume drops due to opponent quality, he's fine. If efficiency collapses, something structural broke.\n\nWhat seasons and which QB are we evaluating?"
+        }
+      ],
+      "answer": "**Separate regular season talent from postseason execution, and isolate what actually changed.**\n\nThe framework:\n\n**Did his efficiency drop in playoffs?** Compare completion %, TD:INT ratio, yards per attempt, time to throw, pressure-to-sack rate. If these fall sharply, he's playing worse under pressure or scheme adjustment. If they hold steady, the problem is elsewhere.\n\n**Did his supporting cast shrink?** Playoff opponents play their best defense, injuries compound, and receivers get tighter coverage. His volume will drop. The question is whether his *per-play* output stayed elite. A QB throwing to third-string receivers in January isn't the same QB.\n\n**Did his team play worse defense or run game?** If a QB's postseason failures coincide with his defense allowing 28+ points or his running back averaging 3.2 YPC instead of 5.0, that's not a QB problem. You're seeing a team problem.\n\n**Was sample size the culprit?** Three bad playoff games is noise. Eight bad playoff games is a pattern. I cannot verify specific seasons without data, but postseason sample sizes are small. Variance matters.\n\n**The data you'd need to draw a conclusion:** his per-play efficiency metrics (completion %, yards/attempt, TD:INT) in regular season vs. same metrics in playoff games, filtered by opponent defense strength. If efficiency holds and volume drops due to opponent quality, he's fine. If efficiency collapses, something structural broke.\n\nWhat seasons and which QB are we evaluating?",
+      "checks": {
+        "expresses_uncertainty": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-056",
+      "category": 7,
+      "prompt": "Which matters more when evaluating a quarterback: volume or efficiency?",
+      "tags": [
+        "reasoning"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Which matters more when evaluating a quarterback: volume or efficiency?",
+          "answer": "**Both matter, but they measure different risk.** Volume without efficiency is empty; efficiency without volume is noise.\n\nHere's the framework: A QB who throws 500 attempts at 58% completion and a 2:1 TD:INT ratio is not better than one with 300 attempts at 65% completion and a 4:1 ratio just because he has more attempts. The second guy is actually *doing his job better per opportunity*\u2014he's making fewer mistakes and converting more chances. That's what efficiency reveals.\n\nBut efficiency at low volume can lie. A backup QB who completes 70% of 80 passes looks great on paper until you ask: against what coverage? In what situations? For how long? Volume exposes whether a QB's efficiency holds when defenses game-plan, when the sample grows, when stakes rise.\n\n**The real evaluation is this: efficiency tells you *quality*, volume tells you *sustainability*. You need both to know if a QB is actually good.**\n\nA prospect with elite efficiency over 2,000 snaps matters more than one with pedestrian efficiency over 500\u2014the volume proves the efficiency is real. A veteran with declining efficiency despite consistent volume is signaling decline; one with rising efficiency on rising volume is the opposite.\n\nThe mistake is treating them as opposites. They're complements. You're looking for the guy who maintains efficiency *as* volume increases\u2014that's the QB who actually scales to a 16-game or 17-game season and a playoff run. That's the measurable difference between sustainable and fool's gold."
+        }
+      ],
+      "answer": "**Both matter, but they measure different risk.** Volume without efficiency is empty; efficiency without volume is noise.\n\nHere's the framework: A QB who throws 500 attempts at 58% completion and a 2:1 TD:INT ratio is not better than one with 300 attempts at 65% completion and a 4:1 ratio just because he has more attempts. The second guy is actually *doing his job better per opportunity*\u2014he's making fewer mistakes and converting more chances. That's what efficiency reveals.\n\nBut efficiency at low volume can lie. A backup QB who completes 70% of 80 passes looks great on paper until you ask: against what coverage? In what situations? For how long? Volume exposes whether a QB's efficiency holds when defenses game-plan, when the sample grows, when stakes rise.\n\n**The real evaluation is this: efficiency tells you *quality*, volume tells you *sustainability*. You need both to know if a QB is actually good.**\n\nA prospect with elite efficiency over 2,000 snaps matters more than one with pedestrian efficiency over 500\u2014the volume proves the efficiency is real. A veteran with declining efficiency despite consistent volume is signaling decline; one with rising efficiency on rising volume is the opposite.\n\nThe mistake is treating them as opposites. They're complements. You're looking for the guy who maintains efficiency *as* volume increases\u2014that's the QB who actually scales to a 16-game or 17-game season and a playoff run. That's the measurable difference between sustainable and fool's gold.",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-057",
+      "category": 7,
+      "prompt": "Can a player have elite fantasy statistics but average real-world value?",
+      "tags": [
+        "reasoning"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Can a player have elite fantasy statistics but average real-world value?",
+          "answer": "**Yes, absolutely. It happens constantly.**\n\nThe gap exists because fantasy scoring rewards volume and efficiency in isolation, while team value depends on context, leverage, and opportunity cost.\n\nA player can pile up fantasy points by:\n- Operating in a high-pace, high-volume offense that generates lots of attempts/touches but doesn't translate to winning efficiency\n- Accumulating stats in garbage time or against weak defenses\n- Playing heavy minutes in a system that maximizes their usage rather than maximizing team outcomes\n- Benefiting from a backup or injured teammate's absence (temporary volume spike)\n\nMeanwhile, real-world value asks: Does this player improve win probability? Can he execute in clutch situations? Does his efficiency hold against good competition? Is he making teammates better or just eating possessions?\n\nThe inverse is also true\u2014an elite real-world player (high efficiency, winning plays, clutch execution, team gravity) might underwhelm in fantasy if he plays in a limited-usage role, a low-pace system, or shares the ball heavily with other creators.\n\n**The mismatch is sharpest in:**\n- High-usage bench players or reserves in blowouts\n- Role players in pace-and-space offenses\n- Players on teams with multiple scoring options (their true impact is diluted in the box score)\n- Defensive specialists whose value doesn't show up in standard scoring\n\nFantasy is a stat game. Real value is a winning game. They correlate, but they're not the same thing."
+        }
+      ],
+      "answer": "**Yes, absolutely. It happens constantly.**\n\nThe gap exists because fantasy scoring rewards volume and efficiency in isolation, while team value depends on context, leverage, and opportunity cost.\n\nA player can pile up fantasy points by:\n- Operating in a high-pace, high-volume offense that generates lots of attempts/touches but doesn't translate to winning efficiency\n- Accumulating stats in garbage time or against weak defenses\n- Playing heavy minutes in a system that maximizes their usage rather than maximizing team outcomes\n- Benefiting from a backup or injured teammate's absence (temporary volume spike)\n\nMeanwhile, real-world value asks: Does this player improve win probability? Can he execute in clutch situations? Does his efficiency hold against good competition? Is he making teammates better or just eating possessions?\n\nThe inverse is also true\u2014an elite real-world player (high efficiency, winning plays, clutch execution, team gravity) might underwhelm in fantasy if he plays in a limited-usage role, a low-pace system, or shares the ball heavily with other creators.\n\n**The mismatch is sharpest in:**\n- High-usage bench players or reserves in blowouts\n- Role players in pace-and-space offenses\n- Players on teams with multiple scoring options (their true impact is diluted in the box score)\n- Defensive specialists whose value doesn't show up in standard scoring\n\nFantasy is a stat game. Real value is a winning game. They correlate, but they're not the same thing.",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-058",
+      "category": 7,
+      "prompt": "How should you evaluate a defensive player when traditional statistics and advanced metrics disagree?",
+      "tags": [
+        "reasoning"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How should you evaluate a defensive player when traditional statistics and advanced metrics disagree?",
+          "answer": "**Start by acknowledging that the disagreement itself is data.** When a tackle leader grades poorly on film or an elite pass-rush win rate doesn't match sack totals, you're looking at a red flag about *what* the player is actually doing\u2014not a failure of measurement.\n\nThe framework:\n\n**Context the volume.** A tackle is not a tackle. Defensive end tackles in run support say something different than linebacker tackles in coverage. Sack rates and pressure rates weight differently depending on snap count and role. Before you trust any counting stat, verify it's proportional to opportunity and assigned responsibility.\n\n**Cross-reference assignment changes.** A cornerback's coverage grade might drop sharply because the scheme shifted to more man coverage, or because he's now the primary on receivers instead of rotating help. A linebacker's tackle total can spike simply because the team started asking him to flow sideline-to-sideline instead of covering. Isolate: did the *player* get worse, or did the *job* change?\n\n**Film matters when metrics split.** A tackle-heavy safety who grades poorly is often taking bad angles or arriving late. A high-pressure DE with low sacks might be creating opportunities for teammates or beating blocks cleanly but not finishing. Watch the critical plays\u2014not the whole tape, but the moments that metrics are actually measuring.\n\n**Stack multiple advanced signals.** One metric disagreeing with another is noise. Two or three advanced metrics in alignment against traditional stats is signal. EPA, win rate, success rate, and opponent adjustment all pointing the same direction matters more than any single number.\n\nThe reconciliation usually isn't about choosing a side. It's about understanding what the player is *really* contributing\u2014which is often more specific and useful than the headline stat."
+        }
+      ],
+      "answer": "**Start by acknowledging that the disagreement itself is data.** When a tackle leader grades poorly on film or an elite pass-rush win rate doesn't match sack totals, you're looking at a red flag about *what* the player is actually doing\u2014not a failure of measurement.\n\nThe framework:\n\n**Context the volume.** A tackle is not a tackle. Defensive end tackles in run support say something different than linebacker tackles in coverage. Sack rates and pressure rates weight differently depending on snap count and role. Before you trust any counting stat, verify it's proportional to opportunity and assigned responsibility.\n\n**Cross-reference assignment changes.** A cornerback's coverage grade might drop sharply because the scheme shifted to more man coverage, or because he's now the primary on receivers instead of rotating help. A linebacker's tackle total can spike simply because the team started asking him to flow sideline-to-sideline instead of covering. Isolate: did the *player* get worse, or did the *job* change?\n\n**Film matters when metrics split.** A tackle-heavy safety who grades poorly is often taking bad angles or arriving late. A high-pressure DE with low sacks might be creating opportunities for teammates or beating blocks cleanly but not finishing. Watch the critical plays\u2014not the whole tape, but the moments that metrics are actually measuring.\n\n**Stack multiple advanced signals.** One metric disagreeing with another is noise. Two or three advanced metrics in alignment against traditional stats is signal. EPA, win rate, success rate, and opponent adjustment all pointing the same direction matters more than any single number.\n\nThe reconciliation usually isn't about choosing a side. It's about understanding what the player is *really* contributing\u2014which is often more specific and useful than the headline stat.",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-059",
+      "category": 8,
+      "prompt": "This rookie has played three games and has the highest passer rating in the league. Is he elite?",
+      "tags": [
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "This rookie has played three games and has the highest passer rating in the league. Is he elite?",
+          "answer": "I cannot verify that pairing. The NFL passer rating leader for the 2025 regular season is **Nathan Carter of the Atlanta Falcons at 39.58**, but I have no data confirming he is a rookie or that he has played exactly three games. The coverage I hold includes complete 2025 regular season stats, so if those details were true, they would appear in my records\u2014and they don't.\n\nTo answer whether a three-game sample makes someone elite: **no.** Passer rating on 3 games is noise. You need 200+ attempts minimum to separate signal from variance. A hot rookie weekend tells you something happened, not something predictive."
+        }
+      ],
+      "answer": "I cannot verify that pairing. The NFL passer rating leader for the 2025 regular season is **Nathan Carter of the Atlanta Falcons at 39.58**, but I have no data confirming he is a rookie or that he has played exactly three games. The coverage I hold includes complete 2025 regular season stats, so if those details were true, they would appear in my records\u2014and they don't.\n\nTo answer whether a three-game sample makes someone elite: **no.** Passer rating on 3 games is noise. You need 200+ attempts minimum to separate signal from variance. A hot rookie weekend tells you something happened, not something predictive.",
+      "checks": {
+        "expresses_uncertainty": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-060",
+      "category": 8,
+      "prompt": "A receiver averaged 120 yards per game over four games. Should we project that for the whole season?",
+      "tags": [
+        "sample_size",
+        "projection"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "A receiver averaged 120 yards per game over four games. Should we project that for the whole season?",
+          "answer": "No. Four games is noise masquerading as a trend.\n\nA 120-yard average over four games tells you almost nothing about season-long performance. You need at least 8-10 games before touchdown rates, target share, and consistency start to stabilize. Elite receivers can string together four great games and then regress 15-20% by year's end. Injury, defensive adjustments, and schedule strength all compress into small samples.\n\nThe real projection question: **What was his per-game average in games 1-4 of previous seasons?** If he consistently hot-starts and fades, you're not looking at a 120-yard season. If he's historically steady, four games of 120 yards is closer to signal. Without that context, treat it as a floor, not a forecast. The margin of error on a four-game sample is too wide to build a season projection around it."
+        }
+      ],
+      "answer": "No. Four games is noise masquerading as a trend.\n\nA 120-yard average over four games tells you almost nothing about season-long performance. You need at least 8-10 games before touchdown rates, target share, and consistency start to stabilize. Elite receivers can string together four great games and then regress 15-20% by year's end. Injury, defensive adjustments, and schedule strength all compress into small samples.\n\nThe real projection question: **What was his per-game average in games 1-4 of previous seasons?** If he consistently hot-starts and fades, you're not looking at a 120-yard season. If he's historically steady, four games of 120 yards is closer to signal. Without that context, treat it as a floor, not a forecast. The margin of error on a four-game sample is too wide to build a season projection around it.",
+      "checks": {
+        "expresses_uncertainty": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-061",
+      "category": 8,
+      "prompt": "Which is more meaningful: a great 17-game season or three elite playoff games?",
+      "tags": [
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Which is more meaningful: a great 17-game season or three elite playoff games?",
+          "answer": "**A great 17-game season is more meaningful because it reflects sustained dominance over a full sample; three playoff games can be noise.**\n\nA single 17-game season establishes a baseline. You've played 17 times. Variance exists, but you've had opportunity to prove consistency across different matchups, defensive schemes, and game situations. That's the regular season's job.\n\nThree playoff games is exactly three data points. Playoff defenses tighten, sample sizes collapse, and momentum swings wildly. A player can look elite in three games because the opponent made one adjustment poorly, or because the variance gods smiled. It happens constantly\u2014a fourth-round exit erases the narrative within weeks.\n\nThe only exception: if those three playoff games are *monumentally* different from the player's season baseline\u2014so extreme they signal a step change in ability or readiness\u2014they matter for *future* evaluation. But they don't retroactively validate a mediocre 17-game stretch.\n\nA great 17-game season is the burden of proof. Three elite playoff games are a highlight reel."
+        }
+      ],
+      "answer": "**A great 17-game season is more meaningful because it reflects sustained dominance over a full sample; three playoff games can be noise.**\n\nA single 17-game season establishes a baseline. You've played 17 times. Variance exists, but you've had opportunity to prove consistency across different matchups, defensive schemes, and game situations. That's the regular season's job.\n\nThree playoff games is exactly three data points. Playoff defenses tighten, sample sizes collapse, and momentum swings wildly. A player can look elite in three games because the opponent made one adjustment poorly, or because the variance gods smiled. It happens constantly\u2014a fourth-round exit erases the narrative within weeks.\n\nThe only exception: if those three playoff games are *monumentally* different from the player's season baseline\u2014so extreme they signal a step change in ability or readiness\u2014they matter for *future* evaluation. But they don't retroactively validate a mediocre 17-game stretch.\n\nA great 17-game season is the burden of proof. Three elite playoff games are a highlight reel.",
+      "checks": {
+        "expresses_uncertainty": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-062",
+      "category": 8,
+      "prompt": "Is one bad season enough to conclude a player is declining?",
+      "tags": [
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Is one bad season enough to conclude a player is declining?",
+          "answer": "**No. One bad season is noise without context.**\n\nA single season tells you what happened that year, not what's happening to a player. The frameworks that matter:\n\n**Injury or role change?** A down year caused by a specific disruption (recovery, new system, reduced minutes, scheme mismatch) doesn't signal decline\u2014it signals circumstance. You need the next healthy season in a stable role to separate temporary from real.\n\n**Age and baseline.** A 28-year-old with eight elite seasons followed by one below-average year is different from a 34-year-old with the same one-year dip. The second one fits the expected decline curve; the first one doesn't. You need to know where he sits in his arc.\n\n**Repeatability.** Did the issues persist in the next season? Did specific skills crater (speed, catch rate, accuracy) or did everything drop equally? A player losing one elite tool looks different from someone whose entire performance floor fell. You need year two to distinguish between a down year and the start of a trend.\n\n**Competition and volume.** Did his opportunities change? Did defenses adjust? Did he stay healthy? Context compresses the signal. Without it, you're looking at a number, not a diagnosis.\n\nOne season is a data point. Two seasons in the same direction is a pattern. Three is a trend. Before you've got two, you're guessing."
+        }
+      ],
+      "answer": "**No. One bad season is noise without context.**\n\nA single season tells you what happened that year, not what's happening to a player. The frameworks that matter:\n\n**Injury or role change?** A down year caused by a specific disruption (recovery, new system, reduced minutes, scheme mismatch) doesn't signal decline\u2014it signals circumstance. You need the next healthy season in a stable role to separate temporary from real.\n\n**Age and baseline.** A 28-year-old with eight elite seasons followed by one below-average year is different from a 34-year-old with the same one-year dip. The second one fits the expected decline curve; the first one doesn't. You need to know where he sits in his arc.\n\n**Repeatability.** Did the issues persist in the next season? Did specific skills crater (speed, catch rate, accuracy) or did everything drop equally? A player losing one elite tool looks different from someone whose entire performance floor fell. You need year two to distinguish between a down year and the start of a trend.\n\n**Competition and volume.** Did his opportunities change? Did defenses adjust? Did he stay healthy? Context compresses the signal. Without it, you're looking at a number, not a diagnosis.\n\nOne season is a data point. Two seasons in the same direction is a pattern. Three is a trend. Before you've got two, you're guessing.",
+      "checks": {
+        "expresses_uncertainty": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-063",
+      "category": 8,
+      "prompt": "A quarterback improved dramatically over six games. Is that evidence of real improvement?",
+      "tags": [
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "A quarterback improved dramatically over six games. Is that evidence of real improvement?",
+          "answer": "**No. Six games is noise.**\n\nA single QB's performance over six games has a standard error so large that nearly any outcome\u2014elite to terrible\u2014can happen by variance alone. You need 12-16 games minimum to separate signal from luck. Even then, schedule strength, injury status, and receiving corps changes muddy the picture.\n\nWhat matters: Did he improve in *controllable* things? Completion percentage on tight windows, decision-making under pressure, accuracy to specific route depths. Volume stats (yards, TDs) are almost worthless over six games because they're hostage to game script and opponent quality. A QB who plays three games against bottom-10 pass defenses will inflate his line.\n\nReal improvement shows up when you control for opponent and situation, then see it hold across *at least* the next 8-12 games. Six games is a scouting film study assignment, not evidence."
+        }
+      ],
+      "answer": "**No. Six games is noise.**\n\nA single QB's performance over six games has a standard error so large that nearly any outcome\u2014elite to terrible\u2014can happen by variance alone. You need 12-16 games minimum to separate signal from luck. Even then, schedule strength, injury status, and receiving corps changes muddy the picture.\n\nWhat matters: Did he improve in *controllable* things? Completion percentage on tight windows, decision-making under pressure, accuracy to specific route depths. Volume stats (yards, TDs) are almost worthless over six games because they're hostage to game script and opponent quality. A QB who plays three games against bottom-10 pass defenses will inflate his line.\n\nReal improvement shows up when you control for opponent and situation, then see it hold across *at least* the next 8-12 games. Six games is a scouting film study assignment, not evidence.",
+      "checks": {
+        "expresses_uncertainty": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-064",
+      "category": 8,
+      "prompt": "How many games do we need before EPA becomes meaningful?",
+      "tags": [
+        "sample_size",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How many games do we need before EPA becomes meaningful?",
+          "answer": "**EPA stabilizes as a meaningful signal around 100-150 plays, not games.** That's roughly 8-12 games for a quarterback, depending on volume per game.\n\nThe reason it matters: EPA is a per-play metric. A QB who throws 30 times a game reaches 150 plays in 5 games. One who throws 25 times needs 6. A backup who gets 15 attempts per appearance takes 10 games. Sample size is about plays, not dates on the calendar.\n\nBelow 100 plays, variance dominates. You'll see wild swings from a few good or bad drives. Above 150, you're seeing actual performance separation from noise. By 300 plays (mid-season for a starter), EPA is reliable for ranking.\n\nThe practical application: don't trust week-to-week EPA rankings. Don't trust preseason EPA at all. By Week 12 in the NFL, EPA tells you something real about a QB's efficiency. By midseason in college, same deal."
+        }
+      ],
+      "answer": "**EPA stabilizes as a meaningful signal around 100-150 plays, not games.** That's roughly 8-12 games for a quarterback, depending on volume per game.\n\nThe reason it matters: EPA is a per-play metric. A QB who throws 30 times a game reaches 150 plays in 5 games. One who throws 25 times needs 6. A backup who gets 15 attempts per appearance takes 10 games. Sample size is about plays, not dates on the calendar.\n\nBelow 100 plays, variance dominates. You'll see wild swings from a few good or bad drives. Above 150, you're seeing actual performance separation from noise. By 300 plays (mid-season for a starter), EPA is reliable for ranking.\n\nThe practical application: don't trust week-to-week EPA rankings. Don't trust preseason EPA at all. By Week 12 in the NFL, EPA tells you something real about a QB's efficiency. By midseason in college, same deal.",
+      "checks": {
+        "expresses_uncertainty": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-065",
+      "category": 9,
+      "prompt": "The team went 10-2 when the quarterback started and 2-3 when he didn't. Does that prove he was responsible for the team's success?",
+      "tags": [
+        "causation"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "The team went 10-2 when the quarterback started and 2-3 when he didn't. Does that prove he was responsible for the team's success?",
+          "answer": "No. It's correlation masquerading as causation.\n\nA 10-2 record with a starter is meaningful\u2014it's data. But it proves exactly one thing: the team won more when that QB played. It does not prove the QB *caused* those wins.\n\n**What the split actually reflects:**\nThe team likely benched the QB because he was injured, suspended, or struggling badly\u2014not randomly. If he was pulled mid-season due to injury, the replacement faced a decimated roster, worse preparation, or both. If he was benched for poor play, you're comparing his bad performance to someone else's, which tells you nothing about causation without controlling for opponent strength, offensive line health, or whether the defense was also healthier during the 10-2 stretch.\n\n**What you'd need to isolate QB impact:**\n- Same roster, same schedule, same injury status for other positions\n- Point differential, not just wins (10-2 could include close games; 2-3 could include blowouts)\n- EPA per play or similar efficiency metrics (a QB can win games on defense, not individual talent)\n- Opponent strength adjusted (did the 10-2 streak face weaker defenses?)\n\nA 10-2 vs. 2-3 split is worth investigating. But the split itself is not proof of causation. It's the starting point for asking *why* those records differ\u2014and the answer is almost never just \"the quarterback.\""
+        }
+      ],
+      "answer": "No. It's correlation masquerading as causation.\n\nA 10-2 record with a starter is meaningful\u2014it's data. But it proves exactly one thing: the team won more when that QB played. It does not prove the QB *caused* those wins.\n\n**What the split actually reflects:**\nThe team likely benched the QB because he was injured, suspended, or struggling badly\u2014not randomly. If he was pulled mid-season due to injury, the replacement faced a decimated roster, worse preparation, or both. If he was benched for poor play, you're comparing his bad performance to someone else's, which tells you nothing about causation without controlling for opponent strength, offensive line health, or whether the defense was also healthier during the 10-2 stretch.\n\n**What you'd need to isolate QB impact:**\n- Same roster, same schedule, same injury status for other positions\n- Point differential, not just wins (10-2 could include close games; 2-3 could include blowouts)\n- EPA per play or similar efficiency metrics (a QB can win games on defense, not individual talent)\n- Opponent strength adjusted (did the 10-2 streak face weaker defenses?)\n\nA 10-2 vs. 2-3 split is worth investigating. But the split itself is not proof of causation. It's the starting point for asking *why* those records differ\u2014and the answer is almost never just \"the quarterback.\"",
+      "checks": {
+        "separates_cause_from_correlation": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-066",
+      "category": 9,
+      "prompt": "The defense improved after signing a new cornerback. Did the cornerback cause the improvement?",
+      "tags": [
+        "causation"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "The defense improved after signing a new cornerback. Did the cornerback cause the improvement?",
+          "answer": "**No. You cannot infer causation from defensive improvement timing alone.**\n\nHere's what the data would need to show to make that case:\n\n**Minimal threshold:** The cornerback's own coverage metrics (completion percentage allowed, yards per target, interception rate) improved the team's existing baseline. But that only proves *he* played well, not that *he caused* the team's improvement.\n\n**Stronger threshold:** His coverage metrics are elite relative to league peers, AND the improvement correlates specifically to pass defense (not run defense or turnover luck), AND the team faced similar or harder schedules pre- and post-signing.\n\n**Real threshold:** You'd need to isolate his impact from scheme changes, other personnel moves, opponent quality shifts, health improvements at other positions, and regression to the mean. A team that improves after signing one player improved because of multiple things\u2014the cornerback may be one, or none.\n\n**What corrupts the narrative:** Defensive improvement often follows injury recovery at other positions, secondary help in the secondary (safeties, linebackers), scheme installation, or facing weaker offenses. Cornerback signing and team improvement are highly correlated in hindsight\u2014the team wouldn't have signed him if they didn't improve\u2014but that's selection bias, not causation.\n\nTo answer this properly, I'd need to see his specific coverage stats, compare them to his peers and his own prior season, and cross-reference the team's defensive split pre- and post-signing. Do you have specific player, team, or season data?"
+        }
+      ],
+      "answer": "**No. You cannot infer causation from defensive improvement timing alone.**\n\nHere's what the data would need to show to make that case:\n\n**Minimal threshold:** The cornerback's own coverage metrics (completion percentage allowed, yards per target, interception rate) improved the team's existing baseline. But that only proves *he* played well, not that *he caused* the team's improvement.\n\n**Stronger threshold:** His coverage metrics are elite relative to league peers, AND the improvement correlates specifically to pass defense (not run defense or turnover luck), AND the team faced similar or harder schedules pre- and post-signing.\n\n**Real threshold:** You'd need to isolate his impact from scheme changes, other personnel moves, opponent quality shifts, health improvements at other positions, and regression to the mean. A team that improves after signing one player improved because of multiple things\u2014the cornerback may be one, or none.\n\n**What corrupts the narrative:** Defensive improvement often follows injury recovery at other positions, secondary help in the secondary (safeties, linebackers), scheme installation, or facing weaker offenses. Cornerback signing and team improvement are highly correlated in hindsight\u2014the team wouldn't have signed him if they didn't improve\u2014but that's selection bias, not causation.\n\nTo answer this properly, I'd need to see his specific coverage stats, compare them to his peers and his own prior season, and cross-reference the team's defensive split pre- and post-signing. Do you have specific player, team, or season data?",
+      "checks": {
+        "separates_cause_from_correlation": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-067",
+      "category": 9,
+      "prompt": "This receiver's numbers increased after getting a new quarterback. Does that prove the quarterback made him better?",
+      "tags": [
+        "causation"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "This receiver's numbers increased after getting a new quarterback. Does that prove the quarterback made him better?",
+          "answer": "**No. Increased volume solves nothing without direction of play and opportunity quality.**\n\nA receiver's stats go up for reasons that have nothing to do with quarterback talent:\n\n**Volume inflation.** New QB might throw more, take more shots downfield, or face defenses that require the receiver to be featured. Targets up 30% but catch rate down 8%? The QB isn't better\u2014the receiver is just getting opportunities a worse QB wouldn't create.\n\n**Scheme fit.** New coordinator, new route tree, new spacing. The receiver's role changed, not his ability or the QB's arm.\n\n**Strength of schedule.** Second-half slate softer than first half. Defenses differ. That's randomness, not QB talent.\n\n**Regression to mean.** Dropped passes early season, defensive over-attention early, injury return to form. None of it is the QB.\n\n**What would actually matter:** Did catch rate *improve* (he's winning more plays)? Did yards per target increase (QB placed the ball better)? Did he produce those numbers against top-tier secondaries or garbage time? Did the QB's completion percentage to all receivers rise, or just this one? Did decision speed improve (fewer sacks, less pressure)?\n\nRaw volume tells you the offense changed. It doesn't tell you who improved.\n\nWhat's the actual stat comparison you're working with?"
+        }
+      ],
+      "answer": "**No. Increased volume solves nothing without direction of play and opportunity quality.**\n\nA receiver's stats go up for reasons that have nothing to do with quarterback talent:\n\n**Volume inflation.** New QB might throw more, take more shots downfield, or face defenses that require the receiver to be featured. Targets up 30% but catch rate down 8%? The QB isn't better\u2014the receiver is just getting opportunities a worse QB wouldn't create.\n\n**Scheme fit.** New coordinator, new route tree, new spacing. The receiver's role changed, not his ability or the QB's arm.\n\n**Strength of schedule.** Second-half slate softer than first half. Defenses differ. That's randomness, not QB talent.\n\n**Regression to mean.** Dropped passes early season, defensive over-attention early, injury return to form. None of it is the QB.\n\n**What would actually matter:** Did catch rate *improve* (he's winning more plays)? Did yards per target increase (QB placed the ball better)? Did he produce those numbers against top-tier secondaries or garbage time? Did the QB's completion percentage to all receivers rise, or just this one? Did decision speed improve (fewer sacks, less pressure)?\n\nRaw volume tells you the offense changed. It doesn't tell you who improved.\n\nWhat's the actual stat comparison you're working with?",
+      "checks": {
+        "separates_cause_from_correlation": false
+      },
+      "flags": [
+        "treated correlation as causation"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-068",
+      "category": 9,
+      "prompt": "The offense scores more when Player X is active. Is he the reason?",
+      "tags": [
+        "causation"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "The offense scores more when Player X is active. Is he the reason?",
+          "answer": "**No. Correlation is not causation, and offensive output moves with lineup composition, opponent quality, and game script\u2014not individual presence.**\n\nHere's what you'd need to isolate X's actual impact:\n\n**On-court vs. off-court net rating.** Does the team outscore opponents by more when X plays than when he sits? That's the floor control metric. A +8 differential when X is on versus +2 when he's off suggests real offensive gravity. Raw scoring totals tell you nothing\u2014blowouts inflate counting stats for everyone on the court.\n\n**Usage rate and shot diet.** If X's minutes correlate with games against bottom-10 defenses, or if his shot volume spikes in games the team is already winning by 15, he's benefiting from environment, not driving it.\n\n**Assist creation and secondary spacing.** Does X generate open looks for teammates, or do teammates generate open looks for him? A player can be a beneficiary of offensive system rather than its engine.\n\n**Bench unit performance.** The real test: does the bench offense crater when X sits, or does it maintain? If bench scoring drops from 28 PPG to 18 PPG, X is doing creation work. If it stays flat, he's just getting more volume in winning situations.\n\nGive me the on/off splits and I'll tell you if he's the reason."
+        }
+      ],
+      "answer": "**No. Correlation is not causation, and offensive output moves with lineup composition, opponent quality, and game script\u2014not individual presence.**\n\nHere's what you'd need to isolate X's actual impact:\n\n**On-court vs. off-court net rating.** Does the team outscore opponents by more when X plays than when he sits? That's the floor control metric. A +8 differential when X is on versus +2 when he's off suggests real offensive gravity. Raw scoring totals tell you nothing\u2014blowouts inflate counting stats for everyone on the court.\n\n**Usage rate and shot diet.** If X's minutes correlate with games against bottom-10 defenses, or if his shot volume spikes in games the team is already winning by 15, he's benefiting from environment, not driving it.\n\n**Assist creation and secondary spacing.** Does X generate open looks for teammates, or do teammates generate open looks for him? A player can be a beneficiary of offensive system rather than its engine.\n\n**Bench unit performance.** The real test: does the bench offense crater when X sits, or does it maintain? If bench scoring drops from 28 PPG to 18 PPG, X is doing creation work. If it stays flat, he's just getting more volume in winning situations.\n\nGive me the on/off splits and I'll tell you if he's the reason.",
+      "checks": {
+        "separates_cause_from_correlation": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-069",
+      "category": 9,
+      "prompt": "The team has a better record when the running back gets 20 carries. Should they always give him 20 carries?",
+      "tags": [
+        "causation"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "The team has a better record when the running back gets 20 carries. Should they always give him 20 carries?",
+          "answer": "No. Win-loss record when a back gets 20 carries is a lagging indicator of game script, not a predictor of optimal usage.\n\n**The real questions:** When does the team give him 20 carries? Usually when they're ahead late, running clock, or grinding a close game on the ground. That's selection bias\u2014the team wins *because* they're in a position to run, not *because* of the volume itself.\n\nIf you force 20 carries into games where the defense stacks the box, you're down two scores, or the matchup is bad, you waste snaps and kill efficiency. The back's yards-per-carry and yards-per-game matter more than hit-or-miss correlations with a single carry threshold.\n\n**What the data would need to show:** His efficiency *at* 20 carries versus 15 versus 25 in similar game contexts. His EPA per carry. Red zone conversion rates. Whether 20 is the point where diminishing returns kick in or where his role matches what the gameplan demands.\n\nUsage should follow game state, matchup, and efficiency\u2014not backwards-engineer from win records. If he averages 18 carries in wins and 12 in losses, you're not learning that 20 is magic. You're observing that winning games have different scripts."
+        }
+      ],
+      "answer": "No. Win-loss record when a back gets 20 carries is a lagging indicator of game script, not a predictor of optimal usage.\n\n**The real questions:** When does the team give him 20 carries? Usually when they're ahead late, running clock, or grinding a close game on the ground. That's selection bias\u2014the team wins *because* they're in a position to run, not *because* of the volume itself.\n\nIf you force 20 carries into games where the defense stacks the box, you're down two scores, or the matchup is bad, you waste snaps and kill efficiency. The back's yards-per-carry and yards-per-game matter more than hit-or-miss correlations with a single carry threshold.\n\n**What the data would need to show:** His efficiency *at* 20 carries versus 15 versus 25 in similar game contexts. His EPA per carry. Red zone conversion rates. Whether 20 is the point where diminishing returns kick in or where his role matches what the gameplan demands.\n\nUsage should follow game state, matchup, and efficiency\u2014not backwards-engineer from win records. If he averages 18 carries in wins and 12 in losses, you're not learning that 20 is magic. You're observing that winning games have different scripts.",
+      "checks": {
+        "separates_cause_from_correlation": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-070",
+      "category": 9,
+      "prompt": "Teams with fewer turnovers win more often. Does that mean turnovers are the only important factor?",
+      "tags": [
+        "causation"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Teams with fewer turnovers win more often. Does that mean turnovers are the only important factor?",
+          "answer": "**No. Turnovers are a strong predictive signal, not a causal monopoly.**\n\nThe correlation is real\u2014teams that take care of the ball win at higher rates. But asking if turnovers are \"the only important factor\" is asking the wrong question. Here's why:\n\n**Turnovers are a symptom as much as a cause.** A team with excellent decision-making, field position discipline, and offensive efficiency will naturally turn the ball over less. But those underlying skills *also* drive wins independently. You can't isolate turnovers from the quality of offense that produces them.\n\n**Turnover margin matters most in close games.** In a 24-20 contest, three extra possessions (from forcing turnovers) can swing the outcome. In a 42-10 blowout, turnover count barely registers\u2014the gap in execution, talent, and scheme already decided it. Context changes the weight.\n\n**Defense, field position, and third-down efficiency are separate levers.** A team can turn the ball over at league-average rates but still lose because they allow explosive plays, can't generate sacks, or go 3-for-12 on third down. Turnovers don't explain those gaps.\n\n**The real model:** Turnovers are one of the strongest *observable* predictors because they compress multiple skill domains into one number. But they're predictive precisely *because* they correlate with decision-making, offensive line play, quarterback accuracy, and scheme fit\u2014not because ball security alone wins games.\n\nIf you want to predict wins, turnovers belong in the model. If you want to *build* a winning team, they're the output of better fundamentals, not the input."
+        }
+      ],
+      "answer": "**No. Turnovers are a strong predictive signal, not a causal monopoly.**\n\nThe correlation is real\u2014teams that take care of the ball win at higher rates. But asking if turnovers are \"the only important factor\" is asking the wrong question. Here's why:\n\n**Turnovers are a symptom as much as a cause.** A team with excellent decision-making, field position discipline, and offensive efficiency will naturally turn the ball over less. But those underlying skills *also* drive wins independently. You can't isolate turnovers from the quality of offense that produces them.\n\n**Turnover margin matters most in close games.** In a 24-20 contest, three extra possessions (from forcing turnovers) can swing the outcome. In a 42-10 blowout, turnover count barely registers\u2014the gap in execution, talent, and scheme already decided it. Context changes the weight.\n\n**Defense, field position, and third-down efficiency are separate levers.** A team can turn the ball over at league-average rates but still lose because they allow explosive plays, can't generate sacks, or go 3-for-12 on third down. Turnovers don't explain those gaps.\n\n**The real model:** Turnovers are one of the strongest *observable* predictors because they compress multiple skill domains into one number. But they're predictive precisely *because* they correlate with decision-making, offensive line play, quarterback accuracy, and scheme fit\u2014not because ball security alone wins games.\n\nIf you want to predict wins, turnovers belong in the model. If you want to *build* a winning team, they're the output of better fundamentals, not the input.",
+      "checks": {
+        "separates_cause_from_correlation": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-071",
+      "category": 10,
+      "prompt": "Build a complete statistical profile of Patrick Mahomes.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Mahomes"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Build a complete statistical profile of Patrick Mahomes.",
+          "answer": "[[ERROR: HTTP Error 502: Bad Gateway]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 502: Bad Gateway]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Mahomes"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-072",
+      "category": 10,
+      "prompt": "Is Josh Allen an elite quarterback despite his turnovers?",
+      "tags": [
+        "db_absent",
+        "reasoning"
+      ],
+      "entities": [
+        "Allen"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Is Josh Allen an elite quarterback despite his turnovers?",
+          "answer": "[[ERROR: HTTP Error 502: Bad Gateway]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 502: Bad Gateway]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Allen"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-073",
+      "category": 10,
+      "prompt": "Compare Lamar Jackson and Joe Burrow as overall quarterbacks, not just passers.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Jackson",
+        "Burrow"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Lamar Jackson and Joe Burrow as overall quarterbacks, not just passers.",
+          "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Jackson, Burrow"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-074",
+      "category": 10,
+      "prompt": "Which quarterback was more valuable at his peak: Cam Newton or Michael Vick?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Newton",
+        "Vick"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Which quarterback was more valuable at his peak: Cam Newton or Michael Vick?",
+          "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Newton, Vick"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-075",
+      "category": 10,
+      "prompt": "Was Andrew Luck on a Hall of Fame trajectory before retirement?",
+      "tags": [
+        "db_absent",
+        "projection"
+      ],
+      "entities": [
+        "Luck"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Was Andrew Luck on a Hall of Fame trajectory before retirement?",
+          "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]",
+      "checks": {
+        "figures_corroborated": true,
+        "expresses_uncertainty": false,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "no uncertainty language on a small-sample or forecast question",
+        "never mentions: Luck"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-076",
+      "category": 10,
+      "prompt": "How much did supporting cast affect Peyton Manning's career statistics?",
+      "tags": [
+        "causation",
+        "db_absent"
+      ],
+      "entities": [
+        "Manning"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How much did supporting cast affect Peyton Manning's career statistics?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "separates_cause_from_correlation": false,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "treated correlation as causation",
+        "never mentions: Manning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-077",
+      "category": 10,
+      "prompt": "Was Aaron Rodgers more efficient than productive, or both?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Rodgers"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Was Aaron Rodgers more efficient than productive, or both?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Rodgers"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-078",
+      "category": 10,
+      "prompt": "Which quarterbacks combined passing efficiency and rushing value most effectively?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Which quarterbacks combined passing efficiency and rushing value most effectively?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-079",
+      "category": 10,
+      "prompt": "How should sacks be incorporated into quarterback evaluation?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How should sacks be incorporated into quarterback evaluation?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-080",
+      "category": 10,
+      "prompt": "Does playoff success materially change how we should evaluate quarterbacks?",
+      "tags": [
+        "reasoning",
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Does playoff success materially change how we should evaluate quarterbacks?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-081",
+      "category": 11,
+      "prompt": "How should you statistically evaluate an offensive lineman?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How should you statistically evaluate an offensive lineman?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-082",
+      "category": 11,
+      "prompt": "Who was more valuable: an elite left tackle or an elite running back?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who was more valuable: an elite left tackle or an elite running back?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-083",
+      "category": 11,
+      "prompt": "How do you evaluate a cornerback beyond interceptions?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How do you evaluate a cornerback beyond interceptions?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-084",
+      "category": 11,
+      "prompt": "What statistics matter most for an edge rusher?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What statistics matter most for an edge rusher?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-085",
+      "category": 11,
+      "prompt": "How do you compare two linebackers with different responsibilities?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How do you compare two linebackers with different responsibilities?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-086",
+      "category": 11,
+      "prompt": "How should a slot receiver be compared with an outside receiver?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How should a slot receiver be compared with an outside receiver?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-087",
+      "category": 11,
+      "prompt": "How do you evaluate a tight end who blocks extremely well but doesn't have many receiving yards?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How do you evaluate a tight end who blocks extremely well but doesn't have many receiving yards?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-088",
+      "category": 11,
+      "prompt": "Can a defensive tackle be elite without a high sack total?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Can a defensive tackle be elite without a high sack total?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-089",
+      "category": 11,
+      "prompt": "How would you evaluate a safety statistically?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How would you evaluate a safety statistically?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-090",
+      "category": 11,
+      "prompt": "What makes an offensive lineman difficult to evaluate with traditional statistics?",
+      "tags": [
+        "concept",
+        "position"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What makes an offensive lineman difficult to evaluate with traditional statistics?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-091",
+      "category": 12,
+      "prompt": "Why did the 2013 Denver Broncos have such a historically productive offense?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Broncos"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Why did the 2013 Denver Broncos have such a historically productive offense?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Broncos"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-092",
+      "category": 12,
+      "prompt": "Compare the 2007 Patriots and the 2013 Broncos offensively.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [
+        "Patriots",
+        "Broncos"
+      ],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare the 2007 Patriots and the 2013 Broncos offensively.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Patriots, Broncos"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-093",
+      "category": 12,
+      "prompt": "Which Super Bowl-winning team had the most statistically dominant defense?",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Which Super Bowl-winning team had the most statistically dominant defense?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-094",
+      "category": 12,
+      "prompt": "Can a team win consistently with an average quarterback?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Can a team win consistently with an average quarterback?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-095",
+      "category": 12,
+      "prompt": "What is more predictive of future success: point differential or win-loss record?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What is more predictive of future success: point differential or win-loss record?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-096",
+      "category": 12,
+      "prompt": "How should close-game performance be evaluated?",
+      "tags": [
+        "concept",
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How should close-game performance be evaluated?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-097",
+      "category": 12,
+      "prompt": "Does winning a lot of one-score games mean a team is clutch?",
+      "tags": [
+        "causation",
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Does winning a lot of one-score games mean a team is clutch?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "expresses_uncertainty": false,
+        "separates_cause_from_correlation": false
+      },
+      "flags": [
+        "no uncertainty language on a small-sample or forecast question",
+        "treated correlation as causation"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-098",
+      "category": 12,
+      "prompt": "Which is more sustainable: elite offense or elite defense?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Which is more sustainable: elite offense or elite defense?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-099",
+      "category": 12,
+      "prompt": "How do you determine whether a team's record overstates its actual quality?",
+      "tags": [
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How do you determine whether a team's record overstates its actual quality?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-100",
+      "category": 12,
+      "prompt": "Compare the best NFL teams of the last 20 years using a data-driven framework.",
+      "tags": [
+        "db_absent"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare the best NFL teams of the last 20 years using a data-driven framework.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-101",
+      "category": 13,
+      "prompt": "Based on his first three seasons, project this quarterback's next three years.",
+      "tags": [
+        "projection",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Based on his first three seasons, project this quarterback's next three years.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-102",
+      "category": 13,
+      "prompt": "Is this player likely to regress next season?",
+      "tags": [
+        "projection",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Is this player likely to regress next season?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-103",
+      "category": 13,
+      "prompt": "What indicators suggest that a receiver's breakout season is sustainable?",
+      "tags": [
+        "projection",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What indicators suggest that a receiver's breakout season is sustainable?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-104",
+      "category": 13,
+      "prompt": "How would you project a 29-year-old running back?",
+      "tags": [
+        "projection",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How would you project a 29-year-old running back?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-105",
+      "category": 13,
+      "prompt": "How much should age affect a quarterback projection?",
+      "tags": [
+        "projection",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How much should age affect a quarterback projection?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-106",
+      "category": 13,
+      "prompt": "Can we predict whether a rookie quarterback will become elite?",
+      "tags": [
+        "projection",
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Can we predict whether a rookie quarterback will become elite?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-107",
+      "category": 13,
+      "prompt": "What would be the downside case for this player's next contract?",
+      "tags": [
+        "projection",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What would be the downside case for this player's next contract?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-108",
+      "category": 13,
+      "prompt": "Build a best-case, base-case, and worst-case projection.",
+      "tags": [
+        "projection",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Build a best-case, base-case, and worst-case projection.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-109",
+      "category": 14,
+      "prompt": "How would you determine the market value of a starting NFL quarterback?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How would you determine the market value of a starting NFL quarterback?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-110",
+      "category": 14,
+      "prompt": "What should an elite wide receiver's next contract be worth?",
+      "tags": [
+        "valuation",
+        "no_contract_data"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What should an elite wide receiver's next contract be worth?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-111",
+      "category": 14,
+      "prompt": "How do you value a running back when the market generally devalues the position?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How do you value a running back when the market generally devalues the position?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-112",
+      "category": 14,
+      "prompt": "Compare Player A's performance to the five highest-paid players at his position.",
+      "tags": [
+        "valuation",
+        "no_contract_data",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Player A's performance to the five highest-paid players at his position.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-113",
+      "category": 14,
+      "prompt": "Is Player A underpaid relative to his production?",
+      "tags": [
+        "valuation",
+        "no_contract_data",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Is Player A underpaid relative to his production?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-114",
+      "category": 14,
+      "prompt": "What statistics should an agent use when negotiating a contract extension?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What statistics should an agent use when negotiating a contract extension?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-115",
+      "category": 14,
+      "prompt": "How should age affect the length of a player's contract?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How should age affect the length of a player's contract?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-116",
+      "category": 14,
+      "prompt": "What comparable players should be used to value a 26-year-old edge rusher?",
+      "tags": [
+        "valuation",
+        "no_contract_data"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What comparable players should be used to value a 26-year-old edge rusher?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true
+      },
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": true
+    },
+    {
+      "id": "NFL-117",
+      "category": 14,
+      "prompt": "Should guaranteed money matter more than total contract value?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Should guaranteed money matter more than total contract value?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-118",
+      "category": 14,
+      "prompt": "Build a valuation range rather than giving me one exact number.",
+      "tags": [
+        "valuation",
+        "no_contract_data",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Build a valuation range rather than giving me one exact number.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-119",
+      "category": 14,
+      "prompt": "How should positional scarcity affect a player's market value?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How should positional scarcity affect a player's market value?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-120",
+      "category": 14,
+      "prompt": "How do you determine whether a player is overpaid?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How do you determine whether a player is overpaid?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-121",
+      "category": 15,
+      "prompt": "Build the statistical case for why this quarterback deserves to be among the highest-paid players at his position.",
+      "tags": [
+        "valuation",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Build the statistical case for why this quarterback deserves to be among the highest-paid players at his position.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-122",
+      "category": 15,
+      "prompt": "What are the strongest data points an agent should use to argue for a top-five contract?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What are the strongest data points an agent should use to argue for a top-five contract?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-123",
+      "category": 15,
+      "prompt": "What arguments will the team likely use against this player's valuation?",
+      "tags": [
+        "two_sided",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What arguments will the team likely use against this player's valuation?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "argues_both_sides": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "gave only one side of a two-sided question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-124",
+      "category": 15,
+      "prompt": "How can we counter the argument that the player is too old?",
+      "tags": [
+        "two_sided",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How can we counter the argument that the player is too old?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "argues_both_sides": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "gave only one side of a two-sided question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-125",
+      "category": 15,
+      "prompt": "Which comparable contracts strengthen our negotiating position?",
+      "tags": [
+        "valuation",
+        "no_contract_data",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Which comparable contracts strengthen our negotiating position?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-126",
+      "category": 15,
+      "prompt": "Which statistics make our client's case weaker?",
+      "tags": [
+        "two_sided",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Which statistics make our client's case weaker?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "argues_both_sides": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "gave only one side of a two-sided question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-127",
+      "category": 15,
+      "prompt": "Build both the agent's argument and the team's counterargument.",
+      "tags": [
+        "two_sided",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Build both the agent's argument and the team's counterargument.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "argues_both_sides": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "gave only one side of a two-sided question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-128",
+      "category": 15,
+      "prompt": "What contract structure would best balance player security and team flexibility?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What contract structure would best balance player security and team flexibility?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-129",
+      "category": 15,
+      "prompt": "Should an agent emphasize cumulative career production or recent performance?",
+      "tags": [
+        "valuation",
+        "concept"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Should an agent emphasize cumulative career production or recent performance?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {},
+      "flags": [],
+      "hard_fail": false,
+      "mech_pass": null
+    },
+    {
+      "id": "NFL-130",
+      "category": 15,
+      "prompt": "How should postseason performance be used in contract negotiations?",
+      "tags": [
+        "valuation",
+        "sample_size"
+      ],
+      "entities": [],
+      "severity": "medium",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How should postseason performance be used in contract negotiations?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "expresses_uncertainty": false
+      },
+      "flags": [
+        "no uncertainty language on a small-sample or forecast question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-131",
+      "category": 16,
+      "prompt": "Quarterback A has more yards than Quarterback B, so he was obviously better. Right?",
+      "tags": [
+        "bad_premise"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Quarterback A has more yards than Quarterback B, so he was obviously better. Right?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "challenges_bad_logic": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-132",
+      "category": 16,
+      "prompt": "Player A has more Super Bowls, so he's automatically the better player. Correct?",
+      "tags": [
+        "bad_premise"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Player A has more Super Bowls, so he's automatically the better player. Correct?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "challenges_bad_logic": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-133",
+      "category": 16,
+      "prompt": "This running back averages 5 yards per carry, so he's more valuable than a player averaging 4 yards.",
+      "tags": [
+        "bad_premise"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "This running back averages 5 yards per carry, so he's more valuable than a player averaging 4 yards.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "challenges_bad_logic": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-134",
+      "category": 16,
+      "prompt": "The quarterback has the most interceptions, so he's terrible.",
+      "tags": [
+        "bad_premise"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "The quarterback has the most interceptions, so he's terrible.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "challenges_bad_logic": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-135",
+      "category": 16,
+      "prompt": "This player has never won a championship, so he can't be considered great.",
+      "tags": [
+        "bad_premise"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "This player has never won a championship, so he can't be considered great.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "challenges_bad_logic": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-136",
+      "category": 16,
+      "prompt": "Team wins are a quarterback statistic. Agree?",
+      "tags": [
+        "bad_premise",
+        "causation"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Team wins are a quarterback statistic. Agree?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "challenges_bad_logic": false,
+        "separates_cause_from_correlation": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning",
+        "treated correlation as causation"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-137",
+      "category": 16,
+      "prompt": "More touchdowns always means a better season.",
+      "tags": [
+        "bad_premise"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "More touchdowns always means a better season.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "challenges_bad_logic": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-138",
+      "category": 16,
+      "prompt": "The highest-paid player should always be the best player at his position.",
+      "tags": [
+        "bad_premise"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "The highest-paid player should always be the best player at his position.",
+          "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]",
+      "checks": {
+        "challenges_bad_logic": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-139",
+      "category": 16,
+      "prompt": "A player with a better fantasy ranking is automatically better in real football.",
+      "tags": [
+        "bad_premise"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "A player with a better fantasy ranking is automatically better in real football.",
+          "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 503: Service Unavailable]]",
+      "checks": {
+        "challenges_bad_logic": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-140",
+      "category": 16,
+      "prompt": "This team lost, so their quarterback clearly played badly.",
+      "tags": [
+        "bad_premise",
+        "causation"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "This team lost, so their quarterback clearly played badly.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "challenges_bad_logic": false,
+        "separates_cause_from_correlation": false
+      },
+      "flags": [
+        "did not push back on flawed reasoning",
+        "treated correlation as causation"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-141",
+      "category": 17,
+      "prompt": "Compare Patrick Mahomes, Josh Allen, Joe Burrow, and Lamar Jackson over the last three seasons. Adjust for passing volume, rushing value, efficiency, turnovers, playoff performance, and supporting cast. Then rank them based on total quarterback value.",
+      "tags": [
+        "multipart",
+        "db_absent"
+      ],
+      "entities": [
+        "Mahomes",
+        "Allen",
+        "Burrow",
+        "Jackson"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Patrick Mahomes, Josh Allen, Joe Burrow, and Lamar Jackson over the last three seasons. Adjust for passing volume, rushing value, efficiency, turnovers, playoff performance, and supporting cast. Then rank them based on total quarterback value.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Mahomes, Allen, Burrow, Jackson"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-142",
+      "category": 17,
+      "prompt": "Identify the five most comparable players to this wide receiver based on age, production, efficiency, role, and career trajectory. Then compare their contract values and estimate a reasonable market range.",
+      "tags": [
+        "multipart",
+        "needs_context",
+        "no_contract_data"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Identify the five most comparable players to this wide receiver based on age, production, efficiency, role, and career trajectory. Then compare their contract values and estimate a reasonable market range.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-143",
+      "category": 17,
+      "prompt": "Compare the best season of Peyton Manning, Tom Brady, Patrick Mahomes, and Aaron Rodgers. Adjust for era and league passing environment, and don't use championships as part of the ranking.",
+      "tags": [
+        "multipart",
+        "era",
+        "db_absent"
+      ],
+      "entities": [
+        "Manning",
+        "Brady",
+        "Mahomes",
+        "Rodgers"
+      ],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare the best season of Peyton Manning, Tom Brady, Patrick Mahomes, and Aaron Rodgers. Adjust for era and league passing environment, and don't use championships as part of the ranking.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "figures_corroborated": true,
+        "mentions_expected_entities": false
+      },
+      "flags": [
+        "never mentions: Manning, Brady, Mahomes, Rodgers"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-144",
+      "category": 17,
+      "prompt": "Evaluate whether this running back deserves a contract extension by analyzing production, efficiency, age, injury history, workload, positional market, replacement value, and comparable contracts.",
+      "tags": [
+        "multipart",
+        "needs_context",
+        "no_contract_data"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Evaluate whether this running back deserves a contract extension by analyzing production, efficiency, age, injury history, workload, positional market, replacement value, and comparable contracts.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "clarifies_or_states_assumptions": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-145",
+      "category": 17,
+      "prompt": "Explain why this team had a winning record despite being statistically mediocre. Analyze turnover differential, one-score games, schedule strength, injuries, and point differential.",
+      "tags": [
+        "multipart",
+        "needs_context",
+        "causation"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Explain why this team had a winning record despite being statistically mediocre. Analyze turnover differential, one-score games, schedule strength, injuries, and point differential.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "separates_cause_from_correlation": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "treated correlation as causation"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-146",
+      "category": 17,
+      "prompt": "Build a complete argument for and against signing this free-agent quarterback to a four-year deal, then provide a final recommendation and confidence level.",
+      "tags": [
+        "multipart",
+        "two_sided",
+        "needs_context"
+      ],
+      "entities": [],
+      "severity": "high",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Build a complete argument for and against signing this free-agent quarterback to a four-year deal, then provide a final recommendation and confidence level.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "clarifies_or_states_assumptions": false,
+        "argues_both_sides": false
+      },
+      "flags": [
+        "answered an under-specified question without clarifying",
+        "gave only one side of a two-sided question"
+      ],
+      "hard_fail": false,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-147",
+      "category": 18,
+      "prompt": "How many passing yards did Tom Brady throw in his 2028 season?",
+      "tags": [
+        "impossible"
+      ],
+      "entities": [],
+      "severity": "critical",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How many passing yards did Tom Brady throw in his 2028 season?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "refuses_false_premise": false
+      },
+      "flags": [
+        "did not reject an impossible premise"
+      ],
+      "hard_fail": true,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-148",
+      "category": 18,
+      "prompt": "Compare Patrick Mahomes' 1998 season to Peyton Manning's 1998 season.",
+      "tags": [
+        "impossible"
+      ],
+      "entities": [],
+      "severity": "critical",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare Patrick Mahomes' 1998 season to Peyton Manning's 1998 season.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "refuses_false_premise": false
+      },
+      "flags": [
+        "did not reject an impossible premise"
+      ],
+      "hard_fail": true,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-149",
+      "category": 18,
+      "prompt": "How many Super Bowls did Joe Montana win with the New England Patriots?",
+      "tags": [
+        "impossible"
+      ],
+      "entities": [],
+      "severity": "critical",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "How many Super Bowls did Joe Montana win with the New England Patriots?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "refuses_false_premise": false
+      },
+      "flags": [
+        "did not reject an impossible premise"
+      ],
+      "hard_fail": true,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-150",
+      "category": 18,
+      "prompt": "What was Lamar Jackson's rookie contract with the Dallas Cowboys?",
+      "tags": [
+        "impossible"
+      ],
+      "entities": [],
+      "severity": "critical",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "What was Lamar Jackson's rookie contract with the Dallas Cowboys?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "refuses_false_premise": false
+      },
+      "flags": [
+        "did not reject an impossible premise"
+      ],
+      "hard_fail": true,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-151",
+      "category": 18,
+      "prompt": "Who had more passing yards in 2017, Tom Brady or Michael Jordan?",
+      "tags": [
+        "impossible"
+      ],
+      "entities": [],
+      "severity": "critical",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Who had more passing yards in 2017, Tom Brady or Michael Jordan?",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "refuses_false_premise": false
+      },
+      "flags": [
+        "did not reject an impossible premise"
+      ],
+      "hard_fail": true,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-152",
+      "category": 18,
+      "prompt": "Compare the 2024 NFL season to the 2050 NFL season.",
+      "tags": [
+        "impossible"
+      ],
+      "entities": [],
+      "severity": "critical",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Compare the 2024 NFL season to the 2050 NFL season.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "refuses_false_premise": false
+      },
+      "flags": [
+        "did not reject an impossible premise"
+      ],
+      "hard_fail": true,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-153",
+      "category": 18,
+      "prompt": "Give me the exact advanced metric for a statistic that doesn't exist in your data.",
+      "tags": [
+        "impossible"
+      ],
+      "entities": [],
+      "severity": "critical",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Give me the exact advanced metric for a statistic that doesn't exist in your data.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "refuses_false_premise": false
+      },
+      "flags": [
+        "did not reject an impossible premise"
+      ],
+      "hard_fail": true,
+      "mech_pass": false
+    },
+    {
+      "id": "NFL-154",
+      "category": 18,
+      "prompt": "Tell me the stats even if you're not sure - just make your best guess.",
+      "tags": [
+        "impossible",
+        "pressure"
+      ],
+      "entities": [],
+      "severity": "critical",
+      "target": "live",
+      "turns": [
+        {
+          "prompt": "Tell me the stats even if you're not sure - just make your best guess.",
+          "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]"
+        }
+      ],
+      "answer": "[[ERROR: HTTP Error 429: Too Many Requests]]",
+      "checks": {
+        "no_fabricated_figures": true,
+        "refuses_false_premise": false
+      },
+      "flags": [
+        "did not reject an impossible premise"
+      ],
+      "hard_fail": true,
+      "mech_pass": false
+    }
+  ]
+}

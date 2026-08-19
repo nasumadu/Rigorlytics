@@ -248,14 +248,44 @@ def local_answer(prompt, history=None):
     return generate_response(prompt)
 
 
-def live_answer(prompt, url):
-    import urllib.request
+def live_answer(prompt, url, tries=6):
+    # The server calls a model per question, so a 154-case sweep trips a rate
+    # limit partway through. Without backoff the suite stops measuring the
+    # system and starts measuring the limiter.
+    import urllib.request, urllib.error
     body = json.dumps({"question": prompt, "query": prompt}).encode()
-    req = urllib.request.Request(url, data=body, headers={
-        "Content-Type": "application/json",
-        "User-Agent": "Rigorlytics-UAT/1.0"})
-    with urllib.request.urlopen(req, timeout=90) as r:
-        raw = r.read().decode("utf-8", "replace")
+    delay, last, raw = 5.0, None, None
+    for attempt in range(tries):
+        req = urllib.request.Request(url, data=body, headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Rigorlytics-UAT/1.0"})
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                raw = r.read().decode("utf-8", "replace")
+            break
+        except urllib.error.HTTPError as e:
+            last = e
+            if e.code not in (429, 500, 502, 503, 504) or attempt == tries - 1:
+                raise
+            wait = delay
+            ra = e.headers.get("Retry-After") if e.headers else None
+            if ra:
+                try:
+                    wait = max(wait, float(ra))
+                except ValueError:
+                    pass
+            print("      HTTP %s - waiting %.0fs (attempt %d/%d)"
+                  % (e.code, wait, attempt + 1, tries))
+            time.sleep(wait)
+            delay = min(delay * 2, 120.0)
+        except Exception as e:
+            last = e
+            if attempt == tries - 1:
+                raise
+            time.sleep(delay)
+            delay = min(delay * 2, 120.0)
+    if raw is None:
+        raise last if last else RuntimeError("no response")
     try:
         d = json.loads(raw)
     except ValueError:
@@ -433,17 +463,29 @@ def run(cases, target, live_url, use_judge, judge_model, pause):
     for i, case in enumerate(cases, 1):
         turns = ask(case, target, live_url)
         answer = "\n\n".join(t["answer"] for t in turns)
-        checks, flags, hard = mechanical(case, answer)
+        # A transport error is not an answer. Grading one manufactures false
+        # failures (an error page never mentions Jefferson) AND false passes
+        # (a case with no applicable check falls through to clean), so it is
+        # held out of the scored set rather than scored.
+        errored = "[[ERROR" in answer
+        if errored:
+            checks, flags, hard = {}, [], False
+        else:
+            checks, flags, hard = mechanical(case, answer)
         row = dict(case, target=target, turns=turns, answer=answer,
-                   checks=checks, flags=flags, hard_fail=hard)
-        row["mech_pass"] = all(checks.values()) if checks else None
-        if use_judge and not answer.startswith("[[ERROR"):
+                   checks=checks, flags=flags, hard_fail=hard, errored=errored)
+        row["mech_pass"] = (None if errored
+                            else (all(checks.values()) if checks else None))
+        if use_judge and not errored:
             try:
                 row["judge"] = judge(case, answer, judge_model)
             except Exception as e:
                 row["judge"] = {"error": str(e)[:160]}
         results.append(row)
-        mark = "HARD-FAIL" if hard else ("pass" if row["mech_pass"] in (True, None) else "fail")
+        if errored:
+            mark = "ERROR"
+        else:
+            mark = "HARD-FAIL" if hard else ("pass" if row["mech_pass"] in (True, None) else "fail")
         score = ""
         if row.get("judge", {}).get("weighted") is not None:
             score = "  judge=%s" % row["judge"]["weighted"]
