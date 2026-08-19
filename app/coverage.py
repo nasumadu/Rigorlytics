@@ -68,8 +68,10 @@ def _build():
             top = max(years.values())
             full = [y for y, n in years.items() if n >= 0.5 * top]
             thin = {y: n for y, n in years.items() if n < 0.5 * top}
-            part = "%s %s season: %s complete rosters (%s players)" % (
-                league, kind, span(full), format(sum(years[y] for y in full), ","))
+            # "complete rosters" was read as roster-only, with no statistics.
+            # Say plainly that these are statistical records.
+            part = ("%s %s season: %s complete - %s player-season stat lines" % (
+                league, kind, span(full), format(sum(years[y] for y in full), ",")))
             if thin:
                 part += ("; %s partial - only %d-%d players per season, a subset of "
                          "notable names rather than full rosters"

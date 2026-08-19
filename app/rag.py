@@ -5,6 +5,7 @@ from app.player_search import search_players
 from app.live import get_todays_games
 from app.valuation_prompt import valuation_context, history_context
 from app.coverage import coverage_line
+from app.leaders import leader_context
 
 load_dotenv()
 client = anthropic.Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
@@ -34,6 +35,12 @@ def gather_context(question):
         hist = history_context(question)
         if hist:
             context += hist + "\n"
+    except Exception:
+        pass
+    try:
+        led = leader_context(question)
+        if led:
+            context += led + "\n"
     except Exception:
         pass
     return context
