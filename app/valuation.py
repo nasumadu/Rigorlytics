@@ -107,6 +107,12 @@ METRICS = {
             ("passing.passingTouchdowns", "Passing TDs", "total", True),
             ("passing.interceptions", "Interceptions", "total", False),
             ("passing.QBRating", "Passer rating", "rate", True),
+            # nflverse supplies these from 1999 on. EPA measures value added per
+            # play and CPOE isolates accuracy from scheme, so both survive the
+            # era comparisons that raw yardage totals fail.
+            ("advanced.passingEPA", "Passing EPA", "total", True),
+            ("advanced.CPOE", "CPOE", "rate", True),
+            ("passing.completionPct", "Completion %", "rate", True),
         ],
         "RB": [
             ("rushing.rushingYards", "Rushing yards", "total", True),
