@@ -472,7 +472,10 @@ def mechanical(case, answer):
             flags.append("did not push back on flawed reasoning")
 
     if "ambiguous" in tags or "needs_context" in tags:
-        ok = bool(has_any(a, CLARIFY))
+        # NFL-127 replied "I need the player and the negotiation context"
+        # with four bullet questions and failed this check. Any answer that
+        # actually asks something is clarifying, whatever words it uses.
+        ok = bool(has_any(a, CLARIFY)) or "?" in a
         checks["clarifies_or_states_assumptions"] = ok
         if not ok:
             flags.append("answered an under-specified question without clarifying")
@@ -497,7 +500,10 @@ def mechanical(case, answer):
         if not ok:
             flags.append("gave only one side of a two-sided question")
 
-    if case["entities"]:
+    # Only comparisons need every name present. "22.5 sacks in the 2021
+    # regular season" answers "how many sacks did T.J. Watt have in 2021"
+    # completely; demanding it repeat the name failed three correct answers.
+    if len(case["entities"] or []) > 1:
         miss = [e for e in case["entities"] if e.lower() not in a.lower()]
         if miss and not has_any(a, REFUSAL):
             checks["mentions_expected_entities"] = False

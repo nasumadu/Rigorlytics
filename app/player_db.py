@@ -152,6 +152,32 @@ RATE_HINTS = ("pct", "avg", "per", "rating", "era", "whip", "ops", "obp",
               "slug", "shooting", "%")
 
 
+def passer_rating(st):
+    """NFL passer rating from its components.
+
+    nflverse carries no rating, so the "Rating" field printed as part of every
+    QB line was permanently blank - and the model supplied it from memory
+    (Mahomes 2020 as 108.2, correct and entirely unsupported). Every input the
+    formula needs is stored, so the honest fix is to compute it.
+    """
+    try:
+        att = float(st.get("passing.passingAttempts") or 0)
+        cmp_ = float(st.get("passing.completions") or 0)
+        yds = float(st.get("passing.passingYards") or 0)
+        td = float(st.get("passing.passingTouchdowns") or 0)
+        ints = float(st.get("passing.interceptions") or 0)
+    except (TypeError, ValueError):
+        return None
+    if att < 1:
+        return None
+    clamp = lambda x: max(0.0, min(2.375, x))
+    a = clamp((cmp_ / att - 0.3) * 5)
+    b = clamp((yds / att - 3) * 0.25)
+    c = clamp((td / att) * 20)
+    d = clamp(2.375 - (ints / att) * 25)
+    return round((a + b + c + d) / 6 * 100, 1)
+
+
 def _is_rate(key):
     k = (key or "").lower()
     return any(h in k for h in RATE_HINTS)
@@ -179,6 +205,11 @@ def format_player(player):
 
     def rows_for(s):
         stats = s["stats"] or {}
+        if stats and stats.get("passing.QBRating") in (None, "", 0):
+            pr = passer_rating(stats)
+            if pr is not None:
+                stats = dict(stats)
+                stats["passing.QBRating"] = pr
         lines = []
         for key, label in fields:
             v = stats.get(key)
