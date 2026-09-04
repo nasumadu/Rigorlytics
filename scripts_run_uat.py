@@ -76,6 +76,12 @@ REFUSAL = [
     "won't make up", "will not make up", "refuse", "i won't", "i will not",
     "not going to guess", "never signed", "never with", "not fabricate",
     "won't pretend", "don't want to fabricate", "wouldn't be real",
+    # Observed refusals the list missed. NFL-148 rejected an impossible premise
+    # in exactly the right words and was scored a hard failure for it.
+    "cannot make that", "can't make that", "cannot compare", "can't compare",
+    "cannot answer", "can't answer", "i cannot", "i can't", "neither player",
+    "doesn't have", "does not have", "has no ", "have no ", "no season",
+    "outside that scope", "falls outside", "not something i can",
 ]
 CHALLENGE = [
     "not necessarily", "doesn't follow", "does not follow", "that's not",
@@ -96,6 +102,11 @@ CLARIFY = [
     "i need a", "give me a name", "in this database", "in this data",
     "across the", "by that measure", "on that basis", "which season",
     "what i can actually access", "not in 2025",
+    # Declining is a valid response to an under-specified question - NFL-112
+    # said "I can't answer this" and named the missing data, then failed the
+    # clarification check for it.
+    "can't answer", "cannot answer", "outside that scope", "falls outside",
+    "i need to know", "which player", "no salary", "zero salary",
 ]
 UNCERTAIN = [
     "uncertain", "sample", "small sample", "regress", "variance", "noise",
@@ -208,10 +219,62 @@ def leaderboard_figures(question, depth=60):
     return vals
 
 
+_ENT_CACHE = {}
+
+
+def resolve_entity(name, text=None):
+    """A bare surname to the player the question is actually about.
+
+    find_players matches on a prefix, so "Brady" reaches Brady Poppinga and
+    "Manning" reaches nobody. Test entities are surnames almost without
+    exception, so match anywhere in the name, prefer a candidate whose LAST
+    token is the surname, and break ties on seasons held - which is what
+    separates Tom Brady from Brady Quinn.
+    """
+    rows = _ENT_CACHE.get(name)
+    if rows is None:
+        rows = _entity_rows(name)
+        _ENT_CACHE[name] = rows
+    if not rows:
+        return None
+    low = name.strip().lower()
+    surname = [r for r in rows
+               if (r["nm"] or "").strip().lower().split()[-1:] == [low]]
+    pick = surname or rows
+    # Seasons held is the wrong tie-break when the answer names the player:
+    # Tony Jefferson has more seasons than Justin, but only one of them is
+    # being discussed. Prefer whoever the text actually mentions.
+    if text:
+        t = text.lower()
+        named = [r for r in pick if (r["nm"] or "").lower() in t]
+        if named:
+            return named[0]["nm"]
+    return pick[0]["nm"]
+
+
+def _entity_rows(name):
+    try:
+        from app.db import get_conn
+        with get_conn() as c:
+            cur = c.cursor()
+            cur.execute("""
+                SELECT p.full_name AS nm, count(ps.id) AS n
+                FROM players p
+                LEFT JOIN player_seasons ps ON ps.player_id = p.id
+                WHERE p.full_name ILIKE %s
+                GROUP BY p.full_name
+                ORDER BY n DESC
+                LIMIT 25
+            """, ("%" + name + "%",))
+            return [dict(r) for r in cur.fetchall()]
+    except Exception:
+        return []
+
+
 _COMP_CACHE = {}
 
 
-def computed_figures(entities):
+def computed_figures(entities, text=None):
     """Everything Rigorlytics itself derives and hands to the model.
 
     db_figures reads stored rows. It cannot see the aggregates history()
@@ -223,7 +286,7 @@ def computed_figures(entities):
     """
     if not entities:
         return set()
-    key = tuple(sorted(entities))
+    key = (tuple(sorted(entities)), hash(text or ""))
     if key in _COMP_CACHE:
         return _COMP_CACHE[key]
     out = set()
@@ -233,6 +296,15 @@ def computed_figures(entities):
         _COMP_CACHE[key] = out
         return out
     for e in entities:
+        # Entities are bare surnames. history("Brady") resolves to Brady Murray
+        # and history("Manning") to Paul Manning - real players, wrong ones, so
+        # no total ever matches and every career figure reads as invented.
+        # find_players ranks by seasons held, which puts the player the question
+        # is actually about first.
+        try:
+            e = resolve_entity(e, text) or e
+        except Exception:
+            pass
         try:
             h = history(e)
         except Exception:
@@ -265,7 +337,7 @@ def uncorroborated(text, entities, extra=None):
     """Figures asserted in the answer that match nothing we hold or computed."""
     held = db_figures(entities)
     if held is not None:
-        held = held | computed_figures(entities)
+        held = held | computed_figures(entities, text)
     if extra:
         held = (held or set()) | extra
     if held is None:
