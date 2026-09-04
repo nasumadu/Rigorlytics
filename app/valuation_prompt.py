@@ -299,6 +299,10 @@ def render_history(h):
     L.append(h["caveat"])
     L.append("If the question asks about seasons not listed above, say so rather "
              "than filling them in.")
+    L.append("NEVER multiply a mean by a season count to produce a career "
+             "total, and never annualise or extrapolate one. Where a total "
+             "exists it is printed above. Where none is printed, the total is "
+             "not available - say so instead of deriving it.")
     return "\n".join(L)
 
 

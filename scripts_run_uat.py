@@ -208,9 +208,64 @@ def leaderboard_figures(question, depth=60):
     return vals
 
 
+_COMP_CACHE = {}
+
+
+def computed_figures(entities):
+    """Everything Rigorlytics itself derives and hands to the model.
+
+    db_figures reads stored rows. It cannot see the aggregates history()
+    computes or the percentiles analyze() ranks, and it sums regular and
+    postseason rows together while history() aggregates the regular season
+    alone - so a correctly quoted career total can never match and gets
+    reported as fabrication. Flagging figures the system supplied is worse
+    than not checking at all: it buries the real failures under noise.
+    """
+    if not entities:
+        return set()
+    key = tuple(sorted(entities))
+    if key in _COMP_CACHE:
+        return _COMP_CACHE[key]
+    out = set()
+    try:
+        from app.valuation import history, analyze
+    except Exception:
+        _COMP_CACHE[key] = out
+        return out
+    for e in entities:
+        try:
+            h = history(e)
+        except Exception:
+            h = None
+        if h and h.get("ok"):
+            for a in (h.get("aggregates") or {}).values():
+                for f in ("mean", "total", "best"):
+                    if isinstance(a.get(f), (int, float)):
+                        out.add(float(a[f]))
+            for row in (h.get("season_rows") or []):
+                for v in (row.get("values") or {}).values():
+                    if isinstance(v, (int, float)):
+                        out.add(float(v))
+        try:
+            o = analyze(e)
+        except Exception:
+            o = None
+        if o and o.get("ok"):
+            if isinstance(o.get("composite_percentile"), (int, float)):
+                out.add(float(o["composite_percentile"]))
+            for m in (o.get("metrics") or []):
+                for f in ("value", "percentile", "cohort_median"):
+                    if isinstance(m.get(f), (int, float)):
+                        out.add(float(m[f]))
+    _COMP_CACHE[key] = out
+    return out
+
+
 def uncorroborated(text, entities, extra=None):
     """Figures asserted in the answer that match nothing we hold or computed."""
     held = db_figures(entities)
+    if held is not None:
+        held = held | computed_figures(entities)
     if extra:
         held = (held or set()) | extra
     if held is None:

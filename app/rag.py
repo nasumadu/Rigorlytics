@@ -139,6 +139,28 @@ def generate_response(question):
             "an explicit METRICS block above showing that exact percentile. "
             "A MULTI-SEASON RECORD block contains no percentiles. Do not "
             "derive, estimate, round, or imply one from it.\n\n")
+        # A money question with no money in the context is where the model
+        # invents a market: "$28-32M APY, non-negotiable" came from nothing.
+        # The existing guardrail lives inside a player valuation block, so a
+        # question naming no player never reaches it. Checking for a real
+        # figure - not merely the word "salaries" in the coverage list - is
+        # what makes this fire when it should.
+        money_words = ("contract", "salary", "salaries", "worth", "cap hit",
+                       "apy", "market value", "paid", "extension", "cap space",
+                       "franchise tag", "guaranteed", "overpaid", "underpaid",
+                       "$")
+        has_money = ("MONEY AXIS" in user_message
+                     and "Actual: not held for this player" not in user_message)
+        if any(w in question.lower() for w in money_words) and not has_money:
+            user_message += (
+                "MONEY RULE: this question involves contracts, salary or "
+                "market value, and NO money figure for it appears anywhere "
+                "above. You therefore hold none. Do not state, estimate, "
+                "bracket or imply any dollar amount, APY, cap number or "
+                "market range - not as a figure, not as a range, not as "
+                "'roughly', and not as 'the market pays'. Name the money "
+                "data Rigorlytics actually holds, say this question falls "
+                "outside it, and answer on performance alone.\n\n")
         user_message += "QUESTION: " + question
 
         message = client.messages.create(

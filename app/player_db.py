@@ -147,6 +147,16 @@ def get_seasons(player_id, season_type="regular", limit=30):
     """, (player_id, season_type, limit))
 
 
+# Metrics that must never be summed across seasons.
+RATE_HINTS = ("pct", "avg", "per", "rating", "era", "whip", "ops", "obp",
+              "slug", "shooting", "%")
+
+
+def _is_rate(key):
+    k = (key or "").lower()
+    return any(h in k for h in RATE_HINTS)
+
+
 def _num(v):
     try:
         return float(str(v).replace(",", "").replace("%", ""))
@@ -208,9 +218,23 @@ def format_player(player):
         if vals and len(live) * 2 >= len(vals):
             # Each metric carries its own denominator. Labelling every one with
             # the full season count is how a receiver reports a passing average.
-            car.append("    %s: %.1f  (mean of the %d season%s carrying it)"
-                       % (labels.get(key, key), sum(vals) / len(vals),
-                          len(vals), "" if len(vals) == 1 else "s"))
+            # A mean with no total invites the model to multiply. It did
+            # exactly that - "6,521 yards (using mean x seasons held)" - and
+            # the product is arithmetic this system exists to do itself.
+            # Rates are excluded: a career sum of completion percentage is
+            # not a number, it is a category error.
+            lab = labels.get(key, key)
+            if _is_rate(key):
+                car.append("    %s: mean %.1f  (over the %d season%s carrying "
+                           "it; no career total - this is a rate)"
+                           % (lab, sum(vals) / len(vals), len(vals),
+                              "" if len(vals) == 1 else "s"))
+            else:
+                car.append("    %s: mean %.1f, career total %s  (over the %d "
+                           "season%s carrying it)"
+                           % (lab, sum(vals) / len(vals),
+                              format(round(sum(vals), 1), ","), len(vals),
+                              "" if len(vals) == 1 else "s"))
     if car:
         block += "\n  REGULAR-SEASON PER-SEASON AVERAGE (regular season only):\n"
         block += "\n".join(car) + "\n"
