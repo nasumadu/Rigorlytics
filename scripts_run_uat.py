@@ -522,7 +522,15 @@ def run(cases, target, live_url, use_judge, judge_model, pause):
         # failures (an error page never mentions Jefferson) AND false passes
         # (a case with no applicable check falls through to clean), so it is
         # held out of the scored set rather than scored.
-        errored = "[[ERROR" in answer
+        # A local-target failure never carries the [[ERROR]] marker: the app
+        # catches its own exception and returns a friendly sentence, which the
+        # checks then grade as a real answer. That is how an out-of-credit run
+        # reported eight hard failures on impossible-premise cases.
+        APP_ERRORS = ("Rigorlytics hit an error processing",
+                      "temporarily unable to reach its analysis engine",
+                      "Rigorlytics is at capacity")
+        errored = ("[[ERROR" in answer
+                   or any(s in answer for s in APP_ERRORS))
         if errored:
             checks, flags, hard = {}, [], False
         else:

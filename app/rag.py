@@ -173,4 +173,22 @@ def generate_response(question):
         return message.content[0].text
 
     except Exception as e:
+        # Swallowing the exception cost hours: every failure looked identical
+        # from the outside, whether it was a rate limit, an expired key, or a
+        # bug in the prompt assembly. The user still gets a clean message; the
+        # log gets the truth.
+        import traceback
+        traceback.print_exc()
+        print("RIGORLYTICS ERROR: %s: %s" % (type(e).__name__, str(e)[:400]),
+              flush=True)
+        # "Try rephrasing" is wrong advice when the cause is billing or a rate
+        # limit - the question was fine and no rewording will help.
+        msg = str(e).lower()
+        if "credit balance" in msg or "quota" in msg or "billing" in msg:
+            return ("Rigorlytics is temporarily unable to reach its analysis "
+                    "engine (service account issue). This is not a problem "
+                    "with your question - please try again later.")
+        if "rate limit" in msg or "429" in msg or "overloaded" in msg:
+            return ("Rigorlytics is at capacity right now. Please try again "
+                    "in a moment - your question was fine.")
         return "Rigorlytics hit an error processing that request. Try rephrasing your question."
