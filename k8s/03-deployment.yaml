@@ -1,0 +1,162 @@
+# The workload itself.
+#
+# Deployment manages a ReplicaSet, which manages Pods. Writing a bare Pod
+# would mean nothing recreates it when its node dies.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rigorlytics-web
+  namespace: rigorlytics
+  labels:
+    app.kubernetes.io/name: rigorlytics
+    app.kubernetes.io/component: web
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rigorlytics
+      app.kubernetes.io/component: web
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      # Zero capacity lost during a deploy. With 2 replicas and a PDB of
+      # minAvailable 1, this is what lets a node drain proceed without
+      # taking the service down.
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rigorlytics
+        app.kubernetes.io/component: web
+    spec:
+      serviceAccountName: rigorlytics-web
+      automountServiceAccountToken: false
+
+      # Pod-level security context. The namespace enforces the
+      # "restricted" Pod Security Standard, so omitting any of these
+      # causes the API server to reject the pod outright.
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+
+      # Spread replicas across nodes so a single node failure cannot take
+      # every pod. ScheduleAnyway rather than DoNotSchedule because a
+      # single-node dev cluster would otherwise leave the second replica
+      # permanently Pending.
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: rigorlytics
+              app.kubernetes.io/component: web
+
+      containers:
+        - name: web
+          # Built locally and imported into the cluster's containerd, so
+          # there is nothing to pull. Change to a registry path plus
+          # IfNotPresent once images are pushed to ECR or GHCR.
+          image: localhost/rigorlytics:dev
+          imagePullPolicy: Never
+
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+
+          envFrom:
+            - configMapRef:
+                name: rigorlytics-config
+          env:
+            # Both come from a Secret created from .env, never from a
+            # tracked file. optional: false means the pod fails loudly if
+            # the Secret is missing rather than starting half-configured.
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rigorlytics-secrets
+                  key: DATABASE_URL
+                  optional: false
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rigorlytics-secrets
+                  key: ANTHROPIC_API_KEY
+                  optional: false
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+          # Three probes, three different jobs.
+          #
+          # startup  gives the app time to boot before liveness begins.
+          #          Without it, a slow start plus an aggressive liveness
+          #          probe produces an endless restart loop, which is the
+          #          single most common probe mistake.
+          # readiness removes the pod from Service endpoints while it is
+          #          unable to serve, without killing it.
+          # liveness  restarts the container when it is wedged.
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 12        # up to 60s to come up
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          securityContext:
+            # Repeated from the pod securityContext on purpose. Containers
+            # inherit the pod setting, but stating it here keeps the intent
+            # readable in isolation and survives a pod-level edit.
+            runAsUser: 10001
+            runAsGroup: 10001
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+
+          # readOnlyRootFilesystem means anything that writes needs an
+          # explicit writable mount. These two are all the app needs.
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: home
+              mountPath: /home/app
+
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi
+        - name: home
+          emptyDir:
+            sizeLimit: 32Mi
+
+      # Give gunicorn time to finish in-flight requests. Must exceed the
+      # --graceful-timeout of 30s in the image's CMD.
+      terminationGracePeriodSeconds: 45

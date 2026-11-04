@@ -1,0 +1,62 @@
+# Stable address, then external routing.
+#
+# Pods get a new IP every time they are replaced and are never
+# resurrected, only replaced. A Service is the stable name and virtual IP
+# in front of whichever pods currently match its selector.
+apiVersion: v1
+kind: Service
+metadata:
+  name: rigorlytics-web
+  namespace: rigorlytics
+  labels:
+    app.kubernetes.io/name: rigorlytics
+    app.kubernetes.io/component: web
+spec:
+  # ClusterIP, not LoadBalancer: the Ingress below is what faces outward,
+  # so exposing the Service directly would be a second, unmanaged door.
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: rigorlytics
+    app.kubernetes.io/component: web
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+---
+# Ingress handles host and path routing and TLS termination for many
+# Services behind one entry point.
+#
+# ingressClassName is traefik because that is what k3s ships with. On EKS
+# this becomes "alb" with the AWS Load Balancer Controller annotations,
+# and nothing else in this file changes.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rigorlytics
+  namespace: rigorlytics
+  annotations:
+    # Redirect plain HTTP to HTTPS. On a local cluster with no
+    # certificate this is commented out; turn it on once cert-manager or
+    # ACM is issuing one, otherwise you lock yourself out.
+    # traefik.ingress.kubernetes.io/router.middlewares: rigorlytics-redirect-https@kubernetescrd
+    kubernetes.io/description: "Rigorlytics web entry point"
+spec:
+  ingressClassName: traefik
+  rules:
+    # rigorlytics.localhost resolves to 127.0.0.1 in most resolvers, so
+    # this works without editing /etc/hosts. Add the real hostname when
+    # this moves to a cluster that owns DNS.
+    - host: rigorlytics.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rigorlytics-web
+                port:
+                  name: http
+  # tls:
+  #   - hosts: ["rigorlytics.net"]
+  #     secretName: rigorlytics-tls

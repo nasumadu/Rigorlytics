@@ -18,3 +18,16 @@ __pycache__/
 # Logs
 *.log
 uat/results-*
+
+# Scratch output from database and UAT investigation
+brady_diff.txt
+damage.txt
+keycheck.txt
+leaderboard_check.txt
+career_truth.txt
+uat_nfl_report.md
+uat_barrage_report.md
+security-reports/
+
+# Transfer artifacts
+*.tar.gz

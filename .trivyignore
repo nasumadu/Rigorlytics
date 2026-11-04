@@ -1,0 +1,12 @@
+# Documented exceptions. Every entry needs a reason and a review date;
+# an undocumented suppression is indistinguishable from a cover-up.
+
+# AVD-KSV-01010 - "ConfigMap stores sensitive contents"
+# False positive. The flagged keys are PORT ("8000") and GUNICORN_TIMEOUT
+# ("120"): a TCP port number and a gunicorn worker timeout in seconds.
+# Neither is a credential. The two real secrets, DATABASE_URL and
+# ANTHROPIC_API_KEY, appear in no ConfigMap at all. They are supplied by a
+# Secret created imperatively from .env via --from-env-file, so they are
+# never written to a file that git tracks.
+# Reviewed 2026-11-04, N. Asumadu. Re-review if the ConfigMap gains keys.
+AVD-KSV-01010

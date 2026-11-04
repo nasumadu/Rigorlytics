@@ -1,0 +1,28 @@
+# Non-sensitive configuration.
+#
+# This is the Kubernetes equivalent of the ConfigMap edits you made at
+# FEMA: change a value here and restart the Deployment, with no image
+# rebuild. Nothing secret belongs in this file, because a ConfigMap is
+# readable by anyone with get access to the namespace and it is committed
+# to git.
+#
+# DATABASE_URL and ANTHROPIC_API_KEY are deliberately absent. Those come
+# from a Secret created imperatively from .env, so they never exist in a
+# file that git tracks. See the README in this directory.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rigorlytics-config
+  namespace: rigorlytics
+data:
+  FLASK_ENV: "production"
+  PORT: "8000"
+  LOG_LEVEL: "info"
+  # Gunicorn tuning. Two workers with four threads suits an app that
+  # spends its time waiting on Postgres and the Anthropic API rather than
+  # burning CPU. The 120s timeout is sized for the worst measured case:
+  # a question that misses the database and falls through to live ESPN
+  # lookups took 34 seconds, and gunicorn's 30s default would kill it.
+  GUNICORN_WORKERS: "2"
+  GUNICORN_THREADS: "4"
+  GUNICORN_TIMEOUT: "120"

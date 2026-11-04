@@ -1,0 +1,90 @@
+# Local Rigorlytics stack.
+#
+#   docker compose up --build              app + local postgres
+#   docker compose --profile legacy up -d  adds mysql for the migration work
+#   docker compose down -v                 stop and wipe the volumes
+#
+# The local postgres exists so development does not depend on Supabase,
+# which pauses on the free tier after roughly a week of no connections and
+# has twice taken the site down. Point DATABASE_URL at either one.
+#
+# Nothing here hardcodes a credential. Values come from .env, which
+# .dockerignore keeps out of the image and .gitignore keeps out of git.
+
+name: rigorlytics
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rigorlytics:dev
+    ports:
+      - "8000:8000"
+    environment:
+      # Default to the local postgres; override in .env to use Supabase.
+      DATABASE_URL: ${DATABASE_URL:-postgresql://rigor:rigor@postgres:5432/rigorlytics}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?ANTHROPIC_API_KEY must be set}
+      FLASK_ENV: ${FLASK_ENV:-development}
+      PORT: 8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    # Same hardening the Kubernetes manifests will apply, so a container
+    # that works here will not surprise you in the cluster.
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rigor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rigor}
+      POSTGRES_DB: ${POSTGRES_DB:-rigorlytics}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Anything dropped in here runs once, in filename order, on an empty
+      # volume. Put the schema DDL in sql/postgres/ to seed a fresh DB.
+      - ./sql/postgres:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rigor} -d ${POSTGRES_DB:-rigorlytics}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # Opt-in: the legacy source for the migration story. Stays stopped unless
+  # you ask for it, because an idle database is wasted RAM on the VM.
+  mysql:
+    image: mysql:8.4
+    profiles: ["legacy"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-rigorlytics_legacy}
+      MYSQL_USER: ${MYSQL_USER:-rigor}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set MYSQL_PASSWORD in .env}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+      - ./sql/mysql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  mysqldata:

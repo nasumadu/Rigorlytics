@@ -1,0 +1,67 @@
+# Autoscaling and disruption budget.
+#
+# HorizontalPodAutoscaler scales replica count on observed load. It needs
+# metrics-server running, which k3s includes by default; on a bare cluster
+# you must install it first or the HPA reports <unknown> forever and
+# scales nothing.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rigorlytics-web
+  namespace: rigorlytics
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rigorlytics-web
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleUp:
+      # React quickly to load, but not to a single spiky sample.
+      stabilizationWindowSeconds: 30
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 30
+    scaleDown:
+      # Scale down slowly. Shedding replicas during a lull only to need
+      # them again a minute later causes avoidable cold starts.
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+---
+# PodDisruptionBudget: the minimum that must stay available during a
+# VOLUNTARY disruption, which is exactly what a node drain is during a
+# worker node upgrade. This is the object that makes your monthly EKS
+# patching cycle safe: without it, draining a node can evict every
+# replica at once and take the service down.
+#
+# It does not protect against involuntary disruption such as a node
+# crashing. That is what replicas and topology spread are for.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: rigorlytics-web
+  namespace: rigorlytics
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rigorlytics
+      app.kubernetes.io/component: web

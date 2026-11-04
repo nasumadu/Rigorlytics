@@ -1,0 +1,105 @@
+# Microsegmentation.
+#
+# By default every pod in a Kubernetes cluster can reach every other pod
+# on every port. That is a flat network, and it is how a single
+# compromised container becomes lateral movement across the cluster.
+#
+# NetworkPolicy is namespace-scoped and additive: policies union, so the
+# pattern is deny everything, then allow only what is needed.
+#
+# Enforcement requires a CNI that implements it. k3s does (it runs a
+# netpol controller); the AWS VPC CNI does in recent add-on versions;
+# plain flannel does not, and policies silently do nothing. Verify rather
+# than assume, because a policy that is not enforced looks identical to
+# one that is.
+
+# ---- default deny, both directions ------------------------------------
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: rigorlytics
+spec:
+  # Empty podSelector means every pod in the namespace.
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+---
+# ---- allow the ingress controller to reach the web pods ---------------
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-web
+  namespace: rigorlytics
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: rigorlytics
+      app.kubernetes.io/component: web
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        # Traefik runs in kube-system on k3s. On EKS with the AWS Load
+        # Balancer Controller in target-type: ip mode, traffic arrives
+        # from the VPC rather than from a pod, so this becomes an
+        # ipBlock for the VPC CIDR instead.
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: TCP
+          port: 8000
+---
+# ---- allow DNS, without which nothing resolves ------------------------
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns-egress
+  namespace: rigorlytics
+spec:
+  podSelector: {}
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+# ---- allow outbound HTTPS to Supabase, Anthropic and nflverse ---------
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-egress-external
+  namespace: rigorlytics
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: rigorlytics
+      app.kubernetes.io/component: web
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            # Deny the private ranges and the cloud metadata endpoint.
+            # 169.254.169.254 is the one that matters: reachable from any
+            # pod by default, it hands out node IAM credentials, and it
+            # is the first thing an attacker inside a container tries.
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+              - 169.254.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443
+        # Postgres, for a managed database reached over the internet
+        # rather than inside the VPC.
+        - protocol: TCP
+          port: 5432

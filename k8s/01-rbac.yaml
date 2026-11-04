@@ -1,0 +1,46 @@
+# Identity and permissions for the application.
+#
+# The app gets a ServiceAccount of its own rather than using "default",
+# and that account is granted nothing. Rigorlytics never calls the
+# Kubernetes API, so least privilege here means an empty permission set.
+#
+# The Role below exists on purpose even though it grants almost nothing:
+# it documents the intent, and it is the hook for the day the app needs to
+# read its own ConfigMap at runtime. An interviewer asking "what can this
+# workload do to the cluster?" should get "nothing, by design" as the
+# answer, and this is what makes that true.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rigorlytics-web
+  namespace: rigorlytics
+# No token is mounted into the pod. If the workload does not call the API
+# server, handing it a credential for the API server is pure risk.
+automountServiceAccountToken: false
+---
+# Read-only access to its own config, scoped to named objects. Not bound
+# to anything yet; uncomment the RoleBinding when the app needs it.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: rigorlytics-config-reader
+  namespace: rigorlytics
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["rigorlytics-config"]
+    verbs: ["get"]
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: RoleBinding
+# metadata:
+#   name: rigorlytics-config-reader
+#   namespace: rigorlytics
+# subjects:
+#   - kind: ServiceAccount
+#     name: rigorlytics-web
+#     namespace: rigorlytics
+# roleRef:
+#   kind: Role
+#   name: rigorlytics-config-reader
+#   apiGroup: rbac.authorization.k8s.io

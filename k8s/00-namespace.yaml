@@ -1,0 +1,66 @@
+# Namespace, admission policy, and resource guardrails.
+#
+# Pod Security Admission replaced PodSecurityPolicy, which was removed in
+# Kubernetes 1.25. Three labels control it:
+#   enforce  reject pods that violate the profile
+#   audit    record violations in the audit log
+#   warn     return a warning to whoever applied it
+#
+# "restricted" is the strictest of the three built-in profiles. It requires
+# runAsNonRoot, allowPrivilegeEscalation: false, all capabilities dropped,
+# and a seccomp profile. The Deployment in this directory satisfies all of
+# that, so enforcement passes. Try removing one of those fields and
+# reapplying to watch the API server refuse it: that is the demo worth
+# having ready.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rigorlytics
+  labels:
+    name: rigorlytics
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+---
+# Caps what the whole namespace may consume. Without this, one runaway
+# Deployment can starve everything else on the node.
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: rigorlytics-quota
+  namespace: rigorlytics
+spec:
+  hard:
+    requests.cpu: "2"
+    requests.memory: 2Gi
+    limits.cpu: "4"
+    limits.memory: 4Gi
+    pods: "20"
+    persistentvolumeclaims: "4"
+    services.loadbalancers: "1"
+---
+# Supplies defaults and bounds per container, so a pod that forgets to
+# declare resources cannot be scheduled unbounded. The ResourceQuota above
+# also refuses any pod with no requests at all, and this is what keeps
+# that from being an annoyance.
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: rigorlytics-limits
+  namespace: rigorlytics
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: 500m
+        memory: 512Mi
+      defaultRequest:
+        cpu: 100m
+        memory: 128Mi
+      max:
+        cpu: "2"
+        memory: 2Gi
+      min:
+        cpu: 50m
+        memory: 64Mi
