@@ -41,6 +41,9 @@ jobs:
       - name: Trivy secret scan
         uses: aquasecurity/trivy-action@v0.36.0
         with:
+          # Trivy auto-discovers a flat .trivyignore but NOT the
+          # structured .trivyignore.yaml, so it has to be named.
+          trivyignores: .trivyignore.yaml
           scan-type: fs
           scanners: secret
           skip-dirs: venv,.venv,security-reports
@@ -58,6 +61,9 @@ jobs:
       - name: Trivy config scan
         uses: aquasecurity/trivy-action@v0.36.0
         with:
+          # Trivy auto-discovers a flat .trivyignore but NOT the
+          # structured .trivyignore.yaml, so it has to be named.
+          trivyignores: .trivyignore.yaml
           scan-type: config
           # Covers the Dockerfile, compose file and everything under k8s/.
           # Picks up terraform/ automatically once that exists.
@@ -97,6 +103,9 @@ jobs:
       - name: Trivy image scan (report everything)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
+          # Trivy auto-discovers a flat .trivyignore but NOT the
+          # structured .trivyignore.yaml, so it has to be named.
+          trivyignores: .trivyignore.yaml
           scan-type: image
           image-ref: rigorlytics:${{ github.sha }}
           scanners: vuln
@@ -108,6 +117,9 @@ jobs:
       - name: Trivy image scan (SARIF for code scanning)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
+          # Trivy auto-discovers a flat .trivyignore but NOT the
+          # structured .trivyignore.yaml, so it has to be named.
+          trivyignores: .trivyignore.yaml
           scan-type: image
           image-ref: rigorlytics:${{ github.sha }}
           scanners: vuln
@@ -139,6 +151,9 @@ jobs:
       - name: Gate on HIGH and CRITICAL
         uses: aquasecurity/trivy-action@v0.36.0
         with:
+          # Trivy auto-discovers a flat .trivyignore but NOT the
+          # structured .trivyignore.yaml, so it has to be named.
+          trivyignores: .trivyignore.yaml
           scan-type: image
           image-ref: rigorlytics:${{ github.sha }}
           scanners: vuln
@@ -157,16 +172,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v4
-
-      - name: Client-side validation
-        # Catches schema errors and typos without needing a cluster. Server
-        # -side validation would catch more, but requires a live API server.
+      # kubectl --dry-run=client still fetches the OpenAPI schema from an
+      # API server, so it cannot validate anything without a cluster: this
+      # step failed in six seconds on a runner with no kubeconfig. It passed
+      # locally only because k3s happened to be running. kubeconform checks
+      # manifests against published JSON schemas with no cluster at all,
+      # which is what the old step claimed to do and never did.
+      - name: Validate manifests against the Kubernetes schema
         run: |
-          for f in k8s/*.yaml; do
-            echo "--- $f"
-            kubectl apply --dry-run=client --validate=true -f "$f" >/dev/null \
-              && echo "    ok" \
-              || { echo "    FAILED"; exit 1; }
-          done
+          curl -sSfL -o /tmp/kubeconform.tar.gz \
+            https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz
+          tar -xzf /tmp/kubeconform.tar.gz -C /tmp kubeconform
+          # -strict rejects unknown fields, which is how a typo in a key
+          # name gets caught instead of being silently ignored by the API.
+          /tmp/kubeconform -strict -summary k8s/

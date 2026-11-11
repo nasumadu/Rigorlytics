@@ -1,0 +1,31 @@
+# Trivy suppressions for Rigorlytics.
+#
+# The structured format is used instead of a flat .trivyignore so every
+# entry carries a reason and an expiry date. An ignore with no expiry is
+# indistinguishable from a finding nobody ever looked at again; these come
+# back automatically in three months whether or not anyone remembers.
+#
+# Note the identifiers. Older Trivy emitted AVD-KSV-xxxxx and the current
+# scanner emits KSV-xxxxx, so the previous .trivyignore entry had stopped
+# matching anything -- a suppression that silently does nothing is worse
+# than no suppression, because it reads as handled.
+
+misconfigurations:
+  - id: KSV-01010
+    statement: >-
+      The keys flagged as sensitive are PORT ("8000") and GUNICORN_TIMEOUT
+      ("120"). Neither is a credential. Real secrets are created
+      imperatively from .env with kubectl create secret --from-env-file and
+      never appear in a tracked file. Reviewed 2026-11-11.
+    expired_at: 2027-02-11
+
+  - id: KSV-0125
+    statement: >-
+      image is localhost/rigorlytics:dev with imagePullPolicy: Never,
+      because the image is built with Podman and imported directly into the
+      k3s containerd namespace -- there is no registry in this environment
+      to pull from. The finding is correct that this is not a deployable
+      reference. It closes when images are pushed to the ECR repository the
+      Terraform stack already provisions, which enforces immutable tags and
+      scan-on-push. Reviewed 2026-11-11.
+    expired_at: 2027-02-11
