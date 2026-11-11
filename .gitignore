@@ -31,3 +31,8 @@ security-reports/
 
 # Transfer artifacts
 *.tar.gz
+
+# editor and hand-rolled template backups
+*.bak
+*bak
+*.prepatch

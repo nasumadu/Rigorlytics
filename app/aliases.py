@@ -74,3 +74,75 @@ def resolve_alias(name):
     """Return the canonical name if an alias exists, else the original."""
     key = name.strip().lower().replace(".", "").replace("'", "'")
     return ALIASES.get(key, name)
+
+
+# ------------------------------------------------------- one-word names
+# find_players() tries an exact match, then a PREFIX match against the
+# full name. A one-word name therefore matches a player's FIRST name.
+# "Jordan" found Jordan Poyer, a Bills safety, and never considered
+# Michael Jordan -- asked "Jordan vs LeBron career stats", the site
+# compared LeBron James to an NFL defensive back. "LeBron" worked only by
+# accident: no other player's name starts with it.
+#
+# Rule for adding here: the one-word form must be unambiguous across every
+# league in the database. Deliberately NOT included -- "malone" (Karl,
+# Moses), "russell" (Bill, Westbrook, D'Angelo), "barkley" (Charles,
+# Saquon), "manning" (Peyton, Eli), "jackson" (Lamar, Bo, DeSean),
+# "allen" (Josh Allen, Allen Iverson), "aaron" (Hank Aaron, Aaron Rodgers,
+# Aaron Judge), "kelce" (Travis, Jason), "matthews" (Auston, Clay).
+ALIASES.update({
+    "jordan": "Michael Jordan",
+    "lebron": "LeBron James",
+    "kobe": "Kobe Bryant",
+    "curry": "Stephen Curry",
+    "harden": "James Harden",
+    "durant": "Kevin Durant",
+    "westbrook": "Russell Westbrook",
+    "iverson": "Allen Iverson",
+    "duncan": "Tim Duncan",
+    "pippen": "Scottie Pippen",
+    "rodman": "Dennis Rodman",
+    "ewing": "Patrick Ewing",
+    "garnett": "Kevin Garnett",
+    "nowitzki": "Dirk Nowitzki",
+    "carmelo": "Carmelo Anthony",
+    "olajuwon": "Hakeem Olajuwon",
+    "kyrie": "Kyrie Irving",
+    "zion": "Zion Williamson",
+    "wilt": "Wilt Chamberlain",
+    "chamberlain": "Wilt Chamberlain",
+
+    "mahomes": "Patrick Mahomes",
+    "brady": "Tom Brady",
+    "rodgers": "Aaron Rodgers",
+    "favre": "Brett Favre",
+    "montana": "Joe Montana",
+    "elway": "John Elway",
+    "marino": "Dan Marino",
+    "lamar": "Lamar Jackson",
+    "burrow": "Joe Burrow",
+    "herbert": "Justin Herbert",
+    "jefferson": "Justin Jefferson",
+    "saquon": "Saquon Barkley",
+    "kamara": "Alvin Kamara",
+    "tyreek": "Tyreek Hill",
+
+    "trout": "Mike Trout",
+    "pujols": "Albert Pujols",
+    "jeter": "Derek Jeter",
+    "bonds": "Barry Bonds",
+    "mantle": "Mickey Mantle",
+    "gehrig": "Lou Gehrig",
+    "cobb": "Ty Cobb",
+    "clemens": "Roger Clemens",
+    "maddux": "Greg Maddux",
+    "kershaw": "Clayton Kershaw",
+    "verlander": "Justin Verlander",
+
+    "gretzky": "Wayne Gretzky",
+    "ovechkin": "Alex Ovechkin",
+    "ovi": "Alex Ovechkin",
+    "crosby": "Sidney Crosby",
+    "mcdavid": "Connor McDavid",
+    "lemieux": "Mario Lemieux",
+})

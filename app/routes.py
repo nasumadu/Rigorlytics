@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template
 from app.rag import generate_response
 from app.compare import build_comparison
+from app.leaders import build_leaderboard
 from app.players import extract_names
 from app.live import get_mlb_games, get_nhl_games, get_espn_games, is_today
 
@@ -123,6 +124,26 @@ def api_compare():
     return jsonify(payload), 200
 
 
+
+
+@main.route('/api/leaderboard', methods=['POST'])
+def api_leaderboard():
+    """Ranked league leaders as structured rows.
+
+    The numbers on this card come straight out of SQL. The model never sees
+    them, so it cannot round, reorder or invent one -- the same guarantee
+    /api/compare gives, extended to rankings.
+    """
+    data = request.get_json() or {}
+    question = data.get('question', '')
+    if not question:
+        return jsonify({'error': 'No question provided'}), 400
+
+    payload = build_leaderboard(question)
+    if not payload:
+        return jsonify({'type': 'none'}), 200
+
+    return jsonify(payload), 200
 
 
 @main.route('/research')

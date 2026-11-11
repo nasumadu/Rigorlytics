@@ -192,3 +192,142 @@ def leader_context(question, limit=5):
              "Rigorlytics holds for that season, so it is the complete answer "
              "unless the season itself is partially loaded." % rows[0]["name"])
     return "\n".join(L)
+
+
+# ---------------------------------------------------------------- card path
+# Everything below serves the leaderboard CARD. It deliberately does not
+# share a query with leaders(), which feeds the model: that function is
+# covered by UAT category 18 and should not change shape because a UI needed
+# two more columns.
+
+# Team names whose last word is not a usable short label.
+_TEAM_TAIL_STOP = {"team", "fc", "united", "city", "sc", "cf", "club"}
+
+
+def _team_short(name):
+    """'Houston Texans' -> 'Texans'. Falls back to the full name when the
+    last word carries no meaning on its own ('Washington Football Team')."""
+    if not name:
+        return None
+    parts = str(name).split()
+    if len(parts) > 1 and parts[-1].lower() not in _TEAM_TAIL_STOP:
+        return parts[-1]
+    return name
+
+
+def _initials(name):
+    """Computed here, not in the template: a monogram fallback is data, and
+    the browser should not be parsing names to draw one."""
+    parts = [p for p in str(name or "").split() if p]
+    if not parts:
+        return "?"
+    if len(parts) == 1:
+        return parts[0][:2].upper()
+    return (parts[0][0] + parts[-1][0]).upper()
+
+
+def _display(v):
+    """4823 -> '4,823';  67.8 -> '67.8';  0.582 -> '0.582'."""
+    f = float(v)
+    if f.is_integer():
+        return format(int(f), ",")
+    return format(round(f, 3 if abs(f) < 2 else 1), ",")
+
+
+def leader_rows(stat, league, year, season_type="regular", limit=10):
+    """leaders(), plus the identity columns a card has to render."""
+    with get_conn() as c:
+        cur = c.cursor()
+        if year is None:
+            cur.execute("""SELECT max(s.year) AS y FROM seasons s
+                           JOIN leagues l ON l.id = s.league_id
+                           WHERE l.code = %s AND s.season_type = %s""",
+                        (league, season_type))
+            r = cur.fetchone()
+            year = dict(r)["y"] if r else None
+            if year is None:
+                return None, None
+
+        cur.execute("""
+            SELECT p.id AS player_id, p.full_name AS name, p.position,
+                   p.headshot_url, t.name AS team,
+                   (ps.stats->>%s)::float AS v
+            FROM player_seasons ps
+            JOIN players p ON p.id = ps.player_id
+            JOIN seasons s ON s.id = ps.season_id
+            JOIN leagues l ON l.id = s.league_id
+            LEFT JOIN teams t ON t.id = ps.team_id
+            WHERE l.code = %s AND s.year = %s AND s.season_type = %s
+              AND (ps.stats->>%s) IS NOT NULL
+              AND (ps.stats->>%s)::float > 0
+            ORDER BY 6 DESC
+            LIMIT %s
+        """, (stat, league, year, season_type, stat, stat, limit))
+        rows = [dict(r) for r in cur.fetchall()]
+
+        cur.execute("""SELECT count(*) AS n FROM player_seasons ps
+                       JOIN seasons s ON s.id = ps.season_id
+                       JOIN leagues l ON l.id = s.league_id
+                       WHERE l.code=%s AND s.year=%s AND s.season_type=%s""",
+                    (league, year, season_type))
+        pool = dict(cur.fetchone())["n"]
+    return rows, dict(year=year, pool=pool)
+
+
+def build_leaderboard(question, limit=10):
+    """Question -> leaderboard card payload, or None when it is not one.
+
+    Sibling of compare.build_comparison(): same contract, same shape of
+    return, so the front end switches on payload["type"] and nothing else.
+    """
+    spec = detect(question)
+    if not spec:
+        return None
+
+    rows, meta = leader_rows(spec["stat"], spec["league"], spec["year"],
+                             spec["season_type"], limit)
+    if not rows:
+        return None
+
+    out = []
+    prev_v = None
+    prev_rank = 0
+    for i, r in enumerate(rows, 1):
+        # Equal values share a rank. Enumerating positions would print a
+        # 1 and a 2 for two identical figures, which is a wrong answer
+        # dressed up as a precise one.
+        if prev_v is not None and float(r["v"]) == prev_v:
+            rank = prev_rank
+        else:
+            rank = i
+        prev_v, prev_rank = float(r["v"]), rank
+
+        out.append({
+            "rank": rank,
+            "player_id": r["player_id"],
+            "name": r["name"],
+            "position": r.get("position"),
+            "team": r.get("team"),
+            "team_short": _team_short(r.get("team")),
+            "value": float(r["v"]),
+            "display": _display(r["v"]),
+            "headshot": r.get("headshot_url"),
+            "initials": _initials(r["name"]),
+        })
+
+    season_label = "%s%s" % (meta["year"],
+                             " playoffs" if spec["season_type"] == "postseason"
+                             else "")
+    return {
+        "type": "leaderboard",
+        "title": "%s %s %s" % (season_label, spec["league"], spec["label"]),
+        "stat_label": spec["label"],
+        "league": spec["league"],
+        "year": meta["year"],
+        "season_type": spec["season_type"],
+        # Provenance on the card itself, in the same spirit as the line
+        # leader_context() gives the model: the reader can see what the
+        # ranking was computed over rather than taking it on faith.
+        "pool": meta["pool"],
+        "rows": out,
+    }

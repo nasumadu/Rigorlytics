@@ -106,6 +106,25 @@ def find_players(name):
     if rows:
         return rows
 
+    # A one-word name is a surname in almost every case people type one:
+    # "Mahomes", "Gretzky", "Jordan". The prefix pass below anchors at the
+    # start of the full name, so it can only ever match a FIRST name -- it
+    # returned Jordan Poyer for "Jordan" and nothing at all for "Mahomes".
+    # Try the surname before falling through to it.
+    #
+    # Ordering by season count still picks the wrong person among players
+    # who share a surname and are not in the alias list. That is what a
+    # league-coherence pass in player_search.py is for; this pass only
+    # guarantees the right player is in the candidate set.
+    if len(name.split()) == 1:
+        rows = query(cols + """
+            WHERE p.full_name ILIKE %s
+            ORDER BY n DESC, length(p.full_name)
+            LIMIT 5
+        """, ("%% %s" % name,))
+        if rows:
+            return rows
+
     rows = query(cols + """
         WHERE p.full_name ILIKE %s
         ORDER BY n DESC, length(p.full_name)
